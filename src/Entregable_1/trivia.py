@@ -103,7 +103,7 @@ def mostrar_bienvenida():
     """)
     print("¡Bienvenido al Trivial!")
     print("El Trivial es un juego de preguntas y respuestas.")
-    print("Debes seleccionar la opción correcta para cada pregunta.")
+    print("Debes seleccionar la opción correcta (número del 1 al 3) para cada pregunta.")
     print("Presiona ENTER para continuar.")
     input()
 
