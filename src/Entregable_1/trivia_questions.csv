@@ -1,5 +1,5 @@
 "Pregunta","Respuesta1","Respuesta2","Respuesta3","Correcta"
-"¿Cuál es la capital de Francia?","Londres" , "París", "Berlín", "París"
+"¿Cuál es la capital de Francia?", "Londres" , "París", "Berlín", "París"
 "¿Cuánt planetas hay en el sistema solar?", "7", "8", "9", "8"
 "¿Cuál es el símbolo químico del oro?", "Pb", "Ag", "Au", "Au"
 "¿En qué año llegó el hombre a la Luna?", "1969", "1970", "1968", "1969"
@@ -18,4 +18,4 @@
 "¿Qué elemento químico tiene el símbolo Fe?", "Cobre", "Hierro", "Plomo", "Hierro"
 "¿Cuál es el deporte más jugado en el mundo?", "Baloncesto", "Críquet", "Fútbol", "Fútbol"
 "¿Quién escribió 'Cien años de soledad'?", "Gabriel García Márquez", "Mario Vargas Llosa", "Julio Cortázar", "Gabriel García Márquez"
-"¿Cuál es la velocidad de la luz?", "300,000 km/s", "150,000 km/s", "200,000 km/s", "300,000 km/s"
+"¿Cuál es la velocidad de la luz?", "300.000 km/s", "150.000 km/s", "200.000 km/s", "300.000 km/s"
