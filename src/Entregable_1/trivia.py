@@ -5,8 +5,22 @@ import random
 from functools import reduce
 
 
+documentation = {}
+
+def docstring(description):
+    def decorator(func):
+        documentation[func.__name__] = description
+        return func
+    return decorator
+
+def generar_documentacion():
+    for func_name, desc in documentation.items():
+        print(f"Función: {func_name}")
+        print(f"Descripción: {desc}")
+        print("-" * 20)
+
+@docstring("Lee el archivo CSV y devuelve un generador de líneas.")
 def leer_archivo_csv_generador(ruta_archivo):
-    """ Lee un archivo CSV y devuelve un generador de líneas. """
     # Para evitar problemas en la ruta al cargar el archivo
     ruta_archivo = os.path.join(
         os.path.dirname(__file__), 'trivia_questions.csv')
@@ -16,9 +30,8 @@ def leer_archivo_csv_generador(ruta_archivo):
         for linea in lector:
             yield linea
 
-
+@docstring("Selecciona preguntas aleatoriamente del generador y las guarda en listas separadas.")
 def seleccionar_preguntas_aleatorias_generador(lineas, num_preguntas=5):
-    """ Selecciona preguntas aleatoriamente del generador y las guarda en listas separadas. """
     preguntas = list(
         lineas)  # Convertir el generador a lista para permitir el muestreo
     # Extrae n preguntas aleatoriamente
@@ -27,9 +40,8 @@ def seleccionar_preguntas_aleatorias_generador(lineas, num_preguntas=5):
     listas_de_preguntas = [[pregunta] for pregunta in seleccionadas]
     return listas_de_preguntas
 
-
+@docstring("Procesa las líneas del archivo CSV y convierte a cada una en un diccionario.")
 def procesar_lineas(lineas):
-    """ Procesa las líneas del archivo CSV y convierte a cada una en un diccionario. """
     return list(map(lambda linea: {
         'pregunta': linea[0],
         'opcion_1': linea[1],
@@ -38,27 +50,24 @@ def procesar_lineas(lineas):
         'respuesta_correcta': linea[4]
     }, lineas))
 
-
+@docstring("Combina las listas de preguntas y las procesa.")
 def procesar_preguntas_combinadas(listas_de_preguntas):
-    """ Combina las listas de preguntas y las procesa. """
     # Uso de itertools.chain para aplanar la lista de listas
     preguntas_combinadas = list(
         itertools.chain.from_iterable(listas_de_preguntas))
     preguntas_procesadas = procesar_lineas(preguntas_combinadas)
     return preguntas_procesadas
 
-
+@docstring("Lee el archivo CSV, genera las preguntas, las selecciona aleatoriamente y las procesa.")
 def leer_y_procesar_csv(ruta_archivo):
-    """ Lee el archivo CSV, genera las preguntas, las selecciona aleatoriamente y las procesa. """
     lineas_generador = leer_archivo_csv_generador(ruta_archivo)
     lineas_aleatorias = seleccionar_preguntas_aleatorias_generador(
         lineas_generador)
     preguntas_procesadas = procesar_preguntas_combinadas(lineas_aleatorias)
     return preguntas_procesadas
 
-
+@docstring("Imprime el texto con el color especificado.")
 def print_colored(text, color):
-    """ Imprime el texto con el color especificado. """
     colors = {
         "red": "\033[91m",
         "green": "\033[92m",
@@ -71,9 +80,8 @@ def print_colored(text, color):
     }
     print(colors[color] + text + colors["end"])
 
-
+@docstring("Decorador para validar que la entrada sean números.")
 def validate_input(func):
-    """ Decorador para validar que la entrada sean números. """
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -101,9 +109,8 @@ def obtener_respuesta(pregunta):
         print_colored(f"\nIncorrecto. La respuesta correcta era: {pregunta['respuesta_correcta']}", "red")
         return 0
 
-
+@docstring("Muestra un banner de agradecimiento.")
 def mostrar_banner_gracias():
-    """ Muestra un banner de agradecimiento. """
     print(r"""
         
  ██████╗ ██████╗  █████╗  ██████╗██╗ █████╗ ███████╗    ██████╗  ██████╗ ██████╗          ██╗██╗   ██╗ ██████╗  █████╗ ██████╗ ██╗    
@@ -116,9 +123,8 @@ def mostrar_banner_gracias():
           
           """)
 
-
+@docstring("Muestra una línea divisoria.")
 def mostrar_divisor():
-    """ Muestra una línea divisoria. """
     print("\n" + "-" * 50 + "\n")  # Imprime una línea divisoria
 
 
@@ -136,9 +142,8 @@ def jugar_otra_vez():
         print("Respuesta no reconocida.")
         jugar_otra_vez()
 
-
+@docstring("Juega el trivial de forma recursiva.")
 def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indice: int = 0):
-    """ Juega el trivial de forma recursiva. """
     if indice == 0:
         resultados = []
     if indice < len(preguntas):
@@ -150,16 +155,14 @@ def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indi
         print(f"\nTu puntuación final es: {total_puntos} puntos.")
         return total_puntos
 
-
+@docstring("Inicia el juego del trivial.")
 def jugar():
-    """ Inicia el juego del trivial. """
     preguntas = leer_y_procesar_csv('trivia_questions.csv')
     jugar_recursivo(preguntas, resultados=[])
     jugar_otra_vez()
 
-
+@docstring("Muestra un banner de bienvenida.")
 def mostrar_bienvenida():
-    """ Muestra un banner de bienvenida. """
     print_colored(r"""
                                                                    
  ████████╗██████╗ ██╗██╗   ██╗██╗ █████╗ ██╗     
@@ -176,12 +179,12 @@ def mostrar_bienvenida():
     print("Presiona ENTER para continuar.")
     input()
 
-
+@docstring("Función principal del programa.")
 def main():
-    """ Función principal del programa. """
     mostrar_bienvenida()
     jugar()
 
 
 if __name__ == '__main__':
     main()
+    generar_documentacion()
