@@ -6,6 +6,7 @@ from functools import reduce
 
 
 def leer_archivo_csv_generador(ruta_archivo):
+    """ Lee un archivo CSV y devuelve un generador de líneas. """
     # Para evitar problemas en la ruta al cargar el archivo
     ruta_archivo = os.path.join(
         os.path.dirname(__file__), 'trivia_questions.csv')
@@ -28,6 +29,7 @@ def seleccionar_preguntas_aleatorias_generador(lineas, num_preguntas=5):
 
 
 def procesar_lineas(lineas):
+    """ Procesa las líneas del archivo CSV y convierte a cada una en un diccionario. """
     return list(map(lambda linea: {
         'pregunta': linea[0],
         'opcion_1': linea[1],
@@ -47,6 +49,7 @@ def procesar_preguntas_combinadas(listas_de_preguntas):
 
 
 def leer_y_procesar_csv(ruta_archivo):
+    """ Lee el archivo CSV, genera las preguntas, las selecciona aleatoriamente y las procesa. """
     lineas_generador = leer_archivo_csv_generador(ruta_archivo)
     lineas_aleatorias = seleccionar_preguntas_aleatorias_generador(
         lineas_generador)
@@ -55,6 +58,7 @@ def leer_y_procesar_csv(ruta_archivo):
 
 
 def print_colored(text, color):
+    """ Imprime el texto con el color especificado. """
     colors = {
         "red": "\033[91m",
         "green": "\033[92m",
@@ -69,6 +73,7 @@ def print_colored(text, color):
 
 
 def validate_input(func):
+    """ Decorador para validar que la entrada sean números. """
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -80,6 +85,7 @@ def validate_input(func):
 
 @validate_input
 def obtener_respuesta(pregunta):
+    """ Obtiene la respuesta del usuario y verifica si es correcta. """
     print_colored(f"\nPregunta: {pregunta['pregunta']}", "cyan")
     print(f"1: {pregunta['opcion_1']}")
     print(f"2: {pregunta['opcion_2']}")
@@ -92,13 +98,12 @@ def obtener_respuesta(pregunta):
         print_colored("\n¡Correcto!", "green")
         return 10
     else:
-        print_colored(f"\nIncorrecto. La respuesta correcta era: {
-                      pregunta['respuesta_correcta']}", "red")
+        print_colored(f"\nIncorrecto. La respuesta correcta era: {pregunta['respuesta_correcta']}", "red")
         return 0
 
 
 def mostrar_banner_gracias():
-
+    """ Muestra un banner de agradecimiento. """
     print(r"""
         
  ██████╗ ██████╗  █████╗  ██████╗██╗ █████╗ ███████╗    ██████╗  ██████╗ ██████╗          ██╗██╗   ██╗ ██████╗  █████╗ ██████╗ ██╗    
@@ -113,16 +118,18 @@ def mostrar_banner_gracias():
 
 
 def mostrar_divisor():
+    """ Muestra una línea divisoria. """
     print("\n" + "-" * 50 + "\n")  # Imprime una línea divisoria
 
 
 @validate_input
 def jugar_otra_vez():
+    """ Pregunta al usuario si desea jugar otra vez. """
     respuesta = input("¿Deseas jugar otra vez? (s/n): ")
     if respuesta.lower() == 's':
         mostrar_divisor()
 
-        jugar()  # Suponiendo que 'main' es tu función principal
+        jugar()  # Vuelve a jugar
     elif respuesta.lower() == 'n':
         mostrar_banner_gracias()
     else:
@@ -131,6 +138,7 @@ def jugar_otra_vez():
 
 
 def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indice: int = 0):
+    """ Juega el trivial de forma recursiva. """
     if indice == 0:
         resultados = []
     if indice < len(preguntas):
@@ -144,12 +152,14 @@ def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indi
 
 
 def jugar():
+    """ Inicia el juego del trivial. """
     preguntas = leer_y_procesar_csv('trivia_questions.csv')
     jugar_recursivo(preguntas, resultados=[])
     jugar_otra_vez()
 
 
 def mostrar_bienvenida():
+    """ Muestra un banner de bienvenida. """
     print_colored(r"""
                                                                    
  ████████╗██████╗ ██╗██╗   ██╗██╗ █████╗ ██╗     
@@ -168,6 +178,7 @@ def mostrar_bienvenida():
 
 
 def main():
+    """ Función principal del programa. """
     mostrar_bienvenida()
     jugar()
 
