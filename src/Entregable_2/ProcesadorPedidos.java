@@ -11,6 +11,11 @@ public class ProcesadorPedidos {
         this.colaPedidos = new PriorityBlockingQueue<>();
     }
 
+    // getter colaPedidos
+    public PriorityBlockingQueue<Pedido> getColaPedidos() {
+        return colaPedidos;
+    }
+
     // Agregar un pedido a la cola de pedidos
     public void agregarPedido(Pedido pedido) {
         colaPedidos.offer(pedido);

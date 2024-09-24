@@ -3,6 +3,9 @@ package Entregable_2.Test;
 import Entregable_2.Pedido;
 import Entregable_2.ProcesadorPedidos;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.PriorityBlockingQueue;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPedidos {
@@ -35,7 +38,7 @@ public class TestPedidos {
         procesador.procesarPedidos();
         procesador.cerrarProcesador();
 
-        assertTrue(true); // Aquí se podrían añadir más validaciones según los logs
+        assertNull(procesador.getColaPedidos().poll());
     }
 }
 
