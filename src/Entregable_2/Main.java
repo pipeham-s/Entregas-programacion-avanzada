@@ -3,7 +3,7 @@ package Entregable_2;
 public class Main {
     public static void main(String[] args) {
         // Crear el procesador de pedidos con 10 hilos
-        ProcesadorPedidos procesador = new ProcesadorPedidos(6);
+        ProcesadorPedidos procesador = new ProcesadorPedidos(7);
 
         // Crear y agregar pedidos (algunos urgentes)
         procesador.agregarPedido(new Pedido(1, false));
