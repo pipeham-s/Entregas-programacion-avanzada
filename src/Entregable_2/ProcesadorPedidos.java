@@ -84,6 +84,10 @@ public class ProcesadorPedidos {
             procesador.shutdownNow();
         }
     }
+
+    public ExecutorService getProcesador() {
+        return procesador;
+    }
 }
 
 
