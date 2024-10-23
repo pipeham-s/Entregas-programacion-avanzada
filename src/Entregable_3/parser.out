@@ -1,0 +1,168 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ADD_COLUMN
+    ALTER_TABLE
+    CLAVE_PRIMA
+    CLAVE_REFERENTE
+    COMO_MUCHO
+    CREATE_TABLE
+    CREA_LA_TABLA
+    DEFAULT
+    DELETE_FROM
+    DISTINCT
+    DROP_COLUMN
+    DROP_TABLE
+    ENTRE
+    ES_NULO
+    EXISTS
+    FOREIGN_KEY
+    FROM
+    GROUP_BY
+    HAVING
+    INSERT_INTO
+    IS_NULL
+    JOIN
+    LIMIT
+    NO_NULO
+    ON
+    ORDENA_POR
+    ORDER_BY
+    PARECIDO_A
+    POR_DEFECTO
+    PRIMARY_KEY
+    SELECT
+    SET
+    TIRA_LA_TABLA
+    UNICO
+    UNIQUE
+    UPDATE
+    VALUES
+    WHERE
+
+Grammar
+
+Rule 0     S' -> statement_select
+Rule 1     statement_select -> TRAEME columns DE_LA_TABLA table DONDE condition
+Rule 2     statement_select -> TRAEME LOS_DISTINTOS columns DE_LA_TABLA table DONDE condition
+Rule 3     statement_select -> TRAEME CONTANDO LPAREN ASTERISK RPAREN DE_LA_TABLA table AGRUPANDO_POR column WHERE_DEL_GROUP_BY COUNT LPAREN ASTERISK RPAREN GREATER_THAN NUMBER
+Rule 4     statement_select -> TRAEME columns DE_LA_TABLA table MEZCLANDO table EN condition DONDE condition
+Rule 5     statement_insert -> METE_EN table LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN
+Rule 6     statement_update -> ACTUALIZA table SETEA assignments DONDE condition
+Rule 7     statement_delete -> BORRA_DE_LA table DONDE condition
+Rule 8     statement_alter -> CAMBIA_LA_TABLA table AGREGA_LA_COLUMNA column data_type NOT_NULL
+Rule 9     statement_alter -> CAMBIA_LA_TABLA table ELIMINA_LA_COLUMNA column
+Rule 10    columns -> ASTERISK
+Rule 11    columns -> column_list
+Rule 12    column_list -> column
+Rule 13    column_list -> column_list COMMA column
+Rule 14    assignments -> column EQUALS value
+Rule 15    assignments -> assignments COMMA column EQUALS value
+Rule 16    value_list -> value
+Rule 17    value_list -> value_list COMMA value
+Rule 18    column -> ID
+Rule 19    table -> ID
+Rule 20    condition -> column GREATER_THAN value
+Rule 21    condition -> column LESS_THAN value
+Rule 22    condition -> column EQUALS value
+Rule 23    condition -> column BETWEEN value AND value
+Rule 24    condition -> column LIKE value
+Rule 25    condition -> column IN LPAREN value_list RPAREN
+Rule 26    value -> NUMBER
+Rule 27    value -> STRING
+Rule 28    data_type -> VARCHAR LPAREN NUMBER RPAREN
+
+Terminals, with rules where they appear
+
+ACTUALIZA            : 6
+ADD_COLUMN           : 
+AGREGA_LA_COLUMNA    : 8
+AGRUPANDO_POR        : 3
+ALTER_TABLE          : 
+ASTERISK             : 3 3 10
+BETWEEN              : 23
+BORRA_DE_LA          : 7
+CAMBIA_LA_TABLA      : 8 9
+CLAVE_PRIMA          : 
+CLAVE_REFERENTE      : 
+COMMA                : 13 15 17
+COMO_MUCHO           : 
+CONTANDO             : 3
+COUNT                : 3
+CREATE_TABLE         : 
+CREA_LA_TABLA        : 
+DEFAULT              : 
+DELETE_FROM          : 
+DE_LA_TABLA          : 1 2 3 4
+DISTINCT             : 
+DONDE                : 1 2 4 6 7
+DROP_COLUMN          : 
+DROP_TABLE           : 
+ELIMINA_LA_COLUMNA   : 9
+EN                   : 4
+ENTRE                : 
+EQUALS               : 14 15 22
+ES_NULO              : 
+EXISTS               : 
+FOREIGN_KEY          : 
+FROM                 : 
+GREATER_THAN         : 3 20
+GROUP_BY             : 
+HAVING               : 
+ID                   : 18 19
+IN                   : 25
+INSERT_INTO          : 
+IS_NULL              : 
+JOIN                 : 
+LESS_THAN            : 21
+LIKE                 : 24
+LIMIT                : 
+LOS_DISTINTOS        : 2
+LOS_VALORES          : 5
+LPAREN               : 3 3 5 5 25 28
+METE_EN              : 5
+MEZCLANDO            : 4
+NOT_NULL             : 8
+NO_NULO              : 
+NUMBER               : 3 26 28
+ON                   : 
+ORDENA_POR           : 
+ORDER_BY             : 
+PARECIDO_A           : 
+POR_DEFECTO          : 
+PRIMARY_KEY          : 
+RPAREN               : 3 3 5 5 25 28
+SELECT               : 
+SET                  : 
+SETEA                : 6
+STRING               : 27
+TIRA_LA_TABLA        : 
+TRAEME               : 1 2 3 4
+UNICO                : 
+UNIQUE               : 
+UPDATE               : 
+VALUES               : 
+WHERE                : 
+WHERE_DEL_GROUP_BY   : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+AND                  : 23
+VARCHAR              : 28
+assignments          : 6 15
+column               : 3 8 9 12 13 14 15 20 21 22 23 24 25
+column_list          : 5 11 13
+columns              : 1 2 4
+condition            : 1 2 4 4 6 7
+data_type            : 8
+statement_alter      : 
+statement_delete     : 
+statement_insert     : 
+statement_select     : 0
+statement_update     : 
+table                : 1 2 3 4 4 5 6 7 8 9
+value                : 14 15 16 17 20 21 22 23 23 24
+value_list           : 5 17 25
+
