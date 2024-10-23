@@ -16,6 +16,8 @@ tokens = [
     # Símbolos y operadores
     'ASTERISK', 'COMMA', 'SEMICOLON', 'LPAREN', 'RPAREN', 'EQUALS', 'GREATER_THAN', 'LESS_THAN', 'GE', 'LE', 'NE', 'DOT', 'OR',
 
+    # Tipos de datos
+    'VARCHAR',
     # Identificadores y literales
     'IDENTIFIER', 'STRING', 'NUMBER',
 ]
@@ -42,7 +44,127 @@ t_DOT = r'\.'
 
 t_OR = r'OR'
 
+# Tipos de datos
+# Definición del token VARCHAR como una función
+
+
+def t_VARCHAR(t):
+    r'VARCHAR'
+    return t
+
+
 # Palabras clave de SQL y USQL y su mapeo a tokens
+
+# where del group by antes que where para que no se confunda con WHERE
+# Definir las palabras clave de USQL
+
+
+def t_TRAEME(t):
+    r'TRAEME'
+    return t
+
+
+def t_DE_LA_TABLA(t):
+    r'DE\s+LA\s+TABLA'
+    return t
+
+
+def t_DONDE(t):
+    r'DONDE'
+    return t
+
+
+def t_LOS_DISTINTOS(t):
+    r'LOS\s+DISTINTOS'
+    return t
+
+
+def t_METE_EN(t):
+    r'METE\s+EN'
+    return t
+
+
+def t_LOS_VALORES(t):
+    r'LOS\s+VALORES'
+    return t
+
+
+def t_ACTUALIZA(t):
+    r'ACTUALIZA'
+    return t
+
+
+def t_SETEA(t):
+    r'SETEA'
+    return t
+
+
+def t_BORRA_DE_LA(t):
+    r'BORRA\s+DE\s+LA'
+    return t
+
+
+def t_MEZCLANDO(t):
+    r'MEZCLANDO'
+    return t
+
+
+def t_ENTRE(t):
+    r'ENTRE'
+    return t
+
+
+def t_EN(t):
+    r'EN'
+    t.type = 'EN'
+    return t
+
+
+def t_AGRUPANDO_POR(t):
+    r'AGRUPANDO\s+POR'
+    return t
+
+
+def t_CAMBIA_LA_TABLA(t):
+    r'CAMBIA\s+LA\s+TABLA'
+    return t
+
+
+def t_AGREGA_LA_COLUMNA(t):
+    r'AGREGA\s+LA\s+COLUMNA'
+    return t
+
+
+def t_ELIMINA_LA_COLUMNA(t):
+    r'ELIMINA\s+LA\s+COLUMNA'
+    return t
+
+
+def t_Y(t):
+    r'Y'
+    return t
+
+
+def t_NO_NULO(t):
+    r'NO\s+NULO'
+    return t
+
+
+def t_CONTANDO(t):
+    r'CONTANDO'
+    return t
+
+
+def t_TODO(t):
+    r'TODO'
+    return t
+
+
+def t_WHERE_DEL_GROUP_BY(t):
+    r'WHERE\s+DEL\s+GROUP\s+BY'
+    return t
+
+# Definir las palabras clave de SQL
 
 
 def t_SELECT(t):
@@ -144,113 +266,6 @@ def t_COUNT(t):
     r'COUNT'
     return t
 
-# Definir las palabras clave de USQL
-
-
-def t_TRAEME(t):
-    r'TRAEME'
-    return t
-
-
-def t_DE_LA_TABLA(t):
-    r'DE\s+LA\s+TABLA'
-    return t
-
-
-def t_DONDE(t):
-    r'DONDE'
-    return t
-
-
-def t_LOS_DISTINTOS(t):
-    r'LOS\s+DISTINTOS'
-    return t
-
-
-def t_METE_EN(t):
-    r'METE\s+EN'
-    return t
-
-
-def t_LOS_VALORES(t):
-    r'LOS\s+VALORES'
-    return t
-
-
-def t_ACTUALIZA(t):
-    r'ACTUALIZA'
-    return t
-
-
-def t_SETEA(t):
-    r'SETEA'
-    return t
-
-
-def t_BORRA_DE_LA(t):
-    r'BORRA\s+DE\s+LA'
-    return t
-
-
-def t_MEZCLANDO(t):
-    r'MEZCLANDO'
-    return t
-
-
-def t_EN(t):
-    r'EN'
-    t.type = 'EN'
-    return t
-
-
-def t_AGRUPANDO_POR(t):
-    r'AGRUPANDO\s+POR'
-    return t
-
-
-def t_WHERE_DEL_GROUP_BY(t):
-    r'WHERE\s+DEL\s+GROUP\s+BY'
-    return t
-
-
-def t_CAMBIA_LA_TABLA(t):
-    r'CAMBIA\s+LA\s+TABLA'
-    return t
-
-
-def t_AGREGA_LA_COLUMNA(t):
-    r'AGREGA\s+LA\s+COLUMNA'
-    return t
-
-
-def t_ELIMINA_LA_COLUMNA(t):
-    r'ELIMINA\s+LA\s+COLUMNA'
-    return t
-
-
-def t_ENTRE(t):
-    r'ENTRE'
-    return t
-
-
-def t_Y(t):
-    r'Y'
-    return t
-
-
-def t_NO_NULO(t):
-    r'NO\s+NULO'
-    return t
-
-
-def t_CONTANDO(t):
-    r'CONTANDO'
-    return t
-
-
-def t_TODO(t):
-    r'TODO'
-    return t
 
 # Identificadores y literales
 
@@ -262,7 +277,7 @@ def t_IDENTIFIER(t):
 
 def t_STRING(t):
     r'\'([^\\\n]|(\\.))*?\''
-    t.value = t.value[1:-1]  # Remover las comillas
+
     return t
 
 

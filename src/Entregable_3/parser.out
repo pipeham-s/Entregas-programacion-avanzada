@@ -4,8 +4,6 @@ Unused terminals:
 
     ADD_COLUMN
     ALTER_TABLE
-    ASTERISK
-    COUNT
     DELETE_FROM
     DISTINCT
     DROP_COLUMN
@@ -40,137 +38,140 @@ Rule 11    usql_alter_table_statement -> CAMBIA_LA_TABLA IDENTIFIER alter_action
 Rule 12    alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type nullable
 Rule 13    alter_action_usql -> ELIMINA_LA_COLUMNA IDENTIFIER
 Rule 14    data_type -> IDENTIFIER LPAREN NUMBER RPAREN
-Rule 15    nullable -> NO_NULO
-Rule 16    nullable -> empty
-Rule 17    set_list -> assignment
-Rule 18    set_list -> set_list COMMA assignment
-Rule 19    assignment -> IDENTIFIER EQUALS value
-Rule 20    select_elements -> TODO
-Rule 21    select_elements -> LOS_DISTINTOS select_list
-Rule 22    select_elements -> CONTANDO LPAREN TODO RPAREN
-Rule 23    select_elements -> select_list
-Rule 24    select_list -> IDENTIFIER
-Rule 25    select_list -> select_list COMMA IDENTIFIER
-Rule 26    table_reference -> IDENTIFIER
-Rule 27    optional_usql_join -> MEZCLANDO table_reference EN condition
-Rule 28    optional_usql_join -> empty
-Rule 29    optional_usql_where -> DONDE condition
-Rule 30    optional_usql_where -> empty
-Rule 31    optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
-Rule 32    optional_usql_group_by -> empty
-Rule 33    group_list -> IDENTIFIER
-Rule 34    group_list -> group_list COMMA IDENTIFIER
-Rule 35    column_list -> IDENTIFIER
-Rule 36    column_list -> column_list COMMA IDENTIFIER
-Rule 37    value_list -> value
-Rule 38    value_list -> value_list COMMA value
-Rule 39    value -> NUMBER
-Rule 40    value -> STRING
-Rule 41    condition -> expression comparator expression
-Rule 42    condition -> expression BETWEEN expression AND expression
-Rule 43    condition -> expression ENTRE expression Y expression
-Rule 44    condition -> expression
-Rule 45    expression -> IDENTIFIER
-Rule 46    expression -> IDENTIFIER DOT IDENTIFIER
-Rule 47    expression -> NUMBER
-Rule 48    expression -> STRING
-Rule 49    comparator -> EQUALS
-Rule 50    comparator -> GREATER_THAN
-Rule 51    comparator -> LESS_THAN
-Rule 52    comparator -> GE
-Rule 53    comparator -> LE
-Rule 54    comparator -> NE
-Rule 55    empty -> <empty>
+Rule 15    data_type -> VARCHAR LPAREN NUMBER RPAREN
+Rule 16    nullable -> NO_NULO
+Rule 17    nullable -> empty
+Rule 18    set_list -> assignment
+Rule 19    set_list -> set_list COMMA assignment
+Rule 20    assignment -> IDENTIFIER EQUALS value
+Rule 21    select_elements -> TODO
+Rule 22    select_elements -> LOS_DISTINTOS select_list
+Rule 23    select_elements -> CONTANDO LPAREN TODO RPAREN
+Rule 24    select_elements -> select_list
+Rule 25    select_list -> IDENTIFIER
+Rule 26    select_list -> select_list COMMA IDENTIFIER
+Rule 27    table_reference -> IDENTIFIER
+Rule 28    optional_usql_join -> MEZCLANDO table_reference EN condition
+Rule 29    optional_usql_join -> empty
+Rule 30    optional_usql_where -> DONDE condition
+Rule 31    optional_usql_where -> empty
+Rule 32    optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
+Rule 33    optional_usql_group_by -> empty
+Rule 34    group_list -> IDENTIFIER
+Rule 35    group_list -> group_list COMMA IDENTIFIER
+Rule 36    column_list -> IDENTIFIER
+Rule 37    column_list -> column_list COMMA IDENTIFIER
+Rule 38    value_list -> value
+Rule 39    value_list -> value_list COMMA value
+Rule 40    value -> NUMBER
+Rule 41    value -> STRING
+Rule 42    condition -> expression comparator expression
+Rule 43    condition -> expression BETWEEN expression AND expression
+Rule 44    condition -> expression ENTRE expression Y expression
+Rule 45    condition -> expression
+Rule 46    expression -> IDENTIFIER
+Rule 47    expression -> STRING
+Rule 48    expression -> NUMBER
+Rule 49    expression -> COUNT LPAREN ASTERISK RPAREN
+Rule 50    expression -> IDENTIFIER DOT IDENTIFIER
+Rule 51    comparator -> EQUALS
+Rule 52    comparator -> GREATER_THAN
+Rule 53    comparator -> LESS_THAN
+Rule 54    comparator -> GE
+Rule 55    comparator -> LE
+Rule 56    comparator -> NE
+Rule 57    empty -> <empty>
 
 Terminals, with rules where they appear
 
 ACTUALIZA            : 9
 ADD_COLUMN           : 
 AGREGA_LA_COLUMNA    : 12
-AGRUPANDO_POR        : 31
+AGRUPANDO_POR        : 32
 ALTER_TABLE          : 
-AND                  : 42
-ASTERISK             : 
-BETWEEN              : 42
+AND                  : 43
+ASTERISK             : 49
+BETWEEN              : 43
 BORRA_DE_LA          : 10
 CAMBIA_LA_TABLA      : 11
-COMMA                : 18 25 34 36 38
-CONTANDO             : 22
-COUNT                : 
+COMMA                : 19 26 35 37 39
+CONTANDO             : 23
+COUNT                : 49
 DELETE_FROM          : 
 DE_LA_TABLA          : 7
 DISTINCT             : 
-DONDE                : 29
-DOT                  : 46
+DONDE                : 30
+DOT                  : 50
 DROP_COLUMN          : 
 ELIMINA_LA_COLUMNA   : 13
-EN                   : 27
-ENTRE                : 43
-EQUALS               : 19 49
+EN                   : 28
+ENTRE                : 44
+EQUALS               : 20 51
 FROM                 : 
-GE                   : 52
-GREATER_THAN         : 50
+GE                   : 54
+GREATER_THAN         : 52
 GROUP_BY             : 
 HAVING               : 
-IDENTIFIER           : 8 9 10 11 12 13 14 19 24 25 26 33 34 35 36 45 46 46
+IDENTIFIER           : 8 9 10 11 12 13 14 20 25 26 27 34 35 36 37 46 50 50
 INSERT_INTO          : 
 JOIN                 : 
-LE                   : 53
-LESS_THAN            : 51
-LOS_DISTINTOS        : 21
+LE                   : 55
+LESS_THAN            : 53
+LOS_DISTINTOS        : 22
 LOS_VALORES          : 8
-LPAREN               : 8 8 14 22
+LPAREN               : 8 8 14 15 23 49
 METE_EN              : 8
-MEZCLANDO            : 27
-NE                   : 54
+MEZCLANDO            : 28
+NE                   : 56
 NOT_NULL             : 
-NO_NULO              : 15
-NUMBER               : 14 39 47
+NO_NULO              : 16
+NUMBER               : 14 15 40 48
 ON                   : 
 OR                   : 
-RPAREN               : 8 8 14 22
+RPAREN               : 8 8 14 15 23 49
 SELECT               : 
 SEMICOLON            : 7 8 9 10 11
 SET                  : 
 SETEA                : 9
-STRING               : 40 48
-TODO                 : 20 22
+STRING               : 41 47
+TODO                 : 21 23
 TRAEME               : 7
 UPDATE               : 
 VALUES               : 
+VARCHAR              : 15
 WHERE                : 
-WHERE_DEL_GROUP_BY   : 31
-Y                    : 43
+WHERE_DEL_GROUP_BY   : 32
+Y                    : 44
 error                : 
 
 Nonterminals, with rules where they appear
 
 alter_action_usql    : 11
-assignment           : 17 18
-column_list          : 8 36
-comparator           : 41
-condition            : 27 29 31
+assignment           : 18 19
+column_list          : 8 37
+comparator           : 42
+condition            : 28 30 32
 data_type            : 12
-empty                : 16 28 30 32
-expression           : 41 41 42 42 42 43 43 43 44
-group_list           : 31 34
+empty                : 17 29 31 33
+expression           : 42 42 43 43 43 44 44 44 45
+group_list           : 32 35
 nullable             : 12
 optional_usql_group_by : 7
 optional_usql_join   : 7
 optional_usql_where  : 7 9 10
 select_elements      : 7
-select_list          : 21 23 25
-set_list             : 9 18
+select_list          : 22 24 26
+set_list             : 9 19
 statement            : 0
-table_reference      : 7 27
+table_reference      : 7 28
 usql_alter_table_statement : 6
 usql_delete_statement : 5
 usql_insert_statement : 3
 usql_select_statement : 2
 usql_statement       : 1
 usql_update_statement : 4
-value                : 19 37 38
-value_list           : 8 38
+value                : 20 38 39
+value_list           : 8 39
 
 Parsing method: LALR
 
@@ -254,12 +255,12 @@ state 7
 state 8
 
     (7) usql_select_statement -> TRAEME . select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON
-    (20) select_elements -> . TODO
-    (21) select_elements -> . LOS_DISTINTOS select_list
-    (22) select_elements -> . CONTANDO LPAREN TODO RPAREN
-    (23) select_elements -> . select_list
-    (24) select_list -> . IDENTIFIER
-    (25) select_list -> . select_list COMMA IDENTIFIER
+    (21) select_elements -> . TODO
+    (22) select_elements -> . LOS_DISTINTOS select_list
+    (23) select_elements -> . CONTANDO LPAREN TODO RPAREN
+    (24) select_elements -> . select_list
+    (25) select_list -> . IDENTIFIER
+    (26) select_list -> . select_list COMMA IDENTIFIER
 
     TODO            shift and go to state 14
     LOS_DISTINTOS   shift and go to state 15
@@ -306,16 +307,16 @@ state 13
 
 state 14
 
-    (20) select_elements -> TODO .
+    (21) select_elements -> TODO .
 
-    DE_LA_TABLA     reduce using rule 20 (select_elements -> TODO .)
+    DE_LA_TABLA     reduce using rule 21 (select_elements -> TODO .)
 
 
 state 15
 
-    (21) select_elements -> LOS_DISTINTOS . select_list
-    (24) select_list -> . IDENTIFIER
-    (25) select_list -> . select_list COMMA IDENTIFIER
+    (22) select_elements -> LOS_DISTINTOS . select_list
+    (25) select_list -> . IDENTIFIER
+    (26) select_list -> . select_list COMMA IDENTIFIER
 
     IDENTIFIER      shift and go to state 18
 
@@ -323,26 +324,26 @@ state 15
 
 state 16
 
-    (23) select_elements -> select_list .
-    (25) select_list -> select_list . COMMA IDENTIFIER
+    (24) select_elements -> select_list .
+    (26) select_list -> select_list . COMMA IDENTIFIER
 
-    DE_LA_TABLA     reduce using rule 23 (select_elements -> select_list .)
+    DE_LA_TABLA     reduce using rule 24 (select_elements -> select_list .)
     COMMA           shift and go to state 25
 
 
 state 17
 
-    (22) select_elements -> CONTANDO . LPAREN TODO RPAREN
+    (23) select_elements -> CONTANDO . LPAREN TODO RPAREN
 
     LPAREN          shift and go to state 26
 
 
 state 18
 
-    (24) select_list -> IDENTIFIER .
+    (25) select_list -> IDENTIFIER .
 
-    COMMA           reduce using rule 24 (select_list -> IDENTIFIER .)
-    DE_LA_TABLA     reduce using rule 24 (select_list -> IDENTIFIER .)
+    COMMA           reduce using rule 25 (select_list -> IDENTIFIER .)
+    DE_LA_TABLA     reduce using rule 25 (select_list -> IDENTIFIER .)
 
 
 state 19
@@ -362,12 +363,12 @@ state 20
 state 21
 
     (10) usql_delete_statement -> BORRA_DE_LA IDENTIFIER . optional_usql_where SEMICOLON
-    (29) optional_usql_where -> . DONDE condition
-    (30) optional_usql_where -> . empty
-    (55) empty -> .
+    (30) optional_usql_where -> . DONDE condition
+    (31) optional_usql_where -> . empty
+    (57) empty -> .
 
     DONDE           shift and go to state 30
-    SEMICOLON       reduce using rule 55 (empty -> .)
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
     optional_usql_where            shift and go to state 29
     empty                          shift and go to state 31
@@ -386,7 +387,7 @@ state 22
 state 23
 
     (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA . table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON
-    (26) table_reference -> . IDENTIFIER
+    (27) table_reference -> . IDENTIFIER
 
     IDENTIFIER      shift and go to state 36
 
@@ -394,23 +395,23 @@ state 23
 
 state 24
 
-    (21) select_elements -> LOS_DISTINTOS select_list .
-    (25) select_list -> select_list . COMMA IDENTIFIER
+    (22) select_elements -> LOS_DISTINTOS select_list .
+    (26) select_list -> select_list . COMMA IDENTIFIER
 
-    DE_LA_TABLA     reduce using rule 21 (select_elements -> LOS_DISTINTOS select_list .)
+    DE_LA_TABLA     reduce using rule 22 (select_elements -> LOS_DISTINTOS select_list .)
     COMMA           shift and go to state 25
 
 
 state 25
 
-    (25) select_list -> select_list COMMA . IDENTIFIER
+    (26) select_list -> select_list COMMA . IDENTIFIER
 
     IDENTIFIER      shift and go to state 37
 
 
 state 26
 
-    (22) select_elements -> CONTANDO LPAREN . TODO RPAREN
+    (23) select_elements -> CONTANDO LPAREN . TODO RPAREN
 
     TODO            shift and go to state 38
 
@@ -418,8 +419,8 @@ state 26
 state 27
 
     (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN . column_list RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLON
-    (35) column_list -> . IDENTIFIER
-    (36) column_list -> . column_list COMMA IDENTIFIER
+    (36) column_list -> . IDENTIFIER
+    (37) column_list -> . column_list COMMA IDENTIFIER
 
     IDENTIFIER      shift and go to state 39
 
@@ -428,9 +429,9 @@ state 27
 state 28
 
     (9) usql_update_statement -> ACTUALIZA IDENTIFIER SETEA . set_list optional_usql_where SEMICOLON
-    (17) set_list -> . assignment
-    (18) set_list -> . set_list COMMA assignment
-    (19) assignment -> . IDENTIFIER EQUALS value
+    (18) set_list -> . assignment
+    (19) set_list -> . set_list COMMA assignment
+    (20) assignment -> . IDENTIFIER EQUALS value
 
     IDENTIFIER      shift and go to state 41
 
@@ -446,139 +447,141 @@ state 29
 
 state 30
 
-    (29) optional_usql_where -> DONDE . condition
-    (41) condition -> . expression comparator expression
-    (42) condition -> . expression BETWEEN expression AND expression
-    (43) condition -> . expression ENTRE expression Y expression
-    (44) condition -> . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (30) optional_usql_where -> DONDE . condition
+    (42) condition -> . expression comparator expression
+    (43) condition -> . expression BETWEEN expression AND expression
+    (44) condition -> . expression ENTRE expression Y expression
+    (45) condition -> . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
 
     IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
 
     condition                      shift and go to state 45
     expression                     shift and go to state 46
 
 state 31
 
-    (30) optional_usql_where -> empty .
+    (31) optional_usql_where -> empty .
 
-    SEMICOLON       reduce using rule 30 (optional_usql_where -> empty .)
-    AGRUPANDO_POR   reduce using rule 30 (optional_usql_where -> empty .)
+    SEMICOLON       reduce using rule 31 (optional_usql_where -> empty .)
+    AGRUPANDO_POR   reduce using rule 31 (optional_usql_where -> empty .)
 
 
 state 32
 
     (11) usql_alter_table_statement -> CAMBIA_LA_TABLA IDENTIFIER alter_action_usql . SEMICOLON
 
-    SEMICOLON       shift and go to state 50
+    SEMICOLON       shift and go to state 51
 
 
 state 33
 
     (12) alter_action_usql -> AGREGA_LA_COLUMNA . IDENTIFIER data_type nullable
 
-    IDENTIFIER      shift and go to state 51
+    IDENTIFIER      shift and go to state 52
 
 
 state 34
 
     (13) alter_action_usql -> ELIMINA_LA_COLUMNA . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 52
+    IDENTIFIER      shift and go to state 53
 
 
 state 35
 
     (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference . optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON
-    (27) optional_usql_join -> . MEZCLANDO table_reference EN condition
-    (28) optional_usql_join -> . empty
-    (55) empty -> .
+    (28) optional_usql_join -> . MEZCLANDO table_reference EN condition
+    (29) optional_usql_join -> . empty
+    (57) empty -> .
 
-    MEZCLANDO       shift and go to state 54
-    DONDE           reduce using rule 55 (empty -> .)
-    AGRUPANDO_POR   reduce using rule 55 (empty -> .)
-    SEMICOLON       reduce using rule 55 (empty -> .)
+    MEZCLANDO       shift and go to state 55
+    DONDE           reduce using rule 57 (empty -> .)
+    AGRUPANDO_POR   reduce using rule 57 (empty -> .)
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
-    optional_usql_join             shift and go to state 53
-    empty                          shift and go to state 55
+    optional_usql_join             shift and go to state 54
+    empty                          shift and go to state 56
 
 state 36
 
-    (26) table_reference -> IDENTIFIER .
+    (27) table_reference -> IDENTIFIER .
 
-    MEZCLANDO       reduce using rule 26 (table_reference -> IDENTIFIER .)
-    DONDE           reduce using rule 26 (table_reference -> IDENTIFIER .)
-    AGRUPANDO_POR   reduce using rule 26 (table_reference -> IDENTIFIER .)
-    SEMICOLON       reduce using rule 26 (table_reference -> IDENTIFIER .)
-    EN              reduce using rule 26 (table_reference -> IDENTIFIER .)
+    MEZCLANDO       reduce using rule 27 (table_reference -> IDENTIFIER .)
+    DONDE           reduce using rule 27 (table_reference -> IDENTIFIER .)
+    AGRUPANDO_POR   reduce using rule 27 (table_reference -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 27 (table_reference -> IDENTIFIER .)
+    EN              reduce using rule 27 (table_reference -> IDENTIFIER .)
 
 
 state 37
 
-    (25) select_list -> select_list COMMA IDENTIFIER .
+    (26) select_list -> select_list COMMA IDENTIFIER .
 
-    COMMA           reduce using rule 25 (select_list -> select_list COMMA IDENTIFIER .)
-    DE_LA_TABLA     reduce using rule 25 (select_list -> select_list COMMA IDENTIFIER .)
+    COMMA           reduce using rule 26 (select_list -> select_list COMMA IDENTIFIER .)
+    DE_LA_TABLA     reduce using rule 26 (select_list -> select_list COMMA IDENTIFIER .)
 
 
 state 38
 
-    (22) select_elements -> CONTANDO LPAREN TODO . RPAREN
+    (23) select_elements -> CONTANDO LPAREN TODO . RPAREN
 
-    RPAREN          shift and go to state 56
+    RPAREN          shift and go to state 57
 
 
 state 39
 
-    (35) column_list -> IDENTIFIER .
+    (36) column_list -> IDENTIFIER .
 
-    RPAREN          reduce using rule 35 (column_list -> IDENTIFIER .)
-    COMMA           reduce using rule 35 (column_list -> IDENTIFIER .)
+    RPAREN          reduce using rule 36 (column_list -> IDENTIFIER .)
+    COMMA           reduce using rule 36 (column_list -> IDENTIFIER .)
 
 
 state 40
 
     (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list . RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLON
-    (36) column_list -> column_list . COMMA IDENTIFIER
+    (37) column_list -> column_list . COMMA IDENTIFIER
 
-    RPAREN          shift and go to state 57
-    COMMA           shift and go to state 58
+    RPAREN          shift and go to state 58
+    COMMA           shift and go to state 59
 
 
 state 41
 
-    (19) assignment -> IDENTIFIER . EQUALS value
+    (20) assignment -> IDENTIFIER . EQUALS value
 
-    EQUALS          shift and go to state 59
+    EQUALS          shift and go to state 60
 
 
 state 42
 
     (9) usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list . optional_usql_where SEMICOLON
-    (18) set_list -> set_list . COMMA assignment
-    (29) optional_usql_where -> . DONDE condition
-    (30) optional_usql_where -> . empty
-    (55) empty -> .
+    (19) set_list -> set_list . COMMA assignment
+    (30) optional_usql_where -> . DONDE condition
+    (31) optional_usql_where -> . empty
+    (57) empty -> .
 
-    COMMA           shift and go to state 61
+    COMMA           shift and go to state 62
     DONDE           shift and go to state 30
-    SEMICOLON       reduce using rule 55 (empty -> .)
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
-    optional_usql_where            shift and go to state 60
+    optional_usql_where            shift and go to state 61
     empty                          shift and go to state 31
 
 state 43
 
-    (17) set_list -> assignment .
+    (18) set_list -> assignment .
 
-    COMMA           reduce using rule 17 (set_list -> assignment .)
-    DONDE           reduce using rule 17 (set_list -> assignment .)
-    SEMICOLON       reduce using rule 17 (set_list -> assignment .)
+    COMMA           reduce using rule 18 (set_list -> assignment .)
+    DONDE           reduce using rule 18 (set_list -> assignment .)
+    SEMICOLON       reduce using rule 18 (set_list -> assignment .)
 
 
 state 44
@@ -590,635 +593,716 @@ state 44
 
 state 45
 
-    (29) optional_usql_where -> DONDE condition .
+    (30) optional_usql_where -> DONDE condition .
 
-    SEMICOLON       reduce using rule 29 (optional_usql_where -> DONDE condition .)
-    AGRUPANDO_POR   reduce using rule 29 (optional_usql_where -> DONDE condition .)
+    SEMICOLON       reduce using rule 30 (optional_usql_where -> DONDE condition .)
+    AGRUPANDO_POR   reduce using rule 30 (optional_usql_where -> DONDE condition .)
 
 
 state 46
 
-    (41) condition -> expression . comparator expression
-    (42) condition -> expression . BETWEEN expression AND expression
-    (43) condition -> expression . ENTRE expression Y expression
-    (44) condition -> expression .
-    (49) comparator -> . EQUALS
-    (50) comparator -> . GREATER_THAN
-    (51) comparator -> . LESS_THAN
-    (52) comparator -> . GE
-    (53) comparator -> . LE
-    (54) comparator -> . NE
+    (42) condition -> expression . comparator expression
+    (43) condition -> expression . BETWEEN expression AND expression
+    (44) condition -> expression . ENTRE expression Y expression
+    (45) condition -> expression .
+    (51) comparator -> . EQUALS
+    (52) comparator -> . GREATER_THAN
+    (53) comparator -> . LESS_THAN
+    (54) comparator -> . GE
+    (55) comparator -> . LE
+    (56) comparator -> . NE
 
-    BETWEEN         shift and go to state 63
-    ENTRE           shift and go to state 64
-    SEMICOLON       reduce using rule 44 (condition -> expression .)
-    AGRUPANDO_POR   reduce using rule 44 (condition -> expression .)
-    DONDE           reduce using rule 44 (condition -> expression .)
-    EQUALS          shift and go to state 65
-    GREATER_THAN    shift and go to state 66
-    LESS_THAN       shift and go to state 67
-    GE              shift and go to state 68
-    LE              shift and go to state 69
-    NE              shift and go to state 70
+    BETWEEN         shift and go to state 64
+    ENTRE           shift and go to state 65
+    SEMICOLON       reduce using rule 45 (condition -> expression .)
+    AGRUPANDO_POR   reduce using rule 45 (condition -> expression .)
+    DONDE           reduce using rule 45 (condition -> expression .)
+    EQUALS          shift and go to state 66
+    GREATER_THAN    shift and go to state 67
+    LESS_THAN       shift and go to state 68
+    GE              shift and go to state 69
+    LE              shift and go to state 70
+    NE              shift and go to state 71
 
-    comparator                     shift and go to state 62
+    comparator                     shift and go to state 63
 
 state 47
 
-    (45) expression -> IDENTIFIER .
-    (46) expression -> IDENTIFIER . DOT IDENTIFIER
+    (46) expression -> IDENTIFIER .
+    (50) expression -> IDENTIFIER . DOT IDENTIFIER
 
-    BETWEEN         reduce using rule 45 (expression -> IDENTIFIER .)
-    ENTRE           reduce using rule 45 (expression -> IDENTIFIER .)
-    EQUALS          reduce using rule 45 (expression -> IDENTIFIER .)
-    GREATER_THAN    reduce using rule 45 (expression -> IDENTIFIER .)
-    LESS_THAN       reduce using rule 45 (expression -> IDENTIFIER .)
-    GE              reduce using rule 45 (expression -> IDENTIFIER .)
-    LE              reduce using rule 45 (expression -> IDENTIFIER .)
-    NE              reduce using rule 45 (expression -> IDENTIFIER .)
-    SEMICOLON       reduce using rule 45 (expression -> IDENTIFIER .)
-    AGRUPANDO_POR   reduce using rule 45 (expression -> IDENTIFIER .)
-    DONDE           reduce using rule 45 (expression -> IDENTIFIER .)
-    AND             reduce using rule 45 (expression -> IDENTIFIER .)
-    Y               reduce using rule 45 (expression -> IDENTIFIER .)
-    DOT             shift and go to state 71
+    BETWEEN         reduce using rule 46 (expression -> IDENTIFIER .)
+    ENTRE           reduce using rule 46 (expression -> IDENTIFIER .)
+    EQUALS          reduce using rule 46 (expression -> IDENTIFIER .)
+    GREATER_THAN    reduce using rule 46 (expression -> IDENTIFIER .)
+    LESS_THAN       reduce using rule 46 (expression -> IDENTIFIER .)
+    GE              reduce using rule 46 (expression -> IDENTIFIER .)
+    LE              reduce using rule 46 (expression -> IDENTIFIER .)
+    NE              reduce using rule 46 (expression -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 46 (expression -> IDENTIFIER .)
+    AGRUPANDO_POR   reduce using rule 46 (expression -> IDENTIFIER .)
+    DONDE           reduce using rule 46 (expression -> IDENTIFIER .)
+    AND             reduce using rule 46 (expression -> IDENTIFIER .)
+    Y               reduce using rule 46 (expression -> IDENTIFIER .)
+    DOT             shift and go to state 72
 
 
 state 48
 
-    (47) expression -> NUMBER .
+    (47) expression -> STRING .
 
-    BETWEEN         reduce using rule 47 (expression -> NUMBER .)
-    ENTRE           reduce using rule 47 (expression -> NUMBER .)
-    EQUALS          reduce using rule 47 (expression -> NUMBER .)
-    GREATER_THAN    reduce using rule 47 (expression -> NUMBER .)
-    LESS_THAN       reduce using rule 47 (expression -> NUMBER .)
-    GE              reduce using rule 47 (expression -> NUMBER .)
-    LE              reduce using rule 47 (expression -> NUMBER .)
-    NE              reduce using rule 47 (expression -> NUMBER .)
-    SEMICOLON       reduce using rule 47 (expression -> NUMBER .)
-    AGRUPANDO_POR   reduce using rule 47 (expression -> NUMBER .)
-    DONDE           reduce using rule 47 (expression -> NUMBER .)
-    AND             reduce using rule 47 (expression -> NUMBER .)
-    Y               reduce using rule 47 (expression -> NUMBER .)
+    BETWEEN         reduce using rule 47 (expression -> STRING .)
+    ENTRE           reduce using rule 47 (expression -> STRING .)
+    EQUALS          reduce using rule 47 (expression -> STRING .)
+    GREATER_THAN    reduce using rule 47 (expression -> STRING .)
+    LESS_THAN       reduce using rule 47 (expression -> STRING .)
+    GE              reduce using rule 47 (expression -> STRING .)
+    LE              reduce using rule 47 (expression -> STRING .)
+    NE              reduce using rule 47 (expression -> STRING .)
+    SEMICOLON       reduce using rule 47 (expression -> STRING .)
+    AGRUPANDO_POR   reduce using rule 47 (expression -> STRING .)
+    DONDE           reduce using rule 47 (expression -> STRING .)
+    AND             reduce using rule 47 (expression -> STRING .)
+    Y               reduce using rule 47 (expression -> STRING .)
 
 
 state 49
 
-    (48) expression -> STRING .
+    (48) expression -> NUMBER .
 
-    BETWEEN         reduce using rule 48 (expression -> STRING .)
-    ENTRE           reduce using rule 48 (expression -> STRING .)
-    EQUALS          reduce using rule 48 (expression -> STRING .)
-    GREATER_THAN    reduce using rule 48 (expression -> STRING .)
-    LESS_THAN       reduce using rule 48 (expression -> STRING .)
-    GE              reduce using rule 48 (expression -> STRING .)
-    LE              reduce using rule 48 (expression -> STRING .)
-    NE              reduce using rule 48 (expression -> STRING .)
-    SEMICOLON       reduce using rule 48 (expression -> STRING .)
-    AGRUPANDO_POR   reduce using rule 48 (expression -> STRING .)
-    DONDE           reduce using rule 48 (expression -> STRING .)
-    AND             reduce using rule 48 (expression -> STRING .)
-    Y               reduce using rule 48 (expression -> STRING .)
+    BETWEEN         reduce using rule 48 (expression -> NUMBER .)
+    ENTRE           reduce using rule 48 (expression -> NUMBER .)
+    EQUALS          reduce using rule 48 (expression -> NUMBER .)
+    GREATER_THAN    reduce using rule 48 (expression -> NUMBER .)
+    LESS_THAN       reduce using rule 48 (expression -> NUMBER .)
+    GE              reduce using rule 48 (expression -> NUMBER .)
+    LE              reduce using rule 48 (expression -> NUMBER .)
+    NE              reduce using rule 48 (expression -> NUMBER .)
+    SEMICOLON       reduce using rule 48 (expression -> NUMBER .)
+    AGRUPANDO_POR   reduce using rule 48 (expression -> NUMBER .)
+    DONDE           reduce using rule 48 (expression -> NUMBER .)
+    AND             reduce using rule 48 (expression -> NUMBER .)
+    Y               reduce using rule 48 (expression -> NUMBER .)
 
 
 state 50
+
+    (49) expression -> COUNT . LPAREN ASTERISK RPAREN
+
+    LPAREN          shift and go to state 73
+
+
+state 51
 
     (11) usql_alter_table_statement -> CAMBIA_LA_TABLA IDENTIFIER alter_action_usql SEMICOLON .
 
     $end            reduce using rule 11 (usql_alter_table_statement -> CAMBIA_LA_TABLA IDENTIFIER alter_action_usql SEMICOLON .)
 
 
-state 51
+state 52
 
     (12) alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER . data_type nullable
     (14) data_type -> . IDENTIFIER LPAREN NUMBER RPAREN
+    (15) data_type -> . VARCHAR LPAREN NUMBER RPAREN
 
-    IDENTIFIER      shift and go to state 72
+    IDENTIFIER      shift and go to state 74
+    VARCHAR         shift and go to state 76
 
-    data_type                      shift and go to state 73
+    data_type                      shift and go to state 75
 
-state 52
+state 53
 
     (13) alter_action_usql -> ELIMINA_LA_COLUMNA IDENTIFIER .
 
     SEMICOLON       reduce using rule 13 (alter_action_usql -> ELIMINA_LA_COLUMNA IDENTIFIER .)
 
 
-state 53
-
-    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join . optional_usql_where optional_usql_group_by SEMICOLON
-    (29) optional_usql_where -> . DONDE condition
-    (30) optional_usql_where -> . empty
-    (55) empty -> .
-
-    DONDE           shift and go to state 30
-    AGRUPANDO_POR   reduce using rule 55 (empty -> .)
-    SEMICOLON       reduce using rule 55 (empty -> .)
-
-    optional_usql_where            shift and go to state 74
-    empty                          shift and go to state 31
-
 state 54
 
-    (27) optional_usql_join -> MEZCLANDO . table_reference EN condition
-    (26) table_reference -> . IDENTIFIER
+    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join . optional_usql_where optional_usql_group_by SEMICOLON
+    (30) optional_usql_where -> . DONDE condition
+    (31) optional_usql_where -> . empty
+    (57) empty -> .
 
-    IDENTIFIER      shift and go to state 36
+    DONDE           shift and go to state 30
+    AGRUPANDO_POR   reduce using rule 57 (empty -> .)
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
-    table_reference                shift and go to state 75
+    optional_usql_where            shift and go to state 77
+    empty                          shift and go to state 31
 
 state 55
 
-    (28) optional_usql_join -> empty .
+    (28) optional_usql_join -> MEZCLANDO . table_reference EN condition
+    (27) table_reference -> . IDENTIFIER
 
-    DONDE           reduce using rule 28 (optional_usql_join -> empty .)
-    AGRUPANDO_POR   reduce using rule 28 (optional_usql_join -> empty .)
-    SEMICOLON       reduce using rule 28 (optional_usql_join -> empty .)
+    IDENTIFIER      shift and go to state 36
 
+    table_reference                shift and go to state 78
 
 state 56
 
-    (22) select_elements -> CONTANDO LPAREN TODO RPAREN .
+    (29) optional_usql_join -> empty .
 
-    DE_LA_TABLA     reduce using rule 22 (select_elements -> CONTANDO LPAREN TODO RPAREN .)
+    DONDE           reduce using rule 29 (optional_usql_join -> empty .)
+    AGRUPANDO_POR   reduce using rule 29 (optional_usql_join -> empty .)
+    SEMICOLON       reduce using rule 29 (optional_usql_join -> empty .)
 
 
 state 57
 
-    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN . LOS_VALORES LPAREN value_list RPAREN SEMICOLON
+    (23) select_elements -> CONTANDO LPAREN TODO RPAREN .
 
-    LOS_VALORES     shift and go to state 76
+    DE_LA_TABLA     reduce using rule 23 (select_elements -> CONTANDO LPAREN TODO RPAREN .)
 
 
 state 58
 
-    (36) column_list -> column_list COMMA . IDENTIFIER
+    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN . LOS_VALORES LPAREN value_list RPAREN SEMICOLON
 
-    IDENTIFIER      shift and go to state 77
+    LOS_VALORES     shift and go to state 79
 
 
 state 59
 
-    (19) assignment -> IDENTIFIER EQUALS . value
-    (39) value -> . NUMBER
-    (40) value -> . STRING
+    (37) column_list -> column_list COMMA . IDENTIFIER
 
-    NUMBER          shift and go to state 79
-    STRING          shift and go to state 80
+    IDENTIFIER      shift and go to state 80
 
-    value                          shift and go to state 78
 
 state 60
 
-    (9) usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where . SEMICOLON
+    (20) assignment -> IDENTIFIER EQUALS . value
+    (40) value -> . NUMBER
+    (41) value -> . STRING
 
-    SEMICOLON       shift and go to state 81
+    NUMBER          shift and go to state 82
+    STRING          shift and go to state 83
 
+    value                          shift and go to state 81
 
 state 61
 
-    (18) set_list -> set_list COMMA . assignment
-    (19) assignment -> . IDENTIFIER EQUALS value
+    (9) usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where . SEMICOLON
 
-    IDENTIFIER      shift and go to state 41
+    SEMICOLON       shift and go to state 84
 
-    assignment                     shift and go to state 82
 
 state 62
 
-    (41) condition -> expression comparator . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (19) set_list -> set_list COMMA . assignment
+    (20) assignment -> . IDENTIFIER EQUALS value
 
-    IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    IDENTIFIER      shift and go to state 41
 
-    expression                     shift and go to state 83
+    assignment                     shift and go to state 85
 
 state 63
 
-    (42) condition -> expression BETWEEN . expression AND expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (42) condition -> expression comparator . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
 
     IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
 
-    expression                     shift and go to state 84
+    expression                     shift and go to state 86
 
 state 64
 
-    (43) condition -> expression ENTRE . expression Y expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (43) condition -> expression BETWEEN . expression AND expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
 
     IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
 
-    expression                     shift and go to state 85
+    expression                     shift and go to state 87
 
 state 65
 
-    (49) comparator -> EQUALS .
+    (44) condition -> expression ENTRE . expression Y expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
 
-    IDENTIFIER      reduce using rule 49 (comparator -> EQUALS .)
-    NUMBER          reduce using rule 49 (comparator -> EQUALS .)
-    STRING          reduce using rule 49 (comparator -> EQUALS .)
+    IDENTIFIER      shift and go to state 47
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
 
+    expression                     shift and go to state 88
 
 state 66
 
-    (50) comparator -> GREATER_THAN .
+    (51) comparator -> EQUALS .
 
-    IDENTIFIER      reduce using rule 50 (comparator -> GREATER_THAN .)
-    NUMBER          reduce using rule 50 (comparator -> GREATER_THAN .)
-    STRING          reduce using rule 50 (comparator -> GREATER_THAN .)
+    IDENTIFIER      reduce using rule 51 (comparator -> EQUALS .)
+    STRING          reduce using rule 51 (comparator -> EQUALS .)
+    NUMBER          reduce using rule 51 (comparator -> EQUALS .)
+    COUNT           reduce using rule 51 (comparator -> EQUALS .)
 
 
 state 67
 
-    (51) comparator -> LESS_THAN .
+    (52) comparator -> GREATER_THAN .
 
-    IDENTIFIER      reduce using rule 51 (comparator -> LESS_THAN .)
-    NUMBER          reduce using rule 51 (comparator -> LESS_THAN .)
-    STRING          reduce using rule 51 (comparator -> LESS_THAN .)
+    IDENTIFIER      reduce using rule 52 (comparator -> GREATER_THAN .)
+    STRING          reduce using rule 52 (comparator -> GREATER_THAN .)
+    NUMBER          reduce using rule 52 (comparator -> GREATER_THAN .)
+    COUNT           reduce using rule 52 (comparator -> GREATER_THAN .)
 
 
 state 68
 
-    (52) comparator -> GE .
+    (53) comparator -> LESS_THAN .
 
-    IDENTIFIER      reduce using rule 52 (comparator -> GE .)
-    NUMBER          reduce using rule 52 (comparator -> GE .)
-    STRING          reduce using rule 52 (comparator -> GE .)
+    IDENTIFIER      reduce using rule 53 (comparator -> LESS_THAN .)
+    STRING          reduce using rule 53 (comparator -> LESS_THAN .)
+    NUMBER          reduce using rule 53 (comparator -> LESS_THAN .)
+    COUNT           reduce using rule 53 (comparator -> LESS_THAN .)
 
 
 state 69
 
-    (53) comparator -> LE .
+    (54) comparator -> GE .
 
-    IDENTIFIER      reduce using rule 53 (comparator -> LE .)
-    NUMBER          reduce using rule 53 (comparator -> LE .)
-    STRING          reduce using rule 53 (comparator -> LE .)
+    IDENTIFIER      reduce using rule 54 (comparator -> GE .)
+    STRING          reduce using rule 54 (comparator -> GE .)
+    NUMBER          reduce using rule 54 (comparator -> GE .)
+    COUNT           reduce using rule 54 (comparator -> GE .)
 
 
 state 70
 
-    (54) comparator -> NE .
+    (55) comparator -> LE .
 
-    IDENTIFIER      reduce using rule 54 (comparator -> NE .)
-    NUMBER          reduce using rule 54 (comparator -> NE .)
-    STRING          reduce using rule 54 (comparator -> NE .)
+    IDENTIFIER      reduce using rule 55 (comparator -> LE .)
+    STRING          reduce using rule 55 (comparator -> LE .)
+    NUMBER          reduce using rule 55 (comparator -> LE .)
+    COUNT           reduce using rule 55 (comparator -> LE .)
 
 
 state 71
 
-    (46) expression -> IDENTIFIER DOT . IDENTIFIER
+    (56) comparator -> NE .
 
-    IDENTIFIER      shift and go to state 86
+    IDENTIFIER      reduce using rule 56 (comparator -> NE .)
+    STRING          reduce using rule 56 (comparator -> NE .)
+    NUMBER          reduce using rule 56 (comparator -> NE .)
+    COUNT           reduce using rule 56 (comparator -> NE .)
 
 
 state 72
 
-    (14) data_type -> IDENTIFIER . LPAREN NUMBER RPAREN
+    (50) expression -> IDENTIFIER DOT . IDENTIFIER
 
-    LPAREN          shift and go to state 87
+    IDENTIFIER      shift and go to state 89
 
 
 state 73
 
-    (12) alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type . nullable
-    (15) nullable -> . NO_NULO
-    (16) nullable -> . empty
-    (55) empty -> .
+    (49) expression -> COUNT LPAREN . ASTERISK RPAREN
 
-    NO_NULO         shift and go to state 89
-    SEMICOLON       reduce using rule 55 (empty -> .)
+    ASTERISK        shift and go to state 90
 
-    nullable                       shift and go to state 88
-    empty                          shift and go to state 90
 
 state 74
 
-    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where . optional_usql_group_by SEMICOLON
-    (31) optional_usql_group_by -> . AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
-    (32) optional_usql_group_by -> . empty
-    (55) empty -> .
+    (14) data_type -> IDENTIFIER . LPAREN NUMBER RPAREN
 
-    AGRUPANDO_POR   shift and go to state 92
-    SEMICOLON       reduce using rule 55 (empty -> .)
+    LPAREN          shift and go to state 91
 
-    optional_usql_group_by         shift and go to state 91
-    empty                          shift and go to state 93
 
 state 75
 
-    (27) optional_usql_join -> MEZCLANDO table_reference . EN condition
+    (12) alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type . nullable
+    (16) nullable -> . NO_NULO
+    (17) nullable -> . empty
+    (57) empty -> .
 
-    EN              shift and go to state 94
+    NO_NULO         shift and go to state 93
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
+    nullable                       shift and go to state 92
+    empty                          shift and go to state 94
 
 state 76
 
-    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES . LPAREN value_list RPAREN SEMICOLON
+    (15) data_type -> VARCHAR . LPAREN NUMBER RPAREN
 
     LPAREN          shift and go to state 95
 
 
 state 77
 
-    (36) column_list -> column_list COMMA IDENTIFIER .
+    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where . optional_usql_group_by SEMICOLON
+    (32) optional_usql_group_by -> . AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
+    (33) optional_usql_group_by -> . empty
+    (57) empty -> .
 
-    RPAREN          reduce using rule 36 (column_list -> column_list COMMA IDENTIFIER .)
-    COMMA           reduce using rule 36 (column_list -> column_list COMMA IDENTIFIER .)
+    AGRUPANDO_POR   shift and go to state 97
+    SEMICOLON       reduce using rule 57 (empty -> .)
 
+    optional_usql_group_by         shift and go to state 96
+    empty                          shift and go to state 98
 
 state 78
 
-    (19) assignment -> IDENTIFIER EQUALS value .
+    (28) optional_usql_join -> MEZCLANDO table_reference . EN condition
 
-    COMMA           reduce using rule 19 (assignment -> IDENTIFIER EQUALS value .)
-    DONDE           reduce using rule 19 (assignment -> IDENTIFIER EQUALS value .)
-    SEMICOLON       reduce using rule 19 (assignment -> IDENTIFIER EQUALS value .)
+    EN              shift and go to state 99
 
 
 state 79
 
-    (39) value -> NUMBER .
+    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES . LPAREN value_list RPAREN SEMICOLON
 
-    COMMA           reduce using rule 39 (value -> NUMBER .)
-    DONDE           reduce using rule 39 (value -> NUMBER .)
-    SEMICOLON       reduce using rule 39 (value -> NUMBER .)
-    RPAREN          reduce using rule 39 (value -> NUMBER .)
+    LPAREN          shift and go to state 100
 
 
 state 80
 
-    (40) value -> STRING .
+    (37) column_list -> column_list COMMA IDENTIFIER .
 
-    COMMA           reduce using rule 40 (value -> STRING .)
-    DONDE           reduce using rule 40 (value -> STRING .)
-    SEMICOLON       reduce using rule 40 (value -> STRING .)
-    RPAREN          reduce using rule 40 (value -> STRING .)
+    RPAREN          reduce using rule 37 (column_list -> column_list COMMA IDENTIFIER .)
+    COMMA           reduce using rule 37 (column_list -> column_list COMMA IDENTIFIER .)
 
 
 state 81
+
+    (20) assignment -> IDENTIFIER EQUALS value .
+
+    COMMA           reduce using rule 20 (assignment -> IDENTIFIER EQUALS value .)
+    DONDE           reduce using rule 20 (assignment -> IDENTIFIER EQUALS value .)
+    SEMICOLON       reduce using rule 20 (assignment -> IDENTIFIER EQUALS value .)
+
+
+state 82
+
+    (40) value -> NUMBER .
+
+    COMMA           reduce using rule 40 (value -> NUMBER .)
+    DONDE           reduce using rule 40 (value -> NUMBER .)
+    SEMICOLON       reduce using rule 40 (value -> NUMBER .)
+    RPAREN          reduce using rule 40 (value -> NUMBER .)
+
+
+state 83
+
+    (41) value -> STRING .
+
+    COMMA           reduce using rule 41 (value -> STRING .)
+    DONDE           reduce using rule 41 (value -> STRING .)
+    SEMICOLON       reduce using rule 41 (value -> STRING .)
+    RPAREN          reduce using rule 41 (value -> STRING .)
+
+
+state 84
 
     (9) usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where SEMICOLON .
 
     $end            reduce using rule 9 (usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where SEMICOLON .)
 
 
-state 82
-
-    (18) set_list -> set_list COMMA assignment .
-
-    COMMA           reduce using rule 18 (set_list -> set_list COMMA assignment .)
-    DONDE           reduce using rule 18 (set_list -> set_list COMMA assignment .)
-    SEMICOLON       reduce using rule 18 (set_list -> set_list COMMA assignment .)
-
-
-state 83
-
-    (41) condition -> expression comparator expression .
-
-    SEMICOLON       reduce using rule 41 (condition -> expression comparator expression .)
-    AGRUPANDO_POR   reduce using rule 41 (condition -> expression comparator expression .)
-    DONDE           reduce using rule 41 (condition -> expression comparator expression .)
-
-
-state 84
-
-    (42) condition -> expression BETWEEN expression . AND expression
-
-    AND             shift and go to state 96
-
-
 state 85
 
-    (43) condition -> expression ENTRE expression . Y expression
+    (19) set_list -> set_list COMMA assignment .
 
-    Y               shift and go to state 97
+    COMMA           reduce using rule 19 (set_list -> set_list COMMA assignment .)
+    DONDE           reduce using rule 19 (set_list -> set_list COMMA assignment .)
+    SEMICOLON       reduce using rule 19 (set_list -> set_list COMMA assignment .)
 
 
 state 86
 
-    (46) expression -> IDENTIFIER DOT IDENTIFIER .
+    (42) condition -> expression comparator expression .
 
-    BETWEEN         reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    ENTRE           reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    EQUALS          reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    GREATER_THAN    reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    LESS_THAN       reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    GE              reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    LE              reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    NE              reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    SEMICOLON       reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    AGRUPANDO_POR   reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    DONDE           reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    AND             reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
-    Y               reduce using rule 46 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    SEMICOLON       reduce using rule 42 (condition -> expression comparator expression .)
+    AGRUPANDO_POR   reduce using rule 42 (condition -> expression comparator expression .)
+    DONDE           reduce using rule 42 (condition -> expression comparator expression .)
 
 
 state 87
 
-    (14) data_type -> IDENTIFIER LPAREN . NUMBER RPAREN
+    (43) condition -> expression BETWEEN expression . AND expression
 
-    NUMBER          shift and go to state 98
+    AND             shift and go to state 101
 
 
 state 88
+
+    (44) condition -> expression ENTRE expression . Y expression
+
+    Y               shift and go to state 102
+
+
+state 89
+
+    (50) expression -> IDENTIFIER DOT IDENTIFIER .
+
+    BETWEEN         reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    ENTRE           reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    EQUALS          reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    GREATER_THAN    reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    LESS_THAN       reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    GE              reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    LE              reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    NE              reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    SEMICOLON       reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    AGRUPANDO_POR   reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    DONDE           reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    AND             reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+    Y               reduce using rule 50 (expression -> IDENTIFIER DOT IDENTIFIER .)
+
+
+state 90
+
+    (49) expression -> COUNT LPAREN ASTERISK . RPAREN
+
+    RPAREN          shift and go to state 103
+
+
+state 91
+
+    (14) data_type -> IDENTIFIER LPAREN . NUMBER RPAREN
+
+    NUMBER          shift and go to state 104
+
+
+state 92
 
     (12) alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type nullable .
 
     SEMICOLON       reduce using rule 12 (alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type nullable .)
 
 
-state 89
-
-    (15) nullable -> NO_NULO .
-
-    SEMICOLON       reduce using rule 15 (nullable -> NO_NULO .)
-
-
-state 90
-
-    (16) nullable -> empty .
-
-    SEMICOLON       reduce using rule 16 (nullable -> empty .)
-
-
-state 91
-
-    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by . SEMICOLON
-
-    SEMICOLON       shift and go to state 99
-
-
-state 92
-
-    (31) optional_usql_group_by -> AGRUPANDO_POR . group_list WHERE_DEL_GROUP_BY condition
-    (33) group_list -> . IDENTIFIER
-    (34) group_list -> . group_list COMMA IDENTIFIER
-
-    IDENTIFIER      shift and go to state 101
-
-    group_list                     shift and go to state 100
-
 state 93
 
-    (32) optional_usql_group_by -> empty .
+    (16) nullable -> NO_NULO .
 
-    SEMICOLON       reduce using rule 32 (optional_usql_group_by -> empty .)
+    SEMICOLON       reduce using rule 16 (nullable -> NO_NULO .)
 
 
 state 94
 
-    (27) optional_usql_join -> MEZCLANDO table_reference EN . condition
-    (41) condition -> . expression comparator expression
-    (42) condition -> . expression BETWEEN expression AND expression
-    (43) condition -> . expression ENTRE expression Y expression
-    (44) condition -> . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (17) nullable -> empty .
 
-    IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    SEMICOLON       reduce using rule 17 (nullable -> empty .)
 
-    condition                      shift and go to state 102
-    expression                     shift and go to state 46
 
 state 95
 
-    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN . value_list RPAREN SEMICOLON
-    (37) value_list -> . value
-    (38) value_list -> . value_list COMMA value
-    (39) value -> . NUMBER
-    (40) value -> . STRING
+    (15) data_type -> VARCHAR LPAREN . NUMBER RPAREN
 
-    NUMBER          shift and go to state 79
-    STRING          shift and go to state 80
+    NUMBER          shift and go to state 105
 
-    value_list                     shift and go to state 103
-    value                          shift and go to state 104
 
 state 96
 
-    (42) condition -> expression BETWEEN expression AND . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by . SEMICOLON
 
-    IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    SEMICOLON       shift and go to state 106
 
-    expression                     shift and go to state 105
 
 state 97
 
-    (43) condition -> expression ENTRE expression Y . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (32) optional_usql_group_by -> AGRUPANDO_POR . group_list WHERE_DEL_GROUP_BY condition
+    (34) group_list -> . IDENTIFIER
+    (35) group_list -> . group_list COMMA IDENTIFIER
 
-    IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    IDENTIFIER      shift and go to state 108
 
-    expression                     shift and go to state 106
+    group_list                     shift and go to state 107
 
 state 98
 
-    (14) data_type -> IDENTIFIER LPAREN NUMBER . RPAREN
+    (33) optional_usql_group_by -> empty .
 
-    RPAREN          shift and go to state 107
+    SEMICOLON       reduce using rule 33 (optional_usql_group_by -> empty .)
 
 
 state 99
+
+    (28) optional_usql_join -> MEZCLANDO table_reference EN . condition
+    (42) condition -> . expression comparator expression
+    (43) condition -> . expression BETWEEN expression AND expression
+    (44) condition -> . expression ENTRE expression Y expression
+    (45) condition -> . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
+
+    IDENTIFIER      shift and go to state 47
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
+
+    condition                      shift and go to state 109
+    expression                     shift and go to state 46
+
+state 100
+
+    (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN . value_list RPAREN SEMICOLON
+    (38) value_list -> . value
+    (39) value_list -> . value_list COMMA value
+    (40) value -> . NUMBER
+    (41) value -> . STRING
+
+    NUMBER          shift and go to state 82
+    STRING          shift and go to state 83
+
+    value_list                     shift and go to state 110
+    value                          shift and go to state 111
+
+state 101
+
+    (43) condition -> expression BETWEEN expression AND . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
+
+    IDENTIFIER      shift and go to state 47
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
+
+    expression                     shift and go to state 112
+
+state 102
+
+    (44) condition -> expression ENTRE expression Y . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
+
+    IDENTIFIER      shift and go to state 47
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
+
+    expression                     shift and go to state 113
+
+state 103
+
+    (49) expression -> COUNT LPAREN ASTERISK RPAREN .
+
+    BETWEEN         reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    ENTRE           reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    EQUALS          reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    GREATER_THAN    reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    LESS_THAN       reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    GE              reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    LE              reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    NE              reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    SEMICOLON       reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    AGRUPANDO_POR   reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    DONDE           reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    AND             reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+    Y               reduce using rule 49 (expression -> COUNT LPAREN ASTERISK RPAREN .)
+
+
+state 104
+
+    (14) data_type -> IDENTIFIER LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 114
+
+
+state 105
+
+    (15) data_type -> VARCHAR LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 115
+
+
+state 106
 
     (7) usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON .
 
     $end            reduce using rule 7 (usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON .)
 
 
-state 100
+state 107
 
-    (31) optional_usql_group_by -> AGRUPANDO_POR group_list . WHERE_DEL_GROUP_BY condition
-    (34) group_list -> group_list . COMMA IDENTIFIER
+    (32) optional_usql_group_by -> AGRUPANDO_POR group_list . WHERE_DEL_GROUP_BY condition
+    (35) group_list -> group_list . COMMA IDENTIFIER
 
-    WHERE_DEL_GROUP_BY shift and go to state 108
-    COMMA           shift and go to state 109
-
-
-state 101
-
-    (33) group_list -> IDENTIFIER .
-
-    WHERE_DEL_GROUP_BY reduce using rule 33 (group_list -> IDENTIFIER .)
-    COMMA           reduce using rule 33 (group_list -> IDENTIFIER .)
+    WHERE_DEL_GROUP_BY shift and go to state 116
+    COMMA           shift and go to state 117
 
 
-state 102
+state 108
 
-    (27) optional_usql_join -> MEZCLANDO table_reference EN condition .
+    (34) group_list -> IDENTIFIER .
 
-    DONDE           reduce using rule 27 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
-    AGRUPANDO_POR   reduce using rule 27 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
-    SEMICOLON       reduce using rule 27 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
+    WHERE_DEL_GROUP_BY reduce using rule 34 (group_list -> IDENTIFIER .)
+    COMMA           reduce using rule 34 (group_list -> IDENTIFIER .)
 
 
-state 103
+state 109
+
+    (28) optional_usql_join -> MEZCLANDO table_reference EN condition .
+
+    DONDE           reduce using rule 28 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
+    AGRUPANDO_POR   reduce using rule 28 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
+    SEMICOLON       reduce using rule 28 (optional_usql_join -> MEZCLANDO table_reference EN condition .)
+
+
+state 110
 
     (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list . RPAREN SEMICOLON
-    (38) value_list -> value_list . COMMA value
+    (39) value_list -> value_list . COMMA value
 
-    RPAREN          shift and go to state 110
-    COMMA           shift and go to state 111
-
-
-state 104
-
-    (37) value_list -> value .
-
-    RPAREN          reduce using rule 37 (value_list -> value .)
-    COMMA           reduce using rule 37 (value_list -> value .)
+    RPAREN          shift and go to state 118
+    COMMA           shift and go to state 119
 
 
-state 105
+state 111
 
-    (42) condition -> expression BETWEEN expression AND expression .
+    (38) value_list -> value .
 
-    SEMICOLON       reduce using rule 42 (condition -> expression BETWEEN expression AND expression .)
-    AGRUPANDO_POR   reduce using rule 42 (condition -> expression BETWEEN expression AND expression .)
-    DONDE           reduce using rule 42 (condition -> expression BETWEEN expression AND expression .)
-
-
-state 106
-
-    (43) condition -> expression ENTRE expression Y expression .
-
-    SEMICOLON       reduce using rule 43 (condition -> expression ENTRE expression Y expression .)
-    AGRUPANDO_POR   reduce using rule 43 (condition -> expression ENTRE expression Y expression .)
-    DONDE           reduce using rule 43 (condition -> expression ENTRE expression Y expression .)
+    RPAREN          reduce using rule 38 (value_list -> value .)
+    COMMA           reduce using rule 38 (value_list -> value .)
 
 
-state 107
+state 112
+
+    (43) condition -> expression BETWEEN expression AND expression .
+
+    SEMICOLON       reduce using rule 43 (condition -> expression BETWEEN expression AND expression .)
+    AGRUPANDO_POR   reduce using rule 43 (condition -> expression BETWEEN expression AND expression .)
+    DONDE           reduce using rule 43 (condition -> expression BETWEEN expression AND expression .)
+
+
+state 113
+
+    (44) condition -> expression ENTRE expression Y expression .
+
+    SEMICOLON       reduce using rule 44 (condition -> expression ENTRE expression Y expression .)
+    AGRUPANDO_POR   reduce using rule 44 (condition -> expression ENTRE expression Y expression .)
+    DONDE           reduce using rule 44 (condition -> expression ENTRE expression Y expression .)
+
+
+state 114
 
     (14) data_type -> IDENTIFIER LPAREN NUMBER RPAREN .
 
@@ -1226,76 +1310,86 @@ state 107
     SEMICOLON       reduce using rule 14 (data_type -> IDENTIFIER LPAREN NUMBER RPAREN .)
 
 
-state 108
+state 115
 
-    (31) optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY . condition
-    (41) condition -> . expression comparator expression
-    (42) condition -> . expression BETWEEN expression AND expression
-    (43) condition -> . expression ENTRE expression Y expression
-    (44) condition -> . expression
-    (45) expression -> . IDENTIFIER
-    (46) expression -> . IDENTIFIER DOT IDENTIFIER
-    (47) expression -> . NUMBER
-    (48) expression -> . STRING
+    (15) data_type -> VARCHAR LPAREN NUMBER RPAREN .
+
+    NO_NULO         reduce using rule 15 (data_type -> VARCHAR LPAREN NUMBER RPAREN .)
+    SEMICOLON       reduce using rule 15 (data_type -> VARCHAR LPAREN NUMBER RPAREN .)
+
+
+state 116
+
+    (32) optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY . condition
+    (42) condition -> . expression comparator expression
+    (43) condition -> . expression BETWEEN expression AND expression
+    (44) condition -> . expression ENTRE expression Y expression
+    (45) condition -> . expression
+    (46) expression -> . IDENTIFIER
+    (47) expression -> . STRING
+    (48) expression -> . NUMBER
+    (49) expression -> . COUNT LPAREN ASTERISK RPAREN
+    (50) expression -> . IDENTIFIER DOT IDENTIFIER
 
     IDENTIFIER      shift and go to state 47
-    NUMBER          shift and go to state 48
-    STRING          shift and go to state 49
+    STRING          shift and go to state 48
+    NUMBER          shift and go to state 49
+    COUNT           shift and go to state 50
 
-    condition                      shift and go to state 112
+    condition                      shift and go to state 120
     expression                     shift and go to state 46
 
-state 109
+state 117
 
-    (34) group_list -> group_list COMMA . IDENTIFIER
+    (35) group_list -> group_list COMMA . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 113
+    IDENTIFIER      shift and go to state 121
 
 
-state 110
+state 118
 
     (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 114
+    SEMICOLON       shift and go to state 122
 
 
-state 111
+state 119
 
-    (38) value_list -> value_list COMMA . value
-    (39) value -> . NUMBER
-    (40) value -> . STRING
+    (39) value_list -> value_list COMMA . value
+    (40) value -> . NUMBER
+    (41) value -> . STRING
 
-    NUMBER          shift and go to state 79
-    STRING          shift and go to state 80
+    NUMBER          shift and go to state 82
+    STRING          shift and go to state 83
 
-    value                          shift and go to state 115
+    value                          shift and go to state 123
 
-state 112
+state 120
 
-    (31) optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition .
+    (32) optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition .
 
-    SEMICOLON       reduce using rule 31 (optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition .)
-
-
-state 113
-
-    (34) group_list -> group_list COMMA IDENTIFIER .
-
-    WHERE_DEL_GROUP_BY reduce using rule 34 (group_list -> group_list COMMA IDENTIFIER .)
-    COMMA           reduce using rule 34 (group_list -> group_list COMMA IDENTIFIER .)
+    SEMICOLON       reduce using rule 32 (optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition .)
 
 
-state 114
+state 121
+
+    (35) group_list -> group_list COMMA IDENTIFIER .
+
+    WHERE_DEL_GROUP_BY reduce using rule 35 (group_list -> group_list COMMA IDENTIFIER .)
+    COMMA           reduce using rule 35 (group_list -> group_list COMMA IDENTIFIER .)
+
+
+state 122
 
     (8) usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLON .
 
     $end            reduce using rule 8 (usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLON .)
 
 
-state 115
+state 123
 
-    (38) value_list -> value_list COMMA value .
+    (39) value_list -> value_list COMMA value .
 
-    RPAREN          reduce using rule 38 (value_list -> value_list COMMA value .)
-    COMMA           reduce using rule 38 (value_list -> value_list COMMA value .)
+    RPAREN          reduce using rule 39 (value_list -> value_list COMMA value .)
+    COMMA           reduce using rule 39 (value_list -> value_list COMMA value .)
 

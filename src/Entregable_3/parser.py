@@ -100,7 +100,7 @@ def p_alter_table_statement_usql(p):
 def p_alter_action_usql(p):
     '''alter_action_usql : AGREGA_LA_COLUMNA IDENTIFIER data_type nullable
                          | ELIMINA_LA_COLUMNA IDENTIFIER'''
-    if p[1] == 'AGREGA_LA_COLUMNA':
+    if p.slice[1].type == 'AGREGA_LA_COLUMNA':
         nullable = f" {p[4]}" if p[4] else ''
         p[0] = f"ADD COLUMN {p[2]} {p[3]}{nullable}"
     else:
@@ -110,7 +110,10 @@ def p_alter_action_usql(p):
 
 
 def p_data_type(p):
-    '''data_type : IDENTIFIER LPAREN NUMBER RPAREN'''
+    '''data_type : IDENTIFIER LPAREN NUMBER RPAREN
+                 | VARCHAR LPAREN NUMBER RPAREN'''
+    if p[1] == 'VARCHAR':
+        p[0] = f"VARCHAR({p[3]})"
     p[0] = f"{p[1]}({p[3]})"
 
 
@@ -149,8 +152,8 @@ def p_select_elements(p):
                        | CONTANDO LPAREN TODO RPAREN
                        | select_list'''
 
-    print(f"Contenido de p: {p[:]}")
-    print(f"Token actual: {p[1]} (Tipo: {p.slice[1].type})")
+    # print(f"Contenido de p: {p[:]}")
+    # print(f"Token actual: {p[1]} (Tipo: {p.slice[1].type})")
     if p[1] == 'TODO':
         p[0] = '*'
     elif p.slice[1].type == 'LOS_DISTINTOS':
@@ -253,7 +256,8 @@ def p_value(p):
     if isinstance(p[1], int):
         p[0] = str(p[1])
     else:
-        p[0] = f"'{p[1]}'"
+        # Mantener las comillas simples correctamente sin duplicarlas
+        p[0] = p[1]  # Elimina cualquier procesamiento adicional de comillas
 
 
 # Condiciones (para WHERE y JOIN)
@@ -264,7 +268,7 @@ def p_condition(p):
                  | expression BETWEEN expression AND expression
                  | expression ENTRE expression Y expression
                  | expression'''
-    if len(p) == 4:
+    if len(p) == 4 and p[2] in ('=', '>', '<', '>=', '<=', '<>'):
         p[0] = f"{p[1]} {p[2]} {p[3]}"
     elif len(p) == 6 and p[2] in ('BETWEEN', 'ENTRE'):
         p[0] = f"{p[1]} BETWEEN {p[3]} AND {p[5]}"
@@ -277,15 +281,17 @@ def p_condition(p):
 
 def p_expression(p):
     '''expression : IDENTIFIER
-                  | IDENTIFIER DOT IDENTIFIER
+                  | STRING
                   | NUMBER
-                  | STRING'''
+                  | COUNT LPAREN ASTERISK RPAREN
+                  | IDENTIFIER DOT IDENTIFIER'''
     if len(p) == 2:
-        # Caso simple: IDENTIFIER, NUMBER, o STRING
-        p[0] = p[1]
+        p[0] = str(p[1])
+    elif len(p) == 5 and p[1] == 'COUNT':
+        p[0] = 'COUNT(*)'
     elif len(p) == 4:
-        # Caso: IDENTIFIER DOT IDENTIFIER (por ejemplo: pedidos.cliente_id)
         p[0] = f"{p[1]}.{p[3]}"
+
 
 # Comparadores
 
@@ -340,17 +346,11 @@ if __name__ == '__main__':
         "TRAEME TODO DE LA TABLA pedidos MEZCLANDO clientes EN pedidos.cliente_id = clientes.id DONDE clientes.ciudad = 'Barcelona';",
         "METE EN usuarios (nombre, edad) LOS VALORES ('Juan', 25);",
         "TRAEME CONTANDO(TODO) DE LA TABLA ventas AGRUPANDO POR producto WHERE DEL GROUP BY COUNT(*) > 5;",
-
-    ]
-
-    ''',
-        ,
         "ACTUALIZA empleados SETEA salario = 3000 DONDE puesto = 'ingeniero';",
-        
-        
-        "BORRA_DE_LA clientes DONDE edad ENTRE 18 Y 25;",
-        "CAMBIA_LA_TABLA empleados AGREGA_LA_COLUMNA direccion VARCHAR(255) NO_NULO;",
-        "CAMBIA_LA_TABLA empleados ELIMINA_LA_COLUMNA direccion;" '''
+        "BORRA DE LA clientes DONDE edad ENTRE 18 Y 25;",
+        "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;",
+        "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
+    ]
 
     for query in queries:
         print(f"Probando la consulta: {query}")
