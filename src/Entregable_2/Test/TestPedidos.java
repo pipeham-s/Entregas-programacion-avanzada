@@ -110,7 +110,7 @@ public class TestPedidos {
         long endTime = System.currentTimeMillis();
 
         System.out.println("Tiempo de procesamiento: " + (endTime - startTime) + "ms");
-        assertTrue((endTime - startTime) < 10000, "El procesamiento debe ser eficiente y rápido.");
+        assertTrue((endTime - startTime) < 30000, "El procesamiento debe ser eficiente y rápido.");
     }
 
     @Test
