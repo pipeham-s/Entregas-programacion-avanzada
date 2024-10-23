@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ACTUALIZA ADD_COLUMN AGREGA_LA_COLUMNA AGRUPANDO_POR ALTER_TABLE ASTERISK BETWEEN BORRA_DE_LA CAMBIA_LA_TABLA CAST CLAVE_PRIMA CLAVE_REFERENTE COMMA COMO_MUCHO CONTANDO COUNT CREATE_TABLE CREA_LA_TABLA DEFAULT DELETE_FROM DE_LA_TABLA DISTINCT DONDE DROP_COLUMN DROP_TABLE ELIMINA_LA_COLUMNA EN ENTRE EQUALS ES_NULO EXISTS FOREIGN_KEY FROM GREATER_THAN GROUP_BY HAVING ID INSERT_INTO IN_ESTO IS_NULL JOIN LESS_THAN LIKE LIMIT LOS_DISTINTOS LOS_VALORES LPAREN METE_EN MEZCLANDO NOT_NULL NO_NULO NUMBER ON ORDENA_POR ORDER_BY PARECIDO_A POR_DEFECTO PRIMARY_KEY RPAREN SELECT SET SETEA STRING TIRA_LA_TABLA TRAEME TRANSFORMA_A UNICO UNIQUE UPDATE VALUES WHERE WHERE_DEL_GROUP_BYstatement : statement_select\n                 | statement_insert\n                 | statement_update\n                 | statement_deletestatement_select : SELECT columns FROM table WHERE condition\n                        | TRAEME columns DE_LA_TABLA table DONDE conditionstatement_insert : INSERT_INTO table LPAREN column_list RPAREN VALUES LPAREN value_list RPAREN\n                        | METE_EN table LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPARENstatement_update : UPDATE table SET assignments WHERE condition\n                        | ACTUALIZA table SETEA assignments DONDE conditionstatement_delete : DELETE_FROM table WHERE condition\n                        | BORRA_DE_LA table DONDE conditionassignments : column EQUALS value\n                   | assignments COMMA column EQUALS valuecolumn : IDcolumns : ID\n               | ASTERISK\n               | columns COMMA IDtable : IDcondition : ID EQUALS value\n                 | ID GREATER_THAN value\n                 | ID LESS_THAN valuecolumn_list : ID\n                   | column_list COMMA IDvalue_list : value\n                  | value_list COMMA valuevalue : NUMBER\n             | STRING'
+_lr_signature = 'ACTUALIZA ADD_COLUMN AGREGA_LA_COLUMNA AGRUPANDO_POR ALTER_TABLE AND ASTERISK BETWEEN BORRA_DE_LA CAMBIA_LA_TABLA COMMA CONTANDO COUNT DELETE_FROM DE_LA_TABLA DISTINCT DONDE DOT DROP_COLUMN ELIMINA_LA_COLUMNA EN ENTRE EQUALS FROM GE GREATER_THAN GROUP_BY HAVING IDENTIFIER INSERT_INTO JOIN LE LESS_THAN LOS_DISTINTOS LOS_VALORES LPAREN METE_EN MEZCLANDO NE NOT_NULL NO_NULO NUMBER ON OR RPAREN SELECT SEMICOLON SET SETEA STRING TODO TRAEME UPDATE VALUES WHERE WHERE_DEL_GROUP_BY Ystatement : usql_statementusql_statement : usql_select_statement\n                      | usql_insert_statement\n                      | usql_update_statement\n                      | usql_delete_statement\n                      | usql_alter_table_statementusql_select_statement : TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLONusql_insert_statement : METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLONusql_update_statement : ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where SEMICOLONusql_delete_statement : BORRA_DE_LA IDENTIFIER optional_usql_where SEMICOLONusql_alter_table_statement : CAMBIA_LA_TABLA IDENTIFIER alter_action_usql SEMICOLONalter_action_usql : AGREGA_LA_COLUMNA IDENTIFIER data_type nullable\n                         | ELIMINA_LA_COLUMNA IDENTIFIERdata_type : IDENTIFIER LPAREN NUMBER RPARENnullable : NO_NULO\n                | emptyset_list : assignment\n                | set_list COMMA assignmentassignment : IDENTIFIER EQUALS valueselect_elements : TODO\n                       | LOS_DISTINTOS select_list\n                       | CONTANDO LPAREN TODO RPAREN\n                       | select_listselect_list : IDENTIFIER\n                   | select_list COMMA IDENTIFIERtable_reference : IDENTIFIERoptional_usql_join : MEZCLANDO table_reference EN condition\n                          | emptyoptional_usql_where : DONDE condition\n                           | emptyoptional_usql_group_by : AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition\n                              | emptygroup_list : IDENTIFIER\n                  | group_list COMMA IDENTIFIERcolumn_list : IDENTIFIER\n                   | column_list COMMA IDENTIFIERvalue_list : value\n                  | value_list COMMA valuevalue : NUMBER\n             | STRINGcondition : expression comparator expression\n                 | expression BETWEEN expression AND expression\n                 | expression ENTRE expression Y expression\n                 | expressionexpression : IDENTIFIER\n                  | IDENTIFIER DOT IDENTIFIER\n                  | NUMBER\n                  | STRINGcomparator : EQUALS\n                  | GREATER_THAN\n                  | LESS_THAN\n                  | GE\n                  | LE\n                  | NEempty :'
     
-_lr_action_items = {'SELECT':([0,],[6,]),'TRAEME':([0,],[7,]),'INSERT_INTO':([0,],[8,]),'METE_EN':([0,],[9,]),'UPDATE':([0,],[10,]),'ACTUALIZA':([0,],[11,]),'DELETE_FROM':([0,],[12,]),'BORRA_DE_LA':([0,],[13,]),'$end':([1,2,3,4,5,44,46,59,60,64,67,68,69,70,71,72,80,82,],[0,-1,-2,-3,-4,-11,-12,-5,-6,-9,-27,-28,-10,-20,-21,-22,-7,-8,]),'ID':([6,7,8,9,10,11,12,13,25,26,27,28,29,30,31,32,33,47,48,50,52,53,55,],[15,15,19,19,19,19,19,19,19,35,19,38,38,42,42,45,45,45,45,62,45,42,45,]),'ASTERISK':([6,7,],[16,16,]),'FROM':([14,15,16,35,],[25,-16,-17,-18,]),'COMMA':([14,15,16,17,35,37,38,39,40,43,62,66,67,68,76,77,78,79,83,],[26,-16,-17,26,-18,50,-23,50,53,53,-24,-13,-27,-28,81,-25,81,-14,-26,]),'DE_LA_TABLA':([15,16,17,35,],[-16,-17,27,-18,]),'LPAREN':([18,19,20,61,63,],[28,-19,29,73,74,]),'SET':([19,21,],[-19,30,]),'SETEA':([19,22,],[-19,31,]),'WHERE':([19,23,34,40,66,67,68,79,],[-19,32,47,52,-13,-27,-28,-14,]),'DONDE':([19,24,36,43,66,67,68,79,],[-19,33,48,55,-13,-27,-28,-14,]),'RPAREN':([37,38,39,62,67,68,76,77,78,83,],[49,-23,51,-24,-27,-28,80,-25,82,-26,]),'EQUALS':([41,42,45,65,],[54,-15,56,75,]),'GREATER_THAN':([45,],[57,]),'LESS_THAN':([45,],[58,]),'VALUES':([49,],[61,]),'LOS_VALORES':([51,],[63,]),'NUMBER':([54,56,57,58,73,74,75,81,],[67,67,67,67,67,67,67,67,]),'STRING':([54,56,57,58,73,74,75,81,],[68,68,68,68,68,68,68,68,]),}
+_lr_action_items = {'TRAEME':([0,],[8,]),'METE_EN':([0,],[9,]),'ACTUALIZA':([0,],[10,]),'BORRA_DE_LA':([0,],[11,]),'CAMBIA_LA_TABLA':([0,],[12,]),'$end':([1,2,3,4,5,6,7,44,50,81,99,114,],[0,-1,-2,-3,-4,-5,-6,-10,-11,-9,-7,-8,]),'TODO':([8,26,],[14,38,]),'LOS_DISTINTOS':([8,],[15,]),'CONTANDO':([8,],[17,]),'IDENTIFIER':([8,9,10,11,12,15,23,25,27,28,30,33,34,51,54,58,61,62,63,64,65,66,67,68,69,70,71,92,94,96,97,108,109,],[18,19,20,21,22,18,36,37,39,41,47,51,52,72,36,77,41,47,47,47,-49,-50,-51,-52,-53,-54,86,101,47,47,47,47,113,]),'DE_LA_TABLA':([13,14,16,18,24,37,56,],[23,-20,-23,-24,-21,-25,-22,]),'COMMA':([16,18,24,37,39,40,42,43,77,78,79,80,82,100,101,103,104,113,115,],[25,-24,25,-25,-35,58,61,-17,-36,-19,-39,-40,-18,109,-33,111,-37,-34,-38,]),'LPAREN':([17,19,72,76,],[26,27,87,95,]),'SETEA':([20,],[28,]),'DONDE':([21,35,36,42,43,46,47,48,49,53,55,78,79,80,82,83,86,102,105,106,],[30,-55,-26,30,-17,-44,-45,-47,-48,30,-28,-19,-39,-40,-18,-41,-46,-27,-42,-43,]),'SEMICOLON':([21,29,31,32,35,36,42,43,45,46,47,48,49,52,53,55,60,73,74,78,79,80,82,83,86,88,89,90,91,93,102,105,106,107,110,112,],[-55,44,-30,50,-55,-26,-55,-17,-29,-44,-45,-47,-48,-13,-55,-28,81,-55,-55,-19,-39,-40,-18,-41,-46,-12,-15,-16,99,-32,-27,-42,-43,-14,114,-31,]),'AGREGA_LA_COLUMNA':([22,],[33,]),'ELIMINA_LA_COLUMNA':([22,],[34,]),'NUMBER':([30,59,62,63,64,65,66,67,68,69,70,87,94,95,96,97,108,111,],[48,79,48,48,48,-49,-50,-51,-52,-53,-54,98,48,79,48,48,48,79,]),'STRING':([30,59,62,63,64,65,66,67,68,69,70,94,95,96,97,108,111,],[49,80,49,49,49,-49,-50,-51,-52,-53,-54,49,80,49,49,49,80,]),'AGRUPANDO_POR':([31,35,36,45,46,47,48,49,53,55,74,83,86,102,105,106,],[-30,-55,-26,-29,-44,-45,-47,-48,-55,-28,92,-41,-46,-27,-42,-43,]),'MEZCLANDO':([35,36,],[54,-26,]),'EN':([36,75,],[-26,94,]),'RPAREN':([38,39,40,77,79,80,98,103,104,115,],[56,-35,57,-36,-39,-40,107,110,-37,-38,]),'EQUALS':([41,46,47,48,49,86,],[59,65,-45,-47,-48,-46,]),'BETWEEN':([46,47,48,49,86,],[63,-45,-47,-48,-46,]),'ENTRE':([46,47,48,49,86,],[64,-45,-47,-48,-46,]),'GREATER_THAN':([46,47,48,49,86,],[66,-45,-47,-48,-46,]),'LESS_THAN':([46,47,48,49,86,],[67,-45,-47,-48,-46,]),'GE':([46,47,48,49,86,],[68,-45,-47,-48,-46,]),'LE':([46,47,48,49,86,],[69,-45,-47,-48,-46,]),'NE':([46,47,48,49,86,],[70,-45,-47,-48,-46,]),'AND':([47,48,49,84,86,],[-45,-47,-48,96,-46,]),'Y':([47,48,49,85,86,],[-45,-47,-48,97,-46,]),'DOT':([47,],[71,]),'LOS_VALORES':([57,],[76,]),'NO_NULO':([73,107,],[89,-14,]),'WHERE_DEL_GROUP_BY':([100,101,113,],[108,-33,-34,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,],[1,]),'statement_select':([0,],[2,]),'statement_insert':([0,],[3,]),'statement_update':([0,],[4,]),'statement_delete':([0,],[5,]),'columns':([6,7,],[14,17,]),'table':([8,9,10,11,12,13,25,27,],[18,20,21,22,23,24,34,36,]),'column_list':([28,29,],[37,39,]),'assignments':([30,31,],[40,43,]),'column':([30,31,53,],[41,41,65,]),'condition':([32,33,47,48,52,55,],[44,46,59,60,64,69,]),'value':([54,56,57,58,73,74,75,81,],[66,70,71,72,77,77,79,83,]),'value_list':([73,74,],[76,78,]),}
+_lr_goto_items = {'statement':([0,],[1,]),'usql_statement':([0,],[2,]),'usql_select_statement':([0,],[3,]),'usql_insert_statement':([0,],[4,]),'usql_update_statement':([0,],[5,]),'usql_delete_statement':([0,],[6,]),'usql_alter_table_statement':([0,],[7,]),'select_elements':([8,],[13,]),'select_list':([8,15,],[16,24,]),'optional_usql_where':([21,42,53,],[29,60,74,]),'empty':([21,35,42,53,73,74,],[31,55,31,31,90,93,]),'alter_action_usql':([22,],[32,]),'table_reference':([23,54,],[35,75,]),'column_list':([27,],[40,]),'set_list':([28,],[42,]),'assignment':([28,61,],[43,82,]),'condition':([30,94,108,],[45,102,112,]),'expression':([30,62,63,64,94,96,97,108,],[46,83,84,85,46,105,106,46,]),'optional_usql_join':([35,],[53,]),'comparator':([46,],[62,]),'data_type':([51,],[73,]),'value':([59,95,111,],[78,104,115,]),'nullable':([73,],[88,]),'optional_usql_group_by':([74,],[91,]),'group_list':([92,],[100,]),'value_list':([95,],[103,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,32 +27,59 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> statement_select','statement',1,'p_statement','parser.py',10),
-  ('statement -> statement_insert','statement',1,'p_statement','parser.py',11),
-  ('statement -> statement_update','statement',1,'p_statement','parser.py',12),
-  ('statement -> statement_delete','statement',1,'p_statement','parser.py',13),
-  ('statement_select -> SELECT columns FROM table WHERE condition','statement_select',6,'p_statement_select','parser.py',18),
-  ('statement_select -> TRAEME columns DE_LA_TABLA table DONDE condition','statement_select',6,'p_statement_select','parser.py',19),
-  ('statement_insert -> INSERT_INTO table LPAREN column_list RPAREN VALUES LPAREN value_list RPAREN','statement_insert',9,'p_statement_insert','parser.py',27),
-  ('statement_insert -> METE_EN table LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN','statement_insert',9,'p_statement_insert','parser.py',28),
-  ('statement_update -> UPDATE table SET assignments WHERE condition','statement_update',6,'p_statement_update','parser.py',36),
-  ('statement_update -> ACTUALIZA table SETEA assignments DONDE condition','statement_update',6,'p_statement_update','parser.py',37),
-  ('statement_delete -> DELETE_FROM table WHERE condition','statement_delete',4,'p_statement_delete','parser.py',45),
-  ('statement_delete -> BORRA_DE_LA table DONDE condition','statement_delete',4,'p_statement_delete','parser.py',46),
-  ('assignments -> column EQUALS value','assignments',3,'p_assignments','parser.py',56),
-  ('assignments -> assignments COMMA column EQUALS value','assignments',5,'p_assignments','parser.py',57),
-  ('column -> ID','column',1,'p_column','parser.py',67),
-  ('columns -> ID','columns',1,'p_columns','parser.py',74),
-  ('columns -> ASTERISK','columns',1,'p_columns','parser.py',75),
-  ('columns -> columns COMMA ID','columns',3,'p_columns','parser.py',76),
-  ('table -> ID','table',1,'p_table','parser.py',84),
-  ('condition -> ID EQUALS value','condition',3,'p_condition','parser.py',89),
-  ('condition -> ID GREATER_THAN value','condition',3,'p_condition','parser.py',90),
-  ('condition -> ID LESS_THAN value','condition',3,'p_condition','parser.py',91),
-  ('column_list -> ID','column_list',1,'p_column_list','parser.py',96),
-  ('column_list -> column_list COMMA ID','column_list',3,'p_column_list','parser.py',97),
-  ('value_list -> value','value_list',1,'p_value_list','parser.py',105),
-  ('value_list -> value_list COMMA value','value_list',3,'p_value_list','parser.py',106),
-  ('value -> NUMBER','value',1,'p_value','parser.py',114),
-  ('value -> STRING','value',1,'p_value','parser.py',115),
+  ('statement -> usql_statement','statement',1,'p_statement','parser.py',18),
+  ('usql_statement -> usql_select_statement','usql_statement',1,'p_usql_statement','parser.py',26),
+  ('usql_statement -> usql_insert_statement','usql_statement',1,'p_usql_statement','parser.py',27),
+  ('usql_statement -> usql_update_statement','usql_statement',1,'p_usql_statement','parser.py',28),
+  ('usql_statement -> usql_delete_statement','usql_statement',1,'p_usql_statement','parser.py',29),
+  ('usql_statement -> usql_alter_table_statement','usql_statement',1,'p_usql_statement','parser.py',30),
+  ('usql_select_statement -> TRAEME select_elements DE_LA_TABLA table_reference optional_usql_join optional_usql_where optional_usql_group_by SEMICOLON','usql_select_statement',8,'p_usql_select_statement','parser.py',48),
+  ('usql_insert_statement -> METE_EN IDENTIFIER LPAREN column_list RPAREN LOS_VALORES LPAREN value_list RPAREN SEMICOLON','usql_insert_statement',10,'p_insert_statement_usql','parser.py',55),
+  ('usql_update_statement -> ACTUALIZA IDENTIFIER SETEA set_list optional_usql_where SEMICOLON','usql_update_statement',6,'p_update_statement_usql','parser.py',67),
+  ('usql_delete_statement -> BORRA_DE_LA IDENTIFIER optional_usql_where SEMICOLON','usql_delete_statement',4,'p_delete_statement_usql','parser.py',79),
+  ('usql_alter_table_statement -> CAMBIA_LA_TABLA IDENTIFIER alter_action_usql SEMICOLON','usql_alter_table_statement',4,'p_alter_table_statement_usql','parser.py',90),
+  ('alter_action_usql -> AGREGA_LA_COLUMNA IDENTIFIER data_type nullable','alter_action_usql',4,'p_alter_action_usql','parser.py',101),
+  ('alter_action_usql -> ELIMINA_LA_COLUMNA IDENTIFIER','alter_action_usql',2,'p_alter_action_usql','parser.py',102),
+  ('data_type -> IDENTIFIER LPAREN NUMBER RPAREN','data_type',4,'p_data_type','parser.py',113),
+  ('nullable -> NO_NULO','nullable',1,'p_nullable','parser.py',120),
+  ('nullable -> empty','nullable',1,'p_nullable','parser.py',121),
+  ('set_list -> assignment','set_list',1,'p_set_list','parser.py',128),
+  ('set_list -> set_list COMMA assignment','set_list',3,'p_set_list','parser.py',129),
+  ('assignment -> IDENTIFIER EQUALS value','assignment',3,'p_assignment','parser.py',139),
+  ('select_elements -> TODO','select_elements',1,'p_select_elements','parser.py',147),
+  ('select_elements -> LOS_DISTINTOS select_list','select_elements',2,'p_select_elements','parser.py',148),
+  ('select_elements -> CONTANDO LPAREN TODO RPAREN','select_elements',4,'p_select_elements','parser.py',149),
+  ('select_elements -> select_list','select_elements',1,'p_select_elements','parser.py',150),
+  ('select_list -> IDENTIFIER','select_list',1,'p_select_list','parser.py',167),
+  ('select_list -> select_list COMMA IDENTIFIER','select_list',3,'p_select_list','parser.py',168),
+  ('table_reference -> IDENTIFIER','table_reference',1,'p_table_reference','parser.py',177),
+  ('optional_usql_join -> MEZCLANDO table_reference EN condition','optional_usql_join',4,'p_optional_usql_join','parser.py',184),
+  ('optional_usql_join -> empty','optional_usql_join',1,'p_optional_usql_join','parser.py',185),
+  ('optional_usql_where -> DONDE condition','optional_usql_where',2,'p_optional_usql_where','parser.py',195),
+  ('optional_usql_where -> empty','optional_usql_where',1,'p_optional_usql_where','parser.py',196),
+  ('optional_usql_group_by -> AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition','optional_usql_group_by',4,'p_optional_usql_group_by','parser.py',206),
+  ('optional_usql_group_by -> empty','optional_usql_group_by',1,'p_optional_usql_group_by','parser.py',207),
+  ('group_list -> IDENTIFIER','group_list',1,'p_group_list','parser.py',218),
+  ('group_list -> group_list COMMA IDENTIFIER','group_list',3,'p_group_list','parser.py',219),
+  ('column_list -> IDENTIFIER','column_list',1,'p_column_list','parser.py',229),
+  ('column_list -> column_list COMMA IDENTIFIER','column_list',3,'p_column_list','parser.py',230),
+  ('value_list -> value','value_list',1,'p_value_list','parser.py',240),
+  ('value_list -> value_list COMMA value','value_list',3,'p_value_list','parser.py',241),
+  ('value -> NUMBER','value',1,'p_value','parser.py',251),
+  ('value -> STRING','value',1,'p_value','parser.py',252),
+  ('condition -> expression comparator expression','condition',3,'p_condition','parser.py',263),
+  ('condition -> expression BETWEEN expression AND expression','condition',5,'p_condition','parser.py',264),
+  ('condition -> expression ENTRE expression Y expression','condition',5,'p_condition','parser.py',265),
+  ('condition -> expression','condition',1,'p_condition','parser.py',266),
+  ('expression -> IDENTIFIER','expression',1,'p_expression','parser.py',279),
+  ('expression -> IDENTIFIER DOT IDENTIFIER','expression',3,'p_expression','parser.py',280),
+  ('expression -> NUMBER','expression',1,'p_expression','parser.py',281),
+  ('expression -> STRING','expression',1,'p_expression','parser.py',282),
+  ('comparator -> EQUALS','comparator',1,'p_comparator','parser.py',294),
+  ('comparator -> GREATER_THAN','comparator',1,'p_comparator','parser.py',295),
+  ('comparator -> LESS_THAN','comparator',1,'p_comparator','parser.py',296),
+  ('comparator -> GE','comparator',1,'p_comparator','parser.py',297),
+  ('comparator -> LE','comparator',1,'p_comparator','parser.py',298),
+  ('comparator -> NE','comparator',1,'p_comparator','parser.py',299),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',306),
 ]

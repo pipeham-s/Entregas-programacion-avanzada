@@ -1,144 +1,289 @@
 import ply.lex as lex
 
-# Diccionario de palabras clave y su mapeo entre SQL y USQL
-usql_to_sql_keywords = {
-    'TRAEME': 'SELECT',
-    'TODO': '*',
-    'DE_LA_TABLA': 'FROM',
-    'DONDE': 'WHERE',
-    'AGRUPANDO_POR': 'GROUP BY',
-    'MEZCLANDO': 'JOIN',
-    'EN': 'ON',
-    'LOS_DISTINTOS': 'DISTINCT',
-    'CONTANDO': 'COUNT',
-    'METE_EN': 'INSERT INTO',
-    'LOS_VALORES': 'VALUES',
-    'ACTUALIZA': 'UPDATE',
-    'SETEA': 'SET',
-    'BORRA_DE_LA': 'DELETE FROM',
-    'ORDENA_POR': 'ORDER BY',
-    'COMO_MUCHO': 'LIMIT',
-    'WHERE_DEL_GROUP_BY': 'HAVING',
-    'EXISTE': 'EXISTS',
-    'EN_ESTO': 'IN',
-    'ENTRE': 'BETWEEN',
-    'PARECIDO_A': 'LIKE',
-    'ES_NULO': 'IS NULL',
-    'CAMBIA_LA_TABLA': 'ALTER TABLE',
-    'AGREGA_LA_COLUMNA': 'ADD COLUMN',
-    'ELIMINA_LA_COLUMNA': 'DROP COLUMN',
-    'CREA_LA_TABLA': 'CREATE TABLE',
-    'TIRA_LA_TABLA': 'DROP TABLE',
-    'POR_DEFECTO': 'DEFAULT',
-    'UNICO': 'UNIQUE',
-    'CLAVE_PRIMA': 'PRIMARY KEY',
-    'CLAVE_REFERENTE': 'FOREIGN KEY',
-    'NO_NULO': 'NOT NULL',
-    'TRANSFORMA_A': 'CAST',
-}
-
-sql_to_usql_keywords = {v: k for k, v in usql_to_sql_keywords.items()}
-
 # Lista de tokens
 tokens = [
-    'IDENTIFIER',
-    'STRING',
-    'NUMBER',
-    'COMMA',
-    'SEMICOLON',
-    'LPAREN',
-    'RPAREN',
-    'EQ',
-    'GT',
-    'LT',
-    'GE',
-    'LE',
-    'NE',
-    'PLUS',
-    'MINUS',
-    'TIMES',
-    'DIVIDE',
-    'AND',
-    'OR',
-    'NOT',
-    'DOT',
-    'ASTERISK',
-] + list(usql_to_sql_keywords.keys())
+    # Palabras clave SQL
+    'SELECT', 'FROM', 'WHERE', 'DISTINCT', 'INSERT_INTO', 'VALUES',
+    'UPDATE', 'SET', 'DELETE_FROM', 'JOIN', 'ON', 'GROUP_BY', 'HAVING',
+    'ALTER_TABLE', 'ADD_COLUMN', 'DROP_COLUMN', 'BETWEEN', 'AND', 'NOT_NULL', 'COUNT',
 
-# Expresiones regulares para tokens simples
+    # Palabras clave USQL
+    'TRAEME', 'DE_LA_TABLA', 'DONDE', 'LOS_DISTINTOS', 'METE_EN', 'LOS_VALORES',
+    'ACTUALIZA', 'SETEA', 'BORRA_DE_LA', 'MEZCLANDO', 'EN', 'AGRUPANDO_POR',
+    'WHERE_DEL_GROUP_BY', 'CAMBIA_LA_TABLA', 'AGREGA_LA_COLUMNA', 'ELIMINA_LA_COLUMNA',
+    'ENTRE', 'Y', 'NO_NULO', 'CONTANDO', 'TODO',
+
+    # Símbolos y operadores
+    'ASTERISK', 'COMMA', 'SEMICOLON', 'LPAREN', 'RPAREN', 'EQUALS', 'GREATER_THAN', 'LESS_THAN', 'GE', 'LE', 'NE', 'DOT', 'OR',
+
+    # Identificadores y literales
+    'IDENTIFIER', 'STRING', 'NUMBER',
+]
+
+# Ignorar espacios y tabs
+t_ignore = ' \t'
+
+# Operadores y símbolos
+t_ASTERISK = r'\*'
+
+
 t_COMMA = r','
 t_SEMICOLON = r';'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_EQ = r'='
-t_GT = r'>'
-t_LT = r'<'
+t_EQUALS = r'='
+t_GREATER_THAN = r'>'
+t_LESS_THAN = r'<'
 t_GE = r'>='
 t_LE = r'<='
 t_NE = r'<>|!='
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_TIMES = r'\*'
-t_DIVIDE = r'/'
 t_DOT = r'\.'
-t_ASTERISK = r'\*'
 
-# Ignoramos espacios y tabs
-t_ignore = ' \t'
 
-# Palabras reservadas (tanto USQL como SQL)
-reserved = set(usql_to_sql_keywords.keys()) | set(
-    usql_to_sql_keywords.values())
+t_OR = r'OR'
+
+# Palabras clave de SQL y USQL y su mapeo a tokens
+
+
+def t_SELECT(t):
+    r'SELECT'
+    return t
+
+
+def t_FROM(t):
+    r'FROM'
+    return t
+
+
+def t_WHERE(t):
+    r'WHERE'
+    return t
+
+
+def t_DISTINCT(t):
+    r'DISTINCT'
+    return t
+
+
+def t_INSERT_INTO(t):
+    r'INSERT\s+INTO'
+    return t
+
+
+def t_VALUES(t):
+    r'VALUES'
+    return t
+
+
+def t_UPDATE(t):
+    r'UPDATE'
+    return t
+
+
+def t_SET(t):
+    r'SET'
+    return t
+
+
+def t_DELETE_FROM(t):
+    r'DELETE\s+FROM'
+    return t
+
+
+def t_JOIN(t):
+    r'JOIN'
+    return t
+
+
+def t_ON(t):
+    r'ON'
+    return t
+
+
+def t_GROUP_BY(t):
+    r'GROUP\s+BY'
+    return t
+
+
+def t_HAVING(t):
+    r'HAVING'
+    return t
+
+
+def t_ALTER_TABLE(t):
+    r'ALTER\s+TABLE'
+    return t
+
+
+def t_ADD_COLUMN(t):
+    r'ADD\s+COLUMN'
+    return t
+
+
+def t_DROP_COLUMN(t):
+    r'DROP\s+COLUMN'
+    return t
+
+
+def t_BETWEEN(t):
+    r'BETWEEN'
+    return t
+
+
+def t_AND(t):
+    r'AND'
+    return t
+
+
+def t_NOT_NULL(t):
+    r'NOT\s+NULL'
+    return t
+
+
+def t_COUNT(t):
+    r'COUNT'
+    return t
+
+# Definir las palabras clave de USQL
+
+
+def t_TRAEME(t):
+    r'TRAEME'
+    return t
+
+
+def t_DE_LA_TABLA(t):
+    r'DE\s+LA\s+TABLA'
+    return t
+
+
+def t_DONDE(t):
+    r'DONDE'
+    return t
+
+
+def t_LOS_DISTINTOS(t):
+    r'LOS\s+DISTINTOS'
+    return t
+
+
+def t_METE_EN(t):
+    r'METE\s+EN'
+    return t
+
+
+def t_LOS_VALORES(t):
+    r'LOS\s+VALORES'
+    return t
+
+
+def t_ACTUALIZA(t):
+    r'ACTUALIZA'
+    return t
+
+
+def t_SETEA(t):
+    r'SETEA'
+    return t
+
+
+def t_BORRA_DE_LA(t):
+    r'BORRA\s+DE\s+LA'
+    return t
+
+
+def t_MEZCLANDO(t):
+    r'MEZCLANDO'
+    return t
+
+
+def t_EN(t):
+    r'EN'
+    t.type = 'EN'
+    return t
+
+
+def t_AGRUPANDO_POR(t):
+    r'AGRUPANDO\s+POR'
+    return t
+
+
+def t_WHERE_DEL_GROUP_BY(t):
+    r'WHERE\s+DEL\s+GROUP\s+BY'
+    return t
+
+
+def t_CAMBIA_LA_TABLA(t):
+    r'CAMBIA\s+LA\s+TABLA'
+    return t
+
+
+def t_AGREGA_LA_COLUMNA(t):
+    r'AGREGA\s+LA\s+COLUMNA'
+    return t
+
+
+def t_ELIMINA_LA_COLUMNA(t):
+    r'ELIMINA\s+LA\s+COLUMNA'
+    return t
+
+
+def t_ENTRE(t):
+    r'ENTRE'
+    return t
+
+
+def t_Y(t):
+    r'Y'
+    return t
+
+
+def t_NO_NULO(t):
+    r'NO\s+NULO'
+    return t
+
+
+def t_CONTANDO(t):
+    r'CONTANDO'
+    return t
+
+
+def t_TODO(t):
+    r'TODO'
+    return t
+
+# Identificadores y literales
 
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    upper_value = t.value.upper()
-    if upper_value in reserved:
-        t.type = upper_value  # Es una palabra clave
-    else:
-        t.type = 'IDENTIFIER'
-    t.value = t.value
     return t
 
 
 def t_STRING(t):
-    r'\'[^\']*\'|"[^"]*"'
-    t.value = t.value.strip('\'"')
+    r'\'([^\\\n]|(\\.))*?\''
+    t.value = t.value[1:-1]  # Remover las comillas
     return t
 
 
 def t_NUMBER(t):
-    r'\d+(\.\d+)?'
-    t.value = float(t.value) if '.' in t.value else int(t.value)
+    r'\d+'
+    t.value = int(t.value)
     return t
 
 
-def t_NEWLINE(t):
+# Manejo de nuevas líneas
+
+
+def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-
-def t_AND(t):
-    r'AND|Y'
-    t.type = 'AND'
-    return t
-
-
-def t_OR(t):
-    r'OR|O'
-    t.type = 'OR'
-    return t
-
-
-def t_NOT(t):
-    r'NOT|NO'
-    t.type = 'NOT'
-    return t
+# Manejo de errores
 
 
 def t_error(t):
-    raise SyntaxError(f"Carácter ilegal '{t.value[0]}' en la línea {t.lineno}")
+    raise SyntaxError(f"Caracter ilegal '{t.value[0]}' en la línea {t.lineno}")
     t.lexer.skip(1)
 
 
