@@ -42,7 +42,9 @@ t_NE = r'<>|!='
 t_DOT = r'\.'
 
 
-t_OR = r'OR'
+def t_OR(t):
+    r'OR'
+    return t
 
 # Tipos de datos
 # Definición del token VARCHAR como una función
