@@ -1,65 +1,74 @@
 import sqlite3
-from lexer import lexer  # Tu lexer de USQL
-from parser import parser  # Tu parser de USQL a SQL
+from parser import translate_query, is_usql
+from lexer import lexer
+import re
 
-class USQLQueryBuilder:
+
+def clean_query(query):
+    """Limpia y formatea la consulta de entrada."""
+    # Reemplaza múltiples espacios por uno solo
+    query = re.sub(r'\s+', ' ', query)
+    # Remueve espacios innecesarios alrededor de caracteres especiales
+    query = query.strip()
+    return query
+
+
+class FluentQueryAPI:
     def __init__(self, db_path):
         self.db_path = db_path
-        self.query = ""
-        self.usql_query = ""
-    
-    def from_usql(self, usql_query):
-        """Establece la consulta USQL inicial."""
-        self.usql_query = usql_query
-        self.query = self.translate_to_sql(usql_query)
-        return self
 
-    def translate_to_sql(self, usql_query):
-        """Traduce la consulta de USQL a SQL utilizando el parser."""
-        lexer.input(usql_query)
-        try:
-            sql_query = parser.parse(usql_query)
-            return sql_query
-        except SyntaxError as e:
-            print(f"Error de traducción: {e}")
-            return None
+    def execute_query(self, query):
+        # query = clean_query(query)  # Asegura un formato uniforme del query
+        lexer.input(query)
+        tokens_list = list(lexer)
 
-    def execute(self):
-        """Ejecuta la consulta SQL traducida en la base de datos."""
-        if not self.query:
-            raise ValueError("No se ha configurado una consulta SQL válida.")
-        
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute(self.query)
-            if self.query.strip().upper().startswith("SELECT"):
-                result = cursor.fetchall()
+        is_usql_query = is_usql(tokens_list)
+        print("\n" + "="*50)
+        print(f"Probando traducir la consulta:\n{query}")
+
+        if is_usql_query:
+            print("Lenguaje USQL detectado, traduciendo a SQL...")
+            translated_query = translate_query(query)
+            if translated_query:
+                print(f"Traducción a SQL:\n{translated_query}")
+                print("Ejecutando sentencia traducida en SQL...")
+                self._execute(translated_query)
             else:
+                print(
+                    "Error en la traducción de USQL a SQL. No se ejecutará la consulta.")
+        else:
+            print("Lenguaje SQL detectado, traduciendo a USQL...")
+            translated_query = translate_query(query)
+            if translated_query:
+                print(f"Traducción a USQL (no ejecutada):\n{translated_query}")
+            print("Ejecutando sentencia original en SQL...")
+            self._execute(query)
+        print("="*50 + "\n")
+
+    def _execute(self, sql_query):
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute(sql_query)
+                results = cursor.fetchall()
+                for row in results:
+                    print(row)
                 conn.commit()
-                result = cursor.rowcount
-            print("Consulta ejecutada con éxito.")
-            return result
         except sqlite3.Error as e:
-            print(f"Error al ejecutar la consulta: {e}")
-            return None
-        finally:
-            cursor.close()
-            conn.close()
-    
-    def to_sql(self):
-        """Devuelve la consulta SQL traducida."""
-        return self.query
+            print("Error ejecutando la consulta en SQL:", e)
 
-# Ejemplo de uso:
-if __name__ == "__main__":
-    db_path = "mi_base_de_datos.db"  # Ruta de la base de datos SQLite
-    builder = USQLQueryBuilder(db_path)
 
-    # Consulta de ejemplo en USQL
-    usql_query = "TRAEME TODO DE LA TABLA usuarios DONDE edad > 18;"
+# Inicializar la base de datos y la API
+db_path = "mi_base_de_datos.db"
+api = FluentQueryAPI(db_path)
 
-    # Crear la consulta con el builder, traducirla, y ejecutarla
-    resultado = builder.from_usql(usql_query).execute()
-    print("Resultado:", resultado)
+api.execute_query("TRAEME TODO DE LA TABLA usuarios;")
+
+# Loop para recibir consultas desde la consola
+while True:
+    query = input("Ingrese una consulta (o 'salir' para terminar): ").strip()
+    print(f"Consulta ingresada: '{query}'")
+    if query.strip().lower() == 'salir':
+        print("Saliendo del programa.")
+        break
+    api.execute_query(query)

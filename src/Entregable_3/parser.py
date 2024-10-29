@@ -450,7 +450,7 @@ parser = yacc.yacc()
 def translate_query(query):
     try:
         lexer.input(query)
-        print(list(lexer))
+        # print(list(lexer))
 
         # Parsear la consulta
         result = parser.parse(query)
@@ -484,10 +484,10 @@ if __name__ == '__main__':
         "ALTER TABLE empleados DROP COLUMN direccion;"
     ]
 
-    # for query in queries:
-    #     print(f"Probando la consulta: {query}")
-    #     translated_query = translate_query(query)
-    #     print(f"Resultado: {translated_query}\n")
+    for query in queries:
+        print(f"Probando la consulta: {query}")
+        translated_query = translate_query(query)
+        print(f"Resultado: {translated_query}\n")
 
     for query in sql_queries:
         print(f"Probando la consulta: {query}")
