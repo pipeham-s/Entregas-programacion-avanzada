@@ -18,7 +18,7 @@ class FluentQueryAPI:
         self.db_path = db_path
 
     def execute_query(self, query):
-        # query = clean_query(query)  # Asegura un formato uniforme del query
+        query = clean_query(query)  # Asegura un formato uniforme del query
         lexer.input(query)
         tokens_list = list(lexer)
 

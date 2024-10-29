@@ -215,13 +215,24 @@ def p_optional_usql_where(p):
 def p_optional_usql_group_by(p):
     '''optional_usql_group_by : AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
                               | GROUP_BY group_list HAVING condition
+                              | AGRUPANDO_POR group_list
+                              | GROUP_BY group_list
                               | empty'''
-    if len(p) > 2:
+
+    if len(p) == 3:
+        # Si solo tiene `GROUP BY` o `AGRUPANDO POR` sin `HAVING`
+        if p.slice[1].type == 'AGRUPANDO_POR':
+            p[0] = f" GROUP BY {p[2]}"
+        else:
+            p[0] = f" AGRUPANDO POR {p[2]}"
+    elif len(p) == 5:
+        # Si tiene `GROUP BY ... HAVING` o `AGRUPANDO POR ... WHERE DEL GROUP BY`
         if p.slice[1].type == 'AGRUPANDO_POR':
             p[0] = f" GROUP BY {p[2]} HAVING {p[4]}"
         else:
             p[0] = f" AGRUPANDO POR {p[2]} WHERE DEL GROUP BY {p[4]}"
     else:
+        # Caso de `empty`
         p[0] = ''
 
 
@@ -230,6 +241,7 @@ def p_optional_usql_group_by(p):
 
 def p_group_list(p):
     '''group_list : IDENTIFIER
+                  | IDENTIFIER COMMA IDENTIFIER
                   | group_list COMMA IDENTIFIER'''
     if len(p) == 2:
         p[0] = p[1]

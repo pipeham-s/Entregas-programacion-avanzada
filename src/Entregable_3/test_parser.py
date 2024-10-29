@@ -1,7 +1,8 @@
 # test_is_usql.py
 import unittest
 from lexer import lexer
-from parser import is_usql, parser  # Asegúrate de importar la función is_usql
+# Asegúrate de importar la función is_usql
+from parser import is_usql, parser, translate_query
 
 
 def is_usql_test(query):
@@ -129,6 +130,62 @@ class TestParser(unittest.TestCase):
     def test_sql_to_usql_alter_drop_column(self):
         query = "ALTER TABLE empleados DROP COLUMN direccion;"
         expected_output = "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
+        self.run_query_test(query, expected_output)
+
+     # Pruebas para completar la cobertura
+
+    # Prueba para `p_nullable`
+    def test_nullable_no_nulo(self):
+        query = "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;"
+        expected_output = "ALTER TABLE empleados ADD COLUMN direccion VARCHAR(255) NOT NULL;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_set_list`
+    def test_set_list(self):
+        query = "ACTUALIZA empleados SETEA salario = 3000, puesto = 'ingeniero' DONDE id = 1;"
+        expected_output = "UPDATE empleados SET salario = 3000, puesto = 'ingeniero' WHERE id = 1;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_select_elements` con `TODO`
+    def test_select_elements_todo(self):
+        query = "TRAEME TODO DE LA TABLA empleados;"
+        expected_output = "SELECT * FROM empleados;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_select_list`
+    def test_select_list(self):
+        query = "TRAEME nombre, edad DE LA TABLA usuarios;"
+        expected_output = "SELECT nombre, edad FROM usuarios;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_optional_usql_group_by`
+    def test_optional_usql_group_by(self):
+        query = "TRAEME CONTANDO(TODO) DE LA TABLA ventas AGRUPANDO POR producto WHERE DEL GROUP BY COUNT(*) > 5;"
+        expected_output = "SELECT COUNT(*) FROM ventas GROUP BY producto HAVING COUNT(*) > 5;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_group_list`
+    def test_group_list(self):
+        query = "TRAEME nombre, edad DE LA TABLA clientes AGRUPANDO POR nombre;"
+        expected_output = "SELECT nombre, edad FROM clientes GROUP BY nombre;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_condition` con `BETWEEN`
+    def test_condition_between(self):
+        query = "BORRA DE LA clientes DONDE edad ENTRE 18 Y 25;"
+        expected_output = "DELETE FROM clientes WHERE edad BETWEEN 18 AND 25;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba para `p_error`
+    def test_syntax_error(self):
+        query = "TRAEME * FROM usuarios"
+        with self.assertRaises(SyntaxError):
+            self.run_query_test(query, None)
+
+    # Prueba para `translate_query` de SQL a USQL
+    def test_translate_sql_to_usql(self):
+        query = "SELECT * FROM usuarios WHERE edad > 18;"
+        expected_output = "TRAEME TODO DE LA TABLA usuarios DONDE edad > 18;"
         self.run_query_test(query, expected_output)
 
 
