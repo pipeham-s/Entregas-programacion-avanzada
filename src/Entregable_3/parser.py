@@ -15,7 +15,8 @@ def is_usql(tokens_list):
 
 
 def p_statement(p):
-    '''statement : usql_statement'''
+    '''statement : usql_statement
+                 |  sql_statement'''
 
     p[0] = p[1]
 
@@ -33,13 +34,13 @@ def p_usql_statement(p):
 # SQL statement
 
 
-# def p_sql_statement(p):
-#     '''sql_statement : sql_select_statement
-#                      | sql_insert_statement
-#                      | sql_update_statement
-#                      | sql_delete_statement
-#                      | sql_alter_table_statement'''
-#     p[0] = p[1]
+def p_sql_statement(p):
+    '''sql_statement : sql_select_statement
+                     | sql_insert_statement
+                     | sql_update_statement
+                     | sql_delete_statement
+                     | sql_alter_table_statement'''
+    p[0] = p[1]
 
 
 # USQL select statement
@@ -121,8 +122,14 @@ def p_data_type(p):
 
 def p_nullable(p):
     '''nullable : NO_NULO
+                | NOT_NULL
                 | empty'''
-    p[0] = 'NOT NULL' if p[1] else ''
+    if p.slice[1].type == 'NO_NULO':
+        p[0] = 'NOT NULL'
+    elif p.slice[1].type == 'NOT_NULL':
+        p[0] = 'NO NULO'
+    else:
+        p[0] = ''
 
 # Set de asignaciones (para UPDATE)
 
@@ -207,9 +214,13 @@ def p_optional_usql_where(p):
 
 def p_optional_usql_group_by(p):
     '''optional_usql_group_by : AGRUPANDO_POR group_list WHERE_DEL_GROUP_BY condition
+                              | GROUP_BY group_list HAVING condition
                               | empty'''
     if len(p) > 2:
-        p[0] = f" GROUP BY {p[2]} HAVING {p[4]}"
+        if p.slice[1].type == 'AGRUPANDO_POR':
+            p[0] = f" GROUP BY {p[2]} HAVING {p[4]}"
+        else:
+            p[0] = f" AGRUPANDO POR {p[2]} WHERE DEL GROUP BY {p[4]}"
     else:
         p[0] = ''
 
@@ -263,6 +274,7 @@ def p_value(p):
 # Condiciones (para WHERE y JOIN)
 
 
+# Condiciones (para WHERE y JOIN)
 def p_condition(p):
     '''condition : expression comparator expression
                  | expression BETWEEN expression AND expression
@@ -270,8 +282,12 @@ def p_condition(p):
                  | expression'''
     if len(p) == 4 and p[2] in ('=', '>', '<', '>=', '<=', '<>'):
         p[0] = f"{p[1]} {p[2]} {p[3]}"
-    elif len(p) == 6 and p[2] in ('BETWEEN', 'ENTRE'):
-        p[0] = f"{p[1]} BETWEEN {p[3]} AND {p[5]}"
+    elif len(p) == 6:
+        if p[2] == 'BETWEEN' or p[2] == 'ENTRE':
+            # Maneja ambas versiones para SQL y USQL
+            between_and = 'ENTRE' if p[2] == 'BETWEEN' else 'BETWEEN'
+            and_y = 'Y' if p[2] == 'BETWEEN' else 'AND'
+            p[0] = f"{p[1]} {between_and} {p[3]} {and_y} {p[5]}"
     else:
         p[0] = p[1]
 
@@ -312,6 +328,7 @@ def p_empty(p):
     'empty :'
     p[0] = ''
 
+
 # Manejo de errores de sintaxis
 
 
@@ -319,8 +336,112 @@ def p_error(p):
     raise SyntaxError(f"Error de sintaxis en la línea {p.lineno}")
 
 
+# AHORA EL MANEJO PARA TRADUCIR DE SQL A USQL
+
+# SQL SELECT a USQL TRAEME
+def p_sql_select_statement(p):
+    '''sql_select_statement : SELECT select_elements_sql FROM table_reference optional_sql_join optional_sql_where optional_sql_group_by SEMICOLON'''
+    # Traducción de SQL a USQL
+    p[0] = f"TRAEME {p[2]} DE LA TABLA {p[4]}{p[5]}{p[6]}{p[7]};"
+
+# SQL INSERT a USQL METE_EN
+
+
+def p_sql_insert_statement(p):
+    '''sql_insert_statement : INSERT_INTO IDENTIFIER LPAREN column_list RPAREN VALUES LPAREN value_list RPAREN SEMICOLON'''
+    # Traducción de SQL a USQL
+    p[0] = f"METE EN {p[2]} ({p[4]}) LOS VALORES ({p[8]});"
+
+# SQL UPDATE a USQL ACTUALIZA
+
+
+def p_sql_update_statement(p):
+    '''sql_update_statement : UPDATE IDENTIFIER SET set_list optional_sql_where SEMICOLON'''
+    # Traducción de SQL a USQL
+    p[0] = f"ACTUALIZA {p[2]} SETEA {p[4]}{p[5]};"
+
+# SQL DELETE a USQL BORRA_DE_LA
+
+
+def p_sql_delete_statement(p):
+    '''sql_delete_statement : DELETE_FROM IDENTIFIER optional_sql_where SEMICOLON'''
+    # Traducción de SQL a USQL
+    p[0] = f"BORRA DE LA {p[2]}{p[3]};"
+
+# SQL ALTER TABLE a USQL CAMBIA_LA_TABLA
+
+
+def p_sql_alter_table_statement(p):
+    '''sql_alter_table_statement : ALTER_TABLE IDENTIFIER alter_action_sql SEMICOLON'''
+    # Traducción de SQL a USQL
+    p[0] = f"CAMBIA LA TABLA {p[2]} {p[3]};"
+
+# Acción de alteración de columna en SQL a USQL
+
+
+def p_alter_action_sql(p):
+    '''alter_action_sql : ADD_COLUMN IDENTIFIER data_type nullable
+                        | DROP_COLUMN IDENTIFIER'''
+    if p.slice[1].type == 'ADD_COLUMN':
+        nullable = f" {p[4]}" if p[4] else ''
+        p[0] = f"AGREGA LA COLUMNA {p[2]} {p[3]}{nullable}"
+    else:
+        p[0] = f"ELIMINA LA COLUMNA {p[2]}"
+
+# Elementos de SELECT SQL (similar a USQL)
+
+
+def p_select_elements_sql(p):
+    '''select_elements_sql : ASTERISK
+                       | DISTINCT select_list
+                       | COUNT LPAREN ASTERISK RPAREN
+                       | select_list'''
+    if p[1] == '*':
+        p[0] = "TODO"
+    elif p[1] == 'DISTINCT':
+        p[0] = f"LOS DISTINTOS {p[2]}"
+    elif p[1] == 'COUNT':
+        p[0] = "CONTANDO(TODO)"
+    else:
+        p[0] = p[1]
+
+# Reglas opcionales para SQL JOIN
+
+
+def p_optional_sql_join(p):
+    '''optional_sql_join : JOIN IDENTIFIER ON condition
+                         | empty'''
+    if len(p) > 2:
+        p[0] = f" MEZCLANDO {p[2]} EN {p[4]}"
+    else:
+        p[0] = ''
+
+# Reglas opcionales para SQL WHERE
+
+
+def p_optional_sql_where(p):
+    '''optional_sql_where : WHERE condition
+                          | empty'''
+    if len(p) > 2:
+        p[0] = f" DONDE {p[2]}"
+    else:
+        p[0] = ''
+
+# Reglas opcionales para SQL GROUP BY
+
+
+def p_optional_sql_group_by(p):
+    '''optional_sql_group_by : GROUP_BY group_list HAVING condition
+                             | empty'''
+    if len(p) > 2:
+        p[0] = f" AGRUPANDO POR {p[2]} WHERE DEL GROUP BY {p[4]}"
+    else:
+        p[0] = ''
+
+
 # Crear el parser
 parser = yacc.yacc()
+
 
 # Crear el lexer
 
@@ -351,8 +472,24 @@ if __name__ == '__main__':
         "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;",
         "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
     ]
+    sql_queries = [
+        "SELECT * FROM usuarios WHERE edad > 18;",
+        "SELECT DISTINCT nombre FROM clientes WHERE ciudad = 'Madrid';",
+        "SELECT * FROM pedidos JOIN clientes ON pedidos.cliente_id = clientes.id WHERE clientes.ciudad = 'Barcelona';",
+        "INSERT INTO usuarios (nombre, edad) VALUES ('Juan', 25);",
+        "SELECT COUNT(*) FROM ventas GROUP BY producto HAVING COUNT(*) > 5;",
+        "UPDATE empleados SET salario = 3000 WHERE puesto = 'ingeniero';",
+        "DELETE FROM clientes WHERE edad BETWEEN 18 AND 25;",
+        "ALTER TABLE empleados ADD COLUMN direccion VARCHAR(255) NOT NULL;",
+        "ALTER TABLE empleados DROP COLUMN direccion;"
+    ]
 
-    for query in queries:
+    # for query in queries:
+    #     print(f"Probando la consulta: {query}")
+    #     translated_query = translate_query(query)
+    #     print(f"Resultado: {translated_query}\n")
+
+    for query in sql_queries:
         print(f"Probando la consulta: {query}")
         translated_query = translate_query(query)
         print(f"Resultado: {translated_query}\n")

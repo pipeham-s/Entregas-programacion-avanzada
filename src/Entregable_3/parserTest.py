@@ -75,6 +75,61 @@ class TestParser(unittest.TestCase):
         query = "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
         expected_output = "ALTER TABLE empleados DROP COLUMN direccion;"
         self.run_query_test(query, expected_output)
+    # Prueba para cada consulta SQL a USQL
+
+        # Prueba de SELECT con TODO
+    def test_sql_to_usql_select_all(self):
+        query = "SELECT * FROM usuarios WHERE edad > 18;"
+        expected_output = "TRAEME TODO DE LA TABLA usuarios DONDE edad > 18;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de SELECT con DISTINCT
+    def test_sql_to_usql_select_distinct(self):
+        query = "SELECT DISTINCT nombre FROM clientes WHERE ciudad = 'Madrid';"
+        expected_output = "TRAEME LOS DISTINTOS nombre DE LA TABLA clientes DONDE ciudad = 'Madrid';"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de INSERT
+    def test_sql_to_usql_insert(self):
+        query = "INSERT INTO usuarios (nombre, edad) VALUES ('Juan', 25);"
+        expected_output = "METE EN usuarios (nombre, edad) LOS VALORES ('Juan', 25);"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de UPDATE
+    def test_sql_to_usql_update(self):
+        query = "UPDATE empleados SET salario = 3000 WHERE puesto = 'ingeniero';"
+        expected_output = "ACTUALIZA empleados SETEA salario = 3000 DONDE puesto = 'ingeniero';"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de JOIN
+    def test_sql_to_usql_join(self):
+        query = "SELECT * FROM pedidos JOIN clientes ON pedidos.cliente_id = clientes.id WHERE clientes.ciudad = 'Barcelona';"
+        expected_output = "TRAEME TODO DE LA TABLA pedidos MEZCLANDO clientes EN pedidos.cliente_id = clientes.id DONDE clientes.ciudad = 'Barcelona';"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de GROUP BY y COUNT
+    def test_sql_to_usql_group_by_count(self):
+        query = "SELECT COUNT(*) FROM ventas GROUP BY producto HAVING COUNT(*) > 5;"
+        expected_output = "TRAEME CONTANDO(TODO) DE LA TABLA ventas AGRUPANDO POR producto WHERE DEL GROUP BY COUNT(*) > 5;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de DELETE
+    def test_sql_to_usql_delete(self):
+        query = "DELETE FROM clientes WHERE edad BETWEEN 18 AND 25;"
+        expected_output = "BORRA DE LA clientes DONDE edad ENTRE 18 Y 25;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de ALTER TABLE para agregar columna
+    def test_sql_to_usql_alter_add_column(self):
+        query = "ALTER TABLE empleados ADD COLUMN direccion VARCHAR(255) NOT NULL;"
+        expected_output = "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;"
+        self.run_query_test(query, expected_output)
+
+    # Prueba de ALTER TABLE para eliminar columna
+    def test_sql_to_usql_alter_drop_column(self):
+        query = "ALTER TABLE empleados DROP COLUMN direccion;"
+        expected_output = "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
+        self.run_query_test(query, expected_output)
 
 
 # Ejecutar las pruebas
