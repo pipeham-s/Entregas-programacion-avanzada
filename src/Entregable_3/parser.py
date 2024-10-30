@@ -295,11 +295,13 @@ def p_condition(p):
     if len(p) == 4 and p[2] in ('=', '>', '<', '>=', '<=', '<>'):
         p[0] = f"{p[1]} {p[2]} {p[3]}"
     elif len(p) == 6:
-        if p[2] == 'BETWEEN' or p[2] == 'ENTRE':
-            # Maneja ambas versiones para SQL y USQL
-            between_and = 'ENTRE' if p[2] == 'BETWEEN' else 'BETWEEN'
-            and_y = 'Y' if p[2] == 'BETWEEN' else 'AND'
-            p[0] = f"{p[1]} {between_and} {p[3]} {and_y} {p[5]}"
+
+        # Maneja ambas versiones para SQL y USQL
+        if p[2] == 'BETWEEN':
+            p[0] = f"{p[1]} ENTRE {p[3]} Y {p[5]}"
+        else:
+            p[0] = f"{p[1]} BETWEEN {p[3]} AND {p[5]}"
+
     else:
         p[0] = p[1]
 
@@ -352,7 +354,7 @@ def p_error(p):
 
 # SQL SELECT a USQL TRAEME
 def p_sql_select_statement(p):
-    '''sql_select_statement : SELECT select_elements_sql FROM table_reference optional_sql_join optional_sql_where optional_sql_group_by SEMICOLON'''
+    '''sql_select_statement : SELECT select_elements_sql FROM table_reference optional_sql_join optional_sql_where optional_usql_group_by SEMICOLON'''
     # Traducción de SQL a USQL
     p[0] = f"TRAEME {p[2]} DE LA TABLA {p[4]}{p[5]}{p[6]}{p[7]};"
 
@@ -442,13 +444,13 @@ def p_optional_sql_where(p):
 # Reglas opcionales para SQL GROUP BY
 
 
-def p_optional_sql_group_by(p):
-    '''optional_sql_group_by : GROUP_BY group_list HAVING condition
-                             | empty'''
-    if len(p) > 2:
-        p[0] = f" AGRUPANDO POR {p[2]} WHERE DEL GROUP BY {p[4]}"
-    else:
-        p[0] = ''
+# def p_optional_sql_group_by(p):
+#     '''optional_sql_group_by : GROUP_BY group_list HAVING condition
+#                              | empty'''
+#     if len(p) > 2:
+#         p[0] = f" AGRUPANDO POR {p[2]} WHERE DEL GROUP BY {p[4]}"
+#     else:
+#         p[0] = ''
 
 
 # Crear el parser
@@ -472,36 +474,36 @@ def translate_query(query):
         return None
 
 
-if __name__ == '__main__':
-    queries = [
-        "TRAEME TODO DE LA TABLA usuarios DONDE edad > 18;",
-        "TRAEME LOS DISTINTOS nombre DE LA TABLA clientes DONDE ciudad = 'Madrid';",
-        "TRAEME TODO DE LA TABLA pedidos MEZCLANDO clientes EN pedidos.cliente_id = clientes.id DONDE clientes.ciudad = 'Barcelona';",
-        "METE EN usuarios (nombre, edad) LOS VALORES ('Juan', 25);",
-        "TRAEME CONTANDO(TODO) DE LA TABLA ventas AGRUPANDO POR producto WHERE DEL GROUP BY COUNT(*) > 5;",
-        "ACTUALIZA empleados SETEA salario = 3000 DONDE puesto = 'ingeniero';",
-        "BORRA DE LA clientes DONDE edad ENTRE 18 Y 25;",
-        "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;",
-        "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
-    ]
-    sql_queries = [
-        "SELECT * FROM usuarios WHERE edad > 18;",
-        "SELECT DISTINCT nombre FROM clientes WHERE ciudad = 'Madrid';",
-        "SELECT * FROM pedidos JOIN clientes ON pedidos.cliente_id = clientes.id WHERE clientes.ciudad = 'Barcelona';",
-        "INSERT INTO usuarios (nombre, edad) VALUES ('Juan', 25);",
-        "SELECT COUNT(*) FROM ventas GROUP BY producto HAVING COUNT(*) > 5;",
-        "UPDATE empleados SET salario = 3000 WHERE puesto = 'ingeniero';",
-        "DELETE FROM clientes WHERE edad BETWEEN 18 AND 25;",
-        "ALTER TABLE empleados ADD COLUMN direccion VARCHAR(255) NOT NULL;",
-        "ALTER TABLE empleados DROP COLUMN direccion;"
-    ]
+# if __name__ == '__main__':
+    # queries = [
+    #     "TRAEME TODO DE LA TABLA usuarios DONDE edad > 18;",
+    #     "TRAEME LOS DISTINTOS nombre DE LA TABLA clientes DONDE ciudad = 'Madrid';",
+    #     "TRAEME TODO DE LA TABLA pedidos MEZCLANDO clientes EN pedidos.cliente_id = clientes.id DONDE clientes.ciudad = 'Barcelona';",
+    #     "METE EN usuarios (nombre, edad) LOS VALORES ('Juan', 25);",
+    #     "TRAEME CONTANDO(TODO) DE LA TABLA ventas AGRUPANDO POR producto WHERE DEL GROUP BY COUNT(*) > 5;",
+    #     "ACTUALIZA empleados SETEA salario = 3000 DONDE puesto = 'ingeniero';",
+    #     "BORRA DE LA clientes DONDE edad ENTRE 18 Y 25;",
+    #     "CAMBIA LA TABLA empleados AGREGA LA COLUMNA direccion VARCHAR(255) NO NULO;",
+    #     "CAMBIA LA TABLA empleados ELIMINA LA COLUMNA direccion;"
+    # ]
+    # sql_queries = [
+    #     "SELECT * FROM usuarios WHERE edad > 18;",
+    #     "SELECT DISTINCT nombre FROM clientes WHERE ciudad = 'Madrid';",
+    #     "SELECT * FROM pedidos JOIN clientes ON pedidos.cliente_id = clientes.id WHERE clientes.ciudad = 'Barcelona';",
+    #     "INSERT INTO usuarios (nombre, edad) VALUES ('Juan', 25);",
+    #     "SELECT COUNT(*) FROM ventas GROUP BY producto HAVING COUNT(*) > 5;",
+    #     "UPDATE empleados SET salario = 3000 WHERE puesto = 'ingeniero';",
+    #     "DELETE FROM clientes WHERE edad BETWEEN 18 AND 25;",
+    #     "ALTER TABLE empleados ADD COLUMN direccion VARCHAR(255) NOT NULL;",
+    #     "ALTER TABLE empleados DROP COLUMN direccion;"
+    # ]
 
-    for query in queries:
-        print(f"Probando la consulta: {query}")
-        translated_query = translate_query(query)
-        print(f"Resultado: {translated_query}\n")
+    # for query in queries:
+    #     print(f"Probando la consulta: {query}")
+    #     translated_query = translate_query(query)
+    #     print(f"Resultado: {translated_query}\n")
 
-    for query in sql_queries:
-        print(f"Probando la consulta: {query}")
-        translated_query = translate_query(query)
-        print(f"Resultado: {translated_query}\n")
+    # for query in sql_queries:
+    #     print(f"Probando la consulta: {query}")
+    #     translated_query = translate_query(query)
+    #     print(f"Resultado: {translated_query}\n")

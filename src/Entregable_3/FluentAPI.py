@@ -51,8 +51,11 @@ class FluentQueryAPI:
                 cursor = conn.cursor()
                 cursor.execute(sql_query)
                 results = cursor.fetchall()
-                for row in results:
-                    print(row)
+                if results:
+                    for row in results:
+                        print(row)
+                else:
+                    print("No se encontraron datos para la consulta.")
                 conn.commit()
         except sqlite3.Error as e:
             print("Error ejecutando la consulta en SQL:", e)

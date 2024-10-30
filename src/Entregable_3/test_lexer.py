@@ -2,7 +2,7 @@ import unittest
 from lexer import lexer
 from parser import parser
 
-data = "TRAEME nombre, edad AGRUPANDO POR edad;"
+data = "TRAEME TODO DE LA TABLA usuarios DONDE edad BETWEEN 18 AND 25;"
 
 lexer.input(data)
 
