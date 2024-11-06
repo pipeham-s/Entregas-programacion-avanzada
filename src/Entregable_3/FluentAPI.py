@@ -1,4 +1,5 @@
 import sqlite3
+from createDB import create_database
 from parser import translate_query, is_usql
 from lexer import lexer
 import re
@@ -63,8 +64,8 @@ class FluentQueryAPI:
 
 # Inicializar la base de datos y la API
 db_path = "mi_base_de_datos.db"
+create_database(db_path)
 api = FluentQueryAPI(db_path)
-
 api.execute_query("TRAEME TODO DE LA TABLA usuarios;")
 
 # Loop para recibir consultas desde la consola
