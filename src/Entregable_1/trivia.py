@@ -1,3 +1,6 @@
+# autopep8: off
+
+
 import itertools
 import csv
 import os
@@ -115,8 +118,7 @@ def obtener_respuesta(pregunta):
         print_colored("\n¡Correcto!", "green")
         return 10
     else:
-        print_colored(f"\nIncorrecto. La respuesta correcta era: {
-                      pregunta['respuesta_correcta']}", "red")
+        print_colored(f"\nIncorrecto. La respuesta correcta era: {pregunta['respuesta_correcta']}", "red")
         return 0
 
 
