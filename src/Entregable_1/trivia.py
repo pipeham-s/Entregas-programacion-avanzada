@@ -7,17 +7,20 @@ from functools import reduce
 
 documentation = {}
 
+
 def docstring(description):
     def decorator(func):
         documentation[func.__name__] = description
         return func
     return decorator
 
+
 def generar_documentacion():
     for func_name, desc in documentation.items():
         print(f"Función: {func_name}")
         print(f"Descripción: {desc}")
         print("-" * 20)
+
 
 @docstring("Lee el archivo CSV y devuelve un generador de líneas.")
 def leer_archivo_csv_generador(ruta_archivo):
@@ -30,6 +33,7 @@ def leer_archivo_csv_generador(ruta_archivo):
         for linea in lector:
             yield linea
 
+
 @docstring("Selecciona preguntas aleatoriamente del generador y las guarda en listas separadas.")
 def seleccionar_preguntas_aleatorias_generador(lineas, num_preguntas=5):
     preguntas = list(
@@ -39,6 +43,7 @@ def seleccionar_preguntas_aleatorias_generador(lineas, num_preguntas=5):
     # Crea una lista para cada pregunta
     listas_de_preguntas = [[pregunta] for pregunta in seleccionadas]
     return listas_de_preguntas
+
 
 @docstring("Procesa las líneas del archivo CSV y convierte a cada una en un diccionario.")
 def procesar_lineas(lineas):
@@ -50,6 +55,7 @@ def procesar_lineas(lineas):
         'respuesta_correcta': linea[4]
     }, lineas))
 
+
 @docstring("Combina las listas de preguntas y las procesa.")
 def procesar_preguntas_combinadas(listas_de_preguntas):
     # Uso de itertools.chain para aplanar la lista de listas
@@ -58,6 +64,7 @@ def procesar_preguntas_combinadas(listas_de_preguntas):
     preguntas_procesadas = procesar_lineas(preguntas_combinadas)
     return preguntas_procesadas
 
+
 @docstring("Lee el archivo CSV, genera las preguntas, las selecciona aleatoriamente y las procesa.")
 def leer_y_procesar_csv(ruta_archivo):
     lineas_generador = leer_archivo_csv_generador(ruta_archivo)
@@ -65,6 +72,7 @@ def leer_y_procesar_csv(ruta_archivo):
         lineas_generador)
     preguntas_procesadas = procesar_preguntas_combinadas(lineas_aleatorias)
     return preguntas_procesadas
+
 
 @docstring("Imprime el texto con el color especificado.")
 def print_colored(text, color):
@@ -80,6 +88,7 @@ def print_colored(text, color):
     }
     print(colors[color] + text + colors["end"])
 
+
 @docstring("Decorador para validar que la entrada sean números.")
 def validate_input(func):
     def wrapper(*args, **kwargs):
@@ -87,7 +96,7 @@ def validate_input(func):
             return func(*args, **kwargs)
         except ValueError:
             print_colored("Por favor ingresa solo números.", "red")
-            return func(*args, **kwargs)
+            return None  # No volver a llamar a la función
     return wrapper
 
 
@@ -106,8 +115,10 @@ def obtener_respuesta(pregunta):
         print_colored("\n¡Correcto!", "green")
         return 10
     else:
-        print_colored(f"\nIncorrecto. La respuesta correcta era: {pregunta['respuesta_correcta']}", "red")
+        print_colored(f"\nIncorrecto. La respuesta correcta era: {
+                      pregunta['respuesta_correcta']}", "red")
         return 0
+
 
 @docstring("Muestra un banner de agradecimiento.")
 def mostrar_banner_gracias():
@@ -122,6 +133,7 @@ def mostrar_banner_gracias():
                                                                                                                                       
           
           """)
+
 
 @docstring("Muestra una línea divisoria.")
 def mostrar_divisor():
@@ -142,6 +154,7 @@ def jugar_otra_vez():
         print("Respuesta no reconocida.")
         jugar_otra_vez()
 
+
 @docstring("Juega el trivial de forma recursiva.")
 def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indice: int = 0):
     if indice == 0:
@@ -155,11 +168,13 @@ def jugar_recursivo(preguntas: list[dict[str, str]], resultados: list[int], indi
         print(f"\nTu puntuación final es: {total_puntos} puntos.")
         return total_puntos
 
+
 @docstring("Inicia el juego del trivial.")
 def jugar():
     preguntas = leer_y_procesar_csv('trivia_questions.csv')
     jugar_recursivo(preguntas, resultados=[])
     jugar_otra_vez()
+
 
 @docstring("Muestra un banner de bienvenida.")
 def mostrar_bienvenida():
@@ -178,6 +193,7 @@ def mostrar_bienvenida():
     print("Debes seleccionar la opción correcta (número del 1 al 3) para cada pregunta.")
     print("Presiona ENTER para continuar.")
     input()
+
 
 @docstring("Función principal del programa.")
 def main():
