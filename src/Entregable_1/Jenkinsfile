@@ -1,0 +1,65 @@
+pipeline {
+    agent { 
+        node {
+            label 'docker-agent-python'
+        }
+    }
+    triggers {
+        pollSCM('* * * * *')  // Revisa cambios en el repositorio cada minuto
+    }
+    environment {
+        PROJECT_DIR = 'src/Entregable_1'
+        PYTHON_VERSION = 'python3'  // Ajusta esto si usas un entorno virtual o versión específica de Python
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo "Instalando dependencias..."
+                sh """
+                cd ${PROJECT_DIR}
+                ${PYTHON_VERSION} -m pip install --upgrade pip
+                ${PYTHON_VERSION} -m pip install -r requirements.txt
+                """
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Ejecutando tests..."
+                sh """
+                cd ${PROJECT_DIR}
+                ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
+                """
+            }
+        }
+        stage('Report') {
+            steps {
+                echo "Generando reporte de cobertura..."
+                publishHTML(target: [
+                    reportDir: "${PROJECT_DIR}/htmlcov",
+                    reportFiles: 'index.html',
+                    reportName: 'Cobertura de Tests'
+                ])
+            }
+        }
+        stage('Deliver') {
+            steps {
+                echo "Simulando entrega..."
+                sh """
+                echo "Entrega completada exitosamente."
+                """
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline finalizado."
+            cleanWs()  // Limpia el workspace después de la ejecución
+        }
+        failure {
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
+        }
+    }
+}
