@@ -1,13 +1,20 @@
+# Usar la imagen base del agente Jenkins oficial
 FROM jenkins/inbound-agent:latest
 
 USER root
 
-# Instalar Docker
+# Instalar Docker CLI
 RUN apt-get update && \
     apt-get install -y docker.io && \
     rm -rf /var/lib/apt/lists/*
 
-# Agregar usuario jenkins al grupo docker
+# Añadir el usuario jenkins al grupo docker
 RUN usermod -aG docker jenkins
 
+# Montar el socket de Docker (para acceso al daemon Docker)
+VOLUME /var/run/docker.sock
+
 USER jenkins
+
+# Configurar el punto de entrada
+ENTRYPOINT ["jenkins-agent"]
