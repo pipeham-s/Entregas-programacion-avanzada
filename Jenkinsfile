@@ -1,53 +1,47 @@
 pipeline {
     agent {
         node {
-            label 'docker-agent-python'
+            label 'docker-agent'
         }
     }
     environment {
-        PROJECT_DIR = 'src'
-        PYTHON_VERSION = 'python3'
+        IMAGE_NAME = 'mi-aplicacion-fastapi'
+        CONTAINER_NAME = 'mi-contenedor-fastapi'
     }
     stages {
+        stage('Checkout Código') {
+            steps {
+                echo "Obteniendo el código del repositorio..."
+                checkout scm
+            }
+        }
         stage('Build Entregable_1') {
             steps {
                 echo "Ejecutando pipeline de Entregable_1..."
                 build job: 'trivia-pipeline', wait: true
             }
         }
-        stage('Setup Python Environment') {
+        stage('Construir Imagen Docker de la Aplicación') {
             steps {
-                echo "Instalando python3-venv y configurando entorno virtual..."
+                echo "Construyendo la imagen Docker de la aplicación..."
                 sh """
-                    apt update -y && apt install -y ${PYTHON_VERSION}-venv
-                    cd ${PROJECT_DIR}
-                    ${PYTHON_VERSION} -m venv venv
-                    . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                    docker build -t ${IMAGE_NAME} -f src/Dockerfile .
                 """
             }
         }
-        
+        stage('Desplegar Aplicación en Contenedor Docker') {
+            steps {
+                echo "Desplegando la aplicación en un contenedor Docker separado..."
+                sh """
+                    docker rm -f ${CONTAINER_NAME} || true
+                    docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${IMAGE_NAME}
+                """
+            }
+        }
     }
     post {
         success {
-            echo "Pipeline ejecutada exitosamente. Iniciando el despliegue de la web..."
-
-            // Desplegar la aplicación web antes de limpiar el workspace
-            sh """
-                cd ${PROJECT_DIR}
-                . venv/bin/activate
-
-                # Detener cualquier instancia anterior de la aplicación
-                pkill -f "uvicorn app:app" || true
-
-                # Iniciar la aplicación web en segundo plano
-                nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload > uvicorn.log 2>&1 &
-            """
             echo "La aplicación web está corriendo en http://localhost:8000"
-
-            
         }
         failure {
             echo "La pipeline falló. No se desplegará la aplicación web."
