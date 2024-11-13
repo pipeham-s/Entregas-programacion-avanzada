@@ -1,73 +1,68 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-u root'  // Ejecuta como root para evitar problemas de permisos
+        }
+    }
+    triggers {
+        pollSCM('H/5 * * * *')  // Verifica cambios cada 5 minutos
+    }
     environment {
-        PROJECT_DIR = 'src'
-        VENV_DIR = 'venv'
+        PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'
     }
-
     stages {
         stage('Setup Python') {
             steps {
-                echo "Instalando Python y configurando entorno virtual..."
-                sh '''
-    apt update -y
-    apt install -y python3 python3-venv python3-pip --no-install-recommends
-    cd src
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install --upgrade pip --user
-'''
-
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo "Instalando dependencias..."
+                echo "Instalando dependencias de Python..."
                 sh """
+                ${PYTHON_VERSION} -m pip install --upgrade pip
+                ${PYTHON_VERSION} -m pip install virtualenv
                 cd ${PROJECT_DIR}
-                . ${VENV_DIR}/bin/activate
+                virtualenv venv
+                . venv/bin/activate
                 pip install -r requirements.txt
                 """
             }
         }
-
-        stage('Run Tests') {
+        stage('Test') {
             steps {
                 echo "Ejecutando tests..."
                 sh """
                 cd ${PROJECT_DIR}
-                . ${VENV_DIR}/bin/activate
-                pytest --cov=trivia --cov-report=term --cov-report=html
+                . venv/bin/activate
+                ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
                 """
             }
         }
-
-        stage('Deploy') {
+        stage('Report') {
             steps {
-                echo "Desplegando aplicación en EC2..."
-                sh """
-                cd ${PROJECT_DIR}
-                . ${VENV_DIR}/bin/activate
-                pkill -f "uvicorn app:app" || true
-                nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
-                """
+                echo "Generando reporte de cobertura..."
+                publishHTML(target: [
+                    reportDir: "${PROJECT_DIR}/htmlcov",
+                    reportFiles: 'index.html',
+                    reportName: 'Cobertura de Tests'
+                ])
+            }
+        }
+        stage('Deliver') {
+            steps {
+                echo "Simulando entrega..."
+                sh "echo 'Entrega completada exitosamente.'"
             }
         }
     }
-
     post {
         always {
-            echo "Limpieza del workspace..."
-            cleanWs()
-        }
-        success {
-            echo "Despliegue exitoso."
+            echo "Pipeline finalizado."
+            cleanWs()  // Limpia el workspace después de la ejecución
         }
         failure {
-            echo "El despliegue falló. Verifica los errores."
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
         }
     }
 }
