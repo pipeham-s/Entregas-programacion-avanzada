@@ -23,8 +23,7 @@ pipeline {
             steps {
                 echo "Generando Javadoc..."
                 sh """
-                cd ${PROJECT_DIR}
-                javadoc -d ../../docs $(find . -name "*.java")
+                javadoc -d src/Entregable_2/docs -sourcepath src -subpackages Entregable_2.Code
                 """
             }
         }
