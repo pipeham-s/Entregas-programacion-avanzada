@@ -1,8 +1,13 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'docker-agent'
+        }
+    }
     environment {
         IMAGE_NAME = 'mi-aplicacion-fastapi'
         CONTAINER_NAME = 'mi-contenedor-fastapi'
+        DOCKER_TLS_VERIFY = '0'
     }
     stages {
         stage('Checkout Código') {
@@ -23,12 +28,8 @@ pipeline {
         stage('Desplegar Aplicación en Contenedor Docker') {
             steps {
                 echo "Desplegando la aplicación en un contenedor Docker..."
-                // Detener cualquier contenedor existente
                 sh """
                     docker rm -f ${CONTAINER_NAME} || true
-                """
-                // Ejecutar el contenedor en segundo plano
-                sh """
                     docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${IMAGE_NAME}
                 """
             }
