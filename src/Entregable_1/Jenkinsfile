@@ -1,8 +1,7 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.11-slim'
-            args '-u root'  // Ejecuta como root para evitar problemas de permisos
+        node {
+            label 'docker-agent-python'
         }
     }
     triggers {
@@ -11,17 +10,17 @@ pipeline {
     environment {
         PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'
+        VENV_DIR = 'venv'
     }
     stages {
-        stage('Setup Python') {
+        stage('Setup') {
             steps {
-                echo "Instalando dependencias de Python..."
+                echo "Instalando dependencias..."
                 sh """
-                ${PYTHON_VERSION} -m pip install --upgrade pip
-                ${PYTHON_VERSION} -m pip install virtualenv
                 cd ${PROJECT_DIR}
-                virtualenv venv
-                . venv/bin/activate
+                ${PYTHON_VERSION} -m venv ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
+                pip install --upgrade pip
                 pip install -r requirements.txt
                 """
             }
@@ -31,7 +30,7 @@ pipeline {
                 echo "Ejecutando tests..."
                 sh """
                 cd ${PROJECT_DIR}
-                . venv/bin/activate
+                . ${VENV_DIR}/bin/activate
                 ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
                 """
             }
@@ -56,7 +55,7 @@ pipeline {
     post {
         always {
             echo "Pipeline finalizado."
-            cleanWs()  // Limpia el workspace después de la ejecución
+            deleteDir()  // Limpia el workspace
         }
         failure {
             echo "Pipeline falló. Verifica los errores."
