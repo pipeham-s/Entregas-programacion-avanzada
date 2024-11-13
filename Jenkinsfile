@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        PROJECT_DIR = 'src'
+        PYTHON_VERSION = 'python3'
+    }
     stages {
         stage('Build Entregable_1') {
             steps {
@@ -8,36 +12,32 @@ pipeline {
             }
         }
         stage('Deploy Web App') {
-    steps {
-        echo "Desplegando aplicación web en EC2..."
-        sh """
-        # Define variables de entorno si es necesario
-        PROJECT_DIR="src"
-        PYTHON_VERSION="python3"
+            steps {
+                echo "Desplegando aplicación web en EC2..."
+                sh """
+                    # Navegar al directorio del proyecto
+                    cd ${PROJECT_DIR}
 
-        cd ${PROJECT_DIR}
+                    # Crear entorno virtual
+                    ${PYTHON_VERSION} -m venv venv
 
-        # Crear entorno virtual
-        ${PYTHON_VERSION} -m venv venv
+                    # Activar entorno virtual
+                    source venv/bin/activate
 
-        # Activar entorno virtual
-        source venv/bin/activate
+                    # Actualizar pip en el entorno virtual
+                    pip install --upgrade pip
 
-        # Actualizar pip en el entorno virtual
-        pip install --upgrade pip
+                    # Instalar dependencias en el entorno virtual
+                    pip install -r requirements.txt
 
-        # Instalar dependencias en el entorno virtual
-        pip install -r requirements.txt
+                    # Detener cualquier instancia anterior de la aplicación
+                    pkill -f "uvicorn app:app" || true
 
-        # Detener cualquier instancia anterior de la aplicación
-        pkill -f "uvicorn app:app" || true
-
-        # Ejecutar la aplicación en segundo plano usando el entorno virtual
-        nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
-        """
-    }
-}
-
+                    # Ejecutar la aplicación en segundo plano usando el entorno virtual
+                    nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
+                """
+            }
+        }
     }
     post {
         always {
