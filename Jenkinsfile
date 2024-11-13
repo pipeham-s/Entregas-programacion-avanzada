@@ -4,7 +4,6 @@ pipeline {
         stage('Build Entregable_1') {
             steps {
                 echo "Ejecutando pipeline de Entregable_1..."
-                // Llama al job 'trivia-pipeline' y espera a que termine
                 build job: 'trivia-pipeline', wait: true
             }
         }
@@ -12,14 +11,24 @@ pipeline {
             steps {
                 echo "Desplegando aplicación web en EC2..."
                 sh """
-                # Cambia al directorio src
-                cd src
+                # Define variables de entorno si es necesario
+                PROJECT_DIR="src"
+                PYTHON_VERSION="python3"
+
+                cd ${PROJECT_DIR}
+
+                # Actualiza pip
+                ${PYTHON_VERSION} -m pip install --upgrade pip
+
                 # Instala las dependencias
-                pip3 install -r requirements.txt --user
-                # Mata cualquier instancia anterior de la aplicación
+                ${PYTHON_VERSION} -m pip install -r requirements.txt --user
+
+                # Detiene cualquier instancia anterior de la aplicación
                 pkill -f "uvicorn app:app" || true
+
                 # Ejecuta la aplicación en segundo plano
-                nohup python3 -m uvicorn app:app --host 0.0.0.0 --port 8000 &
+                nohup ${PYTHON_VERSION} -m uvicorn app:app --host 0.0.0.0 --port 8000 &
+
                 """
             }
         }
