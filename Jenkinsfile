@@ -47,9 +47,7 @@ pipeline {
             """
             echo "La aplicación web está corriendo en http://localhost:8000"
 
-            // Limpieza del workspace después del despliegue
-            echo "Limpieza del workspace."
-            deleteDir()
+            
         }
         failure {
             echo "La pipeline falló. No se desplegará la aplicación web."
