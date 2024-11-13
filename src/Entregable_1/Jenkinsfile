@@ -1,65 +1,47 @@
 pipeline {
-    agent { 
-        node {
-            label 'docker-agent-python'
-        }
-    }
-    triggers {
-        pollSCM('* * * * *')  // Revisa cambios en el repositorio cada minuto
-    }
-    environment {
-        PROJECT_DIR = 'src/Entregable_1'
-        PYTHON_VERSION = 'python3'  // Ajusta esto si usas un entorno virtual o versión específica de Python
-    }
+    agent any
     stages {
-        stage('Build') {
+        stage('Build Entregable_1') {
             steps {
-                echo "Instalando dependencias..."
+                echo "Ejecutando pipeline de Entregable_1..."
+                build job: 'trivia-pipeline', wait: true
+            }
+        }
+        stage('Deploy Web App') {
+            steps {
+                echo "Desplegando aplicación web en EC2..."
                 sh """
+                # Define variables de entorno si es necesario
+                PROJECT_DIR="src"
+                PYTHON_VERSION="python3"
+
                 cd ${PROJECT_DIR}
+
+                # Actualiza pip
                 ${PYTHON_VERSION} -m pip install --upgrade pip
-                ${PYTHON_VERSION} -m pip install -r requirements.txt
-                """
-            }
-        }
-        stage('Test') {
-            steps {
-                echo "Ejecutando tests..."
-                sh """
-                cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
-                """
-            }
-        }
-        stage('Report') {
-            steps {
-                echo "Generando reporte de cobertura..."
-                publishHTML(target: [
-                    reportDir: "${PROJECT_DIR}/htmlcov",
-                    reportFiles: 'index.html',
-                    reportName: 'Cobertura de Tests'
-                ])
-            }
-        }
-        stage('Deliver') {
-            steps {
-                echo "Simulando entrega..."
-                sh """
-                echo "Entrega completada exitosamente."
+
+                # Instala las dependencias
+                ${PYTHON_VERSION} -m pip install -r requirements.txt --user
+
+                # Detiene cualquier instancia anterior de la aplicación
+                pkill -f "uvicorn app:app" || true
+
+                # Ejecuta la aplicación en segundo plano
+                nohup ${PYTHON_VERSION} -m uvicorn app:app --host 0.0.0.0 --port 8000 &
+
                 """
             }
         }
     }
     post {
         always {
-            echo "Pipeline finalizado."
-            cleanWs()  // Limpia el workspace después de la ejecución
+            echo "Pipeline maestra finalizada."
         }
         failure {
-            echo "Pipeline falló. Verifica los errores."
+            echo "La pipeline maestra falló."
         }
         success {
-            echo "Pipeline ejecutado exitosamente."
+            echo "La pipeline maestra se ejecutó exitosamente."
         }
     }
 }
