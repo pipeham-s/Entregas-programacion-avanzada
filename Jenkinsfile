@@ -1,51 +1,53 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent'
-        }
-    }
+    agent any
     environment {
-        IMAGE_NAME = 'mi-aplicacion-fastapi'
-        CONTAINER_NAME = 'mi-contenedor-fastapi'
+        PROJECT_DIR = 'src'
+        PYTHON_VERSION = 'python3'
     }
     stages {
-        stage('Verificar Docker') {
-            steps {
-                echo "Verificando acceso al daemon Docker..."
-                sh 'docker version || exit 1'
-            }
-        }
         stage('Checkout Código') {
             steps {
                 echo "Obteniendo el código del repositorio..."
                 checkout scm
             }
         }
-        stage('Construir Imagen Docker de la Aplicación') {
+        stage('Instalar Dependencias') {
             steps {
-                echo "Construyendo la imagen Docker de la aplicación..."
+                echo "Instalando dependencias y configurando entorno virtual..."
                 sh """
-                    cd src
-                    docker build -t ${IMAGE_NAME} --network=host .
+                    sudo apt-get update -y
+                    sudo apt-get install -y ${PYTHON_VERSION}-venv
+                    cd ${PROJECT_DIR}
+                    ${PYTHON_VERSION} -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
                 """
             }
         }
-        stage('Desplegar Aplicación en Contenedor Docker') {
+        stage('Desplegar Aplicación') {
             steps {
-                echo "Desplegando la aplicación en un contenedor Docker..."
+                echo "Desplegando la aplicación FastAPI..."
                 sh """
-                    docker rm -f ${CONTAINER_NAME} || true
-                    docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${IMAGE_NAME}
+                    cd ${PROJECT_DIR}
+                    . venv/bin/activate
+
+                    # Detener cualquier instancia anterior de la aplicación
+                    pkill -f "uvicorn app:app" || true
+
+                    # Iniciar la aplicación en segundo plano
+                    nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
                 """
+                echo "La aplicación web está corriendo en http://localhost:8000"
             }
         }
     }
     post {
         success {
-            echo "La aplicación web está corriendo en http://localhost:8000"
+            echo "Despliegue exitoso."
         }
         failure {
-            echo "La pipeline falló. No se desplegará la aplicación web."
+            echo "El despliegue falló."
         }
     }
 }
