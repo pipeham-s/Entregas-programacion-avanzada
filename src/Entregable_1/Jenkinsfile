@@ -5,8 +5,9 @@ pipeline {
         }
     }
     triggers {
-        pollSCM('* * * * *')  // Revisa cambios en el repositorio cada minuto
+    pollSCM('H/5 * * * *')  // Verifica cambios cada 5 minutos
     }
+
     environment {
         PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'  // Ajusta esto si usas un entorno virtual o versión específica de Python
