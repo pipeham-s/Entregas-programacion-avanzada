@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        PROJECT_DIR = 'src'
+        PYTHON_VERSION = 'python3'
+    }
     stages {
         stage('Build Entregable_1') {
             steps {
@@ -11,24 +15,17 @@ pipeline {
             steps {
                 echo "Desplegando aplicación web en EC2..."
                 sh """
-                # Define variables de entorno si es necesario
-                PROJECT_DIR="src"
-                PYTHON_VERSION="python3"
-
-                cd ${PROJECT_DIR}
-
                 # Actualiza pip
                 ${PYTHON_VERSION} -m pip install --upgrade pip
 
                 # Instala las dependencias
-                ${PYTHON_VERSION} -m pip install -r requirements.txt --user
+                ${PYTHON_VERSION} -m pip install -r ${PROJECT_DIR}/requirements.txt --user
 
                 # Detiene cualquier instancia anterior de la aplicación
                 pkill -f "uvicorn app:app" || true
 
                 # Ejecuta la aplicación en segundo plano
                 nohup ${PYTHON_VERSION} -m uvicorn app:app --host 0.0.0.0 --port 8000 &
-
                 """
             }
         }
