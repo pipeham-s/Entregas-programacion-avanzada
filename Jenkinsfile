@@ -15,8 +15,8 @@ pipeline {
             steps {
                 echo "Instalando dependencias y configurando entorno virtual..."
                 sh """
-                    sudo apt-get update -y
-                    sudo apt-get install -y ${PYTHON_VERSION}-venv
+                    apt-get update -y
+                    apt-get install -y ${PYTHON_VERSION}-venv
                     cd ${PROJECT_DIR}
                     ${PYTHON_VERSION} -m venv venv
                     . venv/bin/activate
@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Desplegar Aplicación') {
             steps {
-                echo "Desplegando la aplicación FastAPI..."
+                echo "Desplegando la aplicación..."
                 sh """
                     cd ${PROJECT_DIR}
                     . venv/bin/activate
