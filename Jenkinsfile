@@ -11,6 +11,15 @@ pipeline {
                 build job: 'trivia-pipeline', wait: true
             }
         }
+        stage('Setup Python Environment') {
+            steps {
+                echo "Instalando python3-venv..."
+                sh """
+                    apt update -y
+                    apt install -y ${PYTHON_VERSION}-venv
+                """
+            }
+        }
         stage('Deploy Web App') {
             steps {
                 echo "Desplegando aplicación web en EC2..."
