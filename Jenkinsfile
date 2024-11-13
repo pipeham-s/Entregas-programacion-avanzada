@@ -5,6 +5,7 @@ pipeline {
         CONTAINER_NAME = 'mi-contenedor-fastapi'
         DOCKER_HOST = 'unix:///var/run/docker.sock'
         DOCKER_TLS_VERIFY = '0'
+        DOCKER_CERT_PATH = ''
     }
     stages {
         stage('Checkout Código') {
@@ -25,13 +26,9 @@ pipeline {
         stage('Desplegar Aplicación en Contenedor Docker') {
             steps {
                 echo "Desplegando la aplicación en un contenedor Docker..."
-                // Detener cualquier contenedor existente
                 sh """
                     docker rm -f ${CONTAINER_NAME} || true
-                """
-                // Ejecutar el contenedor en segundo plano
-                sh """
-                    docker run -d --name ${CONTAINER_NAME} --network=host -p 8000:8000 ${IMAGE_NAME}
+                    docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${IMAGE_NAME}
                 """
             }
         }
