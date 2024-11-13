@@ -1,47 +1,65 @@
 pipeline {
-    agent any
+    agent { 
+        node {
+            label 'docker-agent-python'
+        }
+    }
+    triggers {
+        pollSCM('* * * * *')  // Revisa cambios en el repositorio cada minuto
+    }
+    environment {
+        PROJECT_DIR = 'src/Entregable_1'
+        PYTHON_VERSION = 'python3'  // Ajusta esto si usas un entorno virtual o versión específica de Python
+    }
     stages {
-        stage('Build Entregable_1') {
+        stage('Build') {
             steps {
-                echo "Ejecutando pipeline de Entregable_1..."
-                build job: 'trivia-pipeline', wait: true
+                echo "Instalando dependencias..."
+                sh """
+                cd ${PROJECT_DIR}
+                ${PYTHON_VERSION} -m pip install --upgrade pip
+                ${PYTHON_VERSION} -m pip install -r requirements.txt
+                """
             }
         }
-        stage('Deploy Web App') {
+        stage('Test') {
             steps {
-                echo "Desplegando aplicación web en EC2..."
+                echo "Ejecutando tests..."
                 sh """
-                # Define variables de entorno si es necesario
-                PROJECT_DIR="src"
-                PYTHON_VERSION="python3"
-
                 cd ${PROJECT_DIR}
-
-                # Actualiza pip
-                ${PYTHON_VERSION} -m pip install --upgrade pip
-
-                # Instala las dependencias
-                ${PYTHON_VERSION} -m pip install -r requirements.txt --user
-
-                # Detiene cualquier instancia anterior de la aplicación
-                pkill -f "uvicorn app:app" || true
-
-                # Ejecuta la aplicación en segundo plano
-                nohup ${PYTHON_VERSION} -m uvicorn app:app --host 0.0.0.0 --port 8000 &
-
+                ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
+                """
+            }
+        }
+        stage('Report') {
+            steps {
+                echo "Generando reporte de cobertura..."
+                publishHTML(target: [
+                    reportDir: "${PROJECT_DIR}/htmlcov",
+                    reportFiles: 'index.html',
+                    reportName: 'Cobertura de Tests'
+                ])
+            }
+        }
+        stage('Deliver') {
+            steps {
+                echo "Simulando entrega..."
+                sh """
+                echo "Entrega completada exitosamente."
                 """
             }
         }
     }
     post {
         always {
-            echo "Pipeline maestra finalizada."
+            echo "Pipeline finalizado."
+            cleanWs()  // Limpia el workspace después de la ejecución
         }
         failure {
-            echo "La pipeline maestra falló."
+            echo "Pipeline falló. Verifica los errores."
         }
         success {
-            echo "La pipeline maestra se ejecutó exitosamente."
+            echo "Pipeline ejecutado exitosamente."
         }
     }
 }
