@@ -1,12 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent-python'
-        }
-    }
-    triggers {
-        pollSCM('H/5 * * * *')  // Verifica cambios cada 5 minutos
-    }
+    agent any
     environment {
         PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'
