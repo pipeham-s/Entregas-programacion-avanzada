@@ -1,8 +1,7 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.11-slim'
-            args '-u root:root'
+        node {
+            label 'docker-agent-python'
         }
     }
     environment {
@@ -20,21 +19,18 @@ pipeline {
             steps {
                 echo "Instalando python3-venv y configurando entorno virtual..."
                 sh """
+                    # Actualizar paquetes e instalar venv
                     apt update -y && apt install -y ${PYTHON_VERSION}-venv
 
                     # Navegar al directorio del proyecto
                     cd ${PROJECT_DIR}
 
-                    # Crear entorno virtual
+                    # Crear y activar entorno virtual
                     ${PYTHON_VERSION} -m venv venv
-
-                    # Activar entorno virtual
                     . venv/bin/activate
 
-                    # Actualizar pip en el entorno virtual
+                    # Actualizar pip e instalar dependencias
                     pip install --upgrade pip
-
-                    # Instalar dependencias en el entorno virtual
                     pip install -r requirements.txt
                 """
             }
