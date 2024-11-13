@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent'
-        }
-    }
+    agent any
     environment {
         IMAGE_NAME = 'mi-aplicacion-fastapi'
         CONTAINER_NAME = 'mi-contenedor-fastapi'
@@ -15,25 +11,24 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build Entregable_1') {
-            steps {
-                echo "Ejecutando pipeline de Entregable_1..."
-                build job: 'trivia-pipeline', wait: true
-            }
-        }
         stage('Construir Imagen Docker de la Aplicación') {
             steps {
                 echo "Construyendo la imagen Docker de la aplicación..."
                 sh """
-                    docker build -t ${IMAGE_NAME} -f src/Dockerfile .
+                    cd src
+                    docker build -t ${IMAGE_NAME} .
                 """
             }
         }
         stage('Desplegar Aplicación en Contenedor Docker') {
             steps {
-                echo "Desplegando la aplicación en un contenedor Docker separado..."
+                echo "Desplegando la aplicación en un contenedor Docker..."
+                // Detener cualquier contenedor existente
                 sh """
                     docker rm -f ${CONTAINER_NAME} || true
+                """
+                // Ejecutar el contenedor en segundo plano
+                sh """
                     docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${IMAGE_NAME}
                 """
             }
