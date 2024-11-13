@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'docker-agent-python'
+        }
+    }
     environment {
         IMAGE_NAME = 'mi-aplicacion-fastapi'
         CONTAINER_NAME = 'mi-contenedor-fastapi'
