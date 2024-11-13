@@ -9,6 +9,12 @@ pipeline {
         CONTAINER_NAME = 'mi-contenedor-fastapi'
     }
     stages {
+        stage('Verificar Docker') {
+            steps {
+                echo "Verificando acceso al daemon Docker..."
+                sh 'docker version || exit 1'
+            }
+        }
         stage('Checkout Código') {
             steps {
                 echo "Obteniendo el código del repositorio..."
