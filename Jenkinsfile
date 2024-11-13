@@ -1,15 +1,12 @@
 pipeline {
     agent {
         node {
-            label 'docker-agent-python'
+            label 'docker-agent'
         }
     }
     environment {
         IMAGE_NAME = 'mi-aplicacion-fastapi'
         CONTAINER_NAME = 'mi-contenedor-fastapi'
-        DOCKER_HOST = 'unix:///var/run/docker.sock'
-        DOCKER_TLS_VERIFY = '0'
-        DOCKER_CERT_PATH = ''
     }
     stages {
         stage('Checkout Código') {
@@ -23,7 +20,7 @@ pipeline {
                 echo "Construyendo la imagen Docker de la aplicación..."
                 sh """
                     cd src
-                    docker build --network=host -t ${IMAGE_NAME} .
+                    docker build -t ${IMAGE_NAME} --network=host .
                 """
             }
         }

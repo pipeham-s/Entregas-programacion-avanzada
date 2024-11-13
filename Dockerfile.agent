@@ -1,0 +1,13 @@
+FROM jenkins/inbound-agent:latest
+
+USER root
+
+# Instalar Docker
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    rm -rf /var/lib/apt/lists/*
+
+# Agregar usuario jenkins al grupo docker
+RUN usermod -aG docker jenkins
+
+USER jenkins
