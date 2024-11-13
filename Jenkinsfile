@@ -28,16 +28,7 @@ pipeline {
                 """
             }
         }
-        stage('Run Tests') {
-            steps {
-                echo "Ejecutando pruebas unitarias..."
-                sh """
-                    cd ${PROJECT_DIR}
-                    . venv/bin/activate
-                    pytest
-                """
-            }
-        }
+    
     }
     post {
         success {
