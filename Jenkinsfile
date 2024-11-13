@@ -28,11 +28,13 @@ pipeline {
                 """
             }
         }
-    
+        
     }
     post {
         success {
             echo "Pipeline ejecutada exitosamente. Iniciando el despliegue de la web..."
+
+            // Desplegar la aplicación web antes de limpiar el workspace
             sh """
                 cd ${PROJECT_DIR}
                 . venv/bin/activate
@@ -44,13 +46,13 @@ pipeline {
                 nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload > uvicorn.log 2>&1 &
             """
             echo "La aplicación web está corriendo en http://localhost:8000"
+
+            // Limpieza del workspace después del despliegue
+            echo "Limpieza del workspace."
+            deleteDir()
         }
         failure {
             echo "La pipeline falló. No se desplegará la aplicación web."
-        }
-        always {
-            echo "Limpieza del workspace."
-            deleteDir()
         }
     }
 }
