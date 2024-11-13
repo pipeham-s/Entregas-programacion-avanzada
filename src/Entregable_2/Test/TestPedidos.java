@@ -1,10 +1,8 @@
 package Entregable_2.Test;
 
-import Entregable_2.Pedido;
-import Entregable_2.ProcesadorPedidos;
+import Entregable_2.Code.Pedido;
+import Entregable_2.Code.ProcesadorPedidos;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.PriorityBlockingQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,27 +1,46 @@
-package Entregable_2;
+package Entregable_2.Code;
 
 import java.util.concurrent.*;
 
+/**
+ * Procesador de pedidos con un número fijo de hilos que permite la ejecución
+ * concurrente de pedidos, priorizando los urgentes.
+ */
 public class ProcesadorPedidos {
     private final ExecutorService procesador;
     private final PriorityBlockingQueue<Pedido> colaPedidos;
 
+    /**
+     * Crea un procesador de pedidos con el número máximo de hilos especificado.
+     *
+     * @param maxHilos Número máximo de hilos en el pool de ejecución.
+     */
     public ProcesadorPedidos(int maxHilos) {
         this.procesador = Executors.newFixedThreadPool(maxHilos);
         this.colaPedidos = new PriorityBlockingQueue<>();
     }
 
-    // getter colaPedidos
+    /**
+     * Obtiene la cola de pedidos del procesador.
+     *
+     * @return La cola de pedidos.
+     */
     public PriorityBlockingQueue<Pedido> getColaPedidos() {
         return colaPedidos;
     }
 
-    // Agregar un pedido a la cola de pedidos
+    /**
+     * Agrega un pedido a la cola para ser procesado.
+     *
+     * @param pedido El pedido a agregar a la cola.
+     */
     public void agregarPedido(Pedido pedido) {
         colaPedidos.offer(pedido);
     }
 
-    // Procesar todos los pedidos de la cola
+    /**
+     * Procesa todos los pedidos de la cola de manera concurrente.
+     */
     public void procesarPedidos() {
         while (!colaPedidos.isEmpty()) {
             Pedido pedido = colaPedidos.poll();  // Extrae el siguiente pedido
@@ -29,7 +48,11 @@ public class ProcesadorPedidos {
         }
     }
 
-    // Procesar un solo pedido en las tres etapas
+    /**
+     * Procesa un pedido en tres etapas: pago, empaquetado y envío.
+     *
+     * @param pedido El pedido a procesar.
+     */
     private void procesarPedido(Pedido pedido) {
         System.out.println("Procesando " + pedido);
         procesarPago(pedido);
@@ -38,7 +61,11 @@ public class ProcesadorPedidos {
         System.out.println("Pedido completado: " + pedido);
     }
 
-    // Simula la etapa de procesamiento de pago
+    /**
+     * Simula la etapa de pago.
+     *
+     * @param pedido El pedido para el que se realiza el pago.
+     */
     private void procesarPago(Pedido pedido) {
         System.out.println("Procesando pago para " + pedido);
         try {
@@ -49,7 +76,11 @@ public class ProcesadorPedidos {
         System.out.println("Pago completado para " + pedido);
     }
 
-    // Simula la etapa de empaquetado (usando ForkJoinPool)
+    /**
+     * Simula la etapa de empaquetado usando ForkJoinPool.
+     *
+     * @param pedido El pedido para el que se realiza el empaquetado.
+     */
     private void empaquetarPedido(Pedido pedido) {
         ForkJoinPool.commonPool().submit(() -> {
             System.out.println("Empaquetando " + pedido);
@@ -62,7 +93,11 @@ public class ProcesadorPedidos {
         }).join();
     }
 
-    // Simula la etapa de envío
+    /**
+     * Simula la etapa de envío.
+     *
+     * @param pedido El pedido para el que se realiza el envío.
+     */
     private void enviarPedido(Pedido pedido) {
         System.out.println("Enviando " + pedido);
         try {
@@ -73,7 +108,9 @@ public class ProcesadorPedidos {
         System.out.println("Envío completado para " + pedido);
     }
 
-    // Cierra el ExecutorService de manera ordenada
+    /**
+     * Cierra el procesador de pedidos de manera ordenada.
+     */
     public void cerrarProcesador() {
         procesador.shutdown();
         try {
@@ -85,6 +122,11 @@ public class ProcesadorPedidos {
         }
     }
 
+    /**
+     * Obtiene el ExecutorService del procesador.
+     *
+     * @return El ExecutorService del procesador.
+     */
     public ExecutorService getProcesador() {
         return procesador;
     }

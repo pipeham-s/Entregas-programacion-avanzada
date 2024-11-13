@@ -1,9 +1,0 @@
-Integrantes:
-Felipe Ham - 53211305
-Santiago Lozano - 53627946
-
-Para jugar simplemente se debe correr el archivo trivia.py y seguir las instrucciones de la consola. 
-Presionar Enter para iniciar
-Allí se muestran la pregunta y las respuestas y se debe responder con 1,2 o 3, dependiendo de cuál creas que es la respuesta correcta.
-Si se ingresa algo distinto a 1, 2 o 3 se vuelve a hacer la pregunta.
-Luego de responder las 5 preguntas se muestra el puntaje y se pregunta si quiere jugar nuevamente. Allí responder con 's' o 'n'

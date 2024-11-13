@@ -1,6 +1,14 @@
-package Entregable_2;
+package Entregable_2.Code;
 
+/**
+ * Esta es la clase principal del programa.
+ */
 public class Main {
+    /**
+     * Método principal que ejecuta el programa.
+     *
+     * @param args Argumentos de línea de comandos.
+     */
     public static void main(String[] args) {
         // Crear el procesador de pedidos con 10 hilos
         ProcesadorPedidos procesador = new ProcesadorPedidos(7);
