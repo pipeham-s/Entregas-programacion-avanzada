@@ -2,8 +2,7 @@ pipeline {
     agent {
         docker {
             image 'openjdk:11-jdk'
-            label 'docker-agent-java'
-            args '-v /var/jenkins_home:/var/jenkins_home' // Opcional: para compartir el workspace de Jenkins
+            args '-v /var/jenkins_home:/var/jenkins_home'
         }
     }
     environment {
