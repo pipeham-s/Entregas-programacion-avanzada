@@ -2,17 +2,17 @@ pipeline {
     agent any
     environment {
         PROJECT_DIR = 'src/Entregable_1'
-        PYTHON_VERSION = 'python3'
+        PYTHON_VERSION = 'python'
         VENV_DIR = 'venv'
     }
     stages {
         stage('Setup') {
             steps {
                 echo "Instalando dependencias..."
-                sh """
+                bat """
                 cd ${PROJECT_DIR}
                 ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
+                call ${VENV_DIR}\\Scripts\\activate
                 pip install --upgrade pip
                 pip install -r requirements.txt
                 """
@@ -21,9 +21,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Ejecutando tests..."
-                sh """
+                bat """
                 cd ${PROJECT_DIR}
-                . ${VENV_DIR}/bin/activate
+                call ${VENV_DIR}\\Scripts\\activate
                 ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
                 """
             }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 echo "Generando reporte de cobertura..."
                 publishHTML(target: [
-                    reportDir: "${PROJECT_DIR}/htmlcov",
+                    reportDir: "${PROJECT_DIR}\\htmlcov",
                     reportFiles: 'index.html',
                     reportName: 'Cobertura de Tests'
                 ])
@@ -41,7 +41,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 echo "Simulando entrega..."
-                sh "echo 'Entrega completada exitosamente.'"
+                bat "echo 'Entrega completada exitosamente.'"
             }
         }
     }
