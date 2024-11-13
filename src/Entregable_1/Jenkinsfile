@@ -1,22 +1,19 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM('H/5 * * * *')  // Verifica cambios cada 5 minutos
-    }
 
     environment {
-        PROJECT_DIR = 'src/Entregable_1'
-        PYTHON_VERSION = '/usr/bin/python3'  // Ajusta la ruta si es necesario
-        VENV_DIR = 'venv'  // Directorio del entorno virtual
+        PROJECT_DIR = 'src'
+        VENV_DIR = 'venv'
+        PYTHON_VERSION = 'python3'
     }
 
     stages {
         stage('Setup Python') {
             steps {
-                echo "Instalando Python y creando entorno virtual..."
+                echo "Instalando Python y configurando entorno virtual..."
                 sh """
                 sudo apt update -y
-                sudo apt install -y python3 python3-venv python3-pip
+                sudo apt install -y ${PYTHON_VERSION} ${PYTHON_VERSION}-venv ${PYTHON_VERSION}-pip
                 cd ${PROJECT_DIR}
                 ${PYTHON_VERSION} -m venv ${VENV_DIR}
                 . ${VENV_DIR}/bin/activate
@@ -24,7 +21,8 @@ pipeline {
                 """
             }
         }
-        stage('Build') {
+
+        stage('Install Dependencies') {
             steps {
                 echo "Instalando dependencias..."
                 sh """
@@ -34,7 +32,8 @@ pipeline {
                 """
             }
         }
-        stage('Test') {
+
+        stage('Run Tests') {
             steps {
                 echo "Ejecutando tests..."
                 sh """
@@ -44,21 +43,15 @@ pipeline {
                 """
             }
         }
-        stage('Report') {
+
+        stage('Deploy') {
             steps {
-                echo "Generando reporte de cobertura..."
-                publishHTML(target: [
-                    reportDir: "${PROJECT_DIR}/htmlcov",
-                    reportFiles: 'index.html',
-                    reportName: 'Cobertura de Tests'
-                ])
-            }
-        }
-        stage('Deliver') {
-            steps {
-                echo "Simulando entrega..."
+                echo "Desplegando aplicación en EC2..."
                 sh """
-                echo "Entrega completada exitosamente."
+                cd ${PROJECT_DIR}
+                . ${VENV_DIR}/bin/activate
+                pkill -f "uvicorn app:app" || true
+                nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
                 """
             }
         }
@@ -66,14 +59,14 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline finalizado."
-            cleanWs()  // Limpia el workspace después de la ejecución
-        }
-        failure {
-            echo "Pipeline falló. Verifica los errores."
+            echo "Limpieza del workspace..."
+            cleanWs()
         }
         success {
-            echo "Pipeline ejecutado exitosamente."
+            echo "Despliegue exitoso."
+        }
+        failure {
+            echo "El despliegue falló. Verifica los errores."
         }
     }
 }
