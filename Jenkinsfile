@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         PROJECT_DIR = 'src'
-        PYTHON_VERSION = 'python3'
     }
     stages {
         stage('Checkout Código') {
@@ -15,13 +14,10 @@ pipeline {
             steps {
                 echo "Instalando dependencias y configurando entorno virtual..."
                 sh """
-                    apt-get update -y
-                    apt-get install -y ${PYTHON_VERSION}-venv
-                    cd ${PROJECT_DIR}
-                    ${PYTHON_VERSION} -m venv venv
-                    . venv/bin/activate
+                    python3 -m venv ${PROJECT_DIR}/venv
+                    . ${PROJECT_DIR}/venv/bin/activate
                     pip install --upgrade pip
-                    pip install -r requirements.txt
+                    pip install -r ${PROJECT_DIR}/requirements.txt
                 """
             }
         }
@@ -29,14 +25,13 @@ pipeline {
             steps {
                 echo "Desplegando la aplicación..."
                 sh """
-                    cd ${PROJECT_DIR}
-                    . venv/bin/activate
+                    . ${PROJECT_DIR}/venv/bin/activate
 
                     # Detener cualquier instancia anterior de la aplicación
                     pkill -f "uvicorn app:app" || true
 
                     # Iniciar la aplicación en segundo plano
-                    nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+                    nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
                 """
                 echo "La aplicación web está corriendo en http://localhost:8000"
             }
@@ -44,7 +39,7 @@ pipeline {
     }
     post {
         success {
-            echo "Despliegue exitoso."
+            echo "Despliegue completado exitosamente."
         }
         failure {
             echo "El despliegue falló."
