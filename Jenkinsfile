@@ -9,12 +9,7 @@ pipeline {
         PYTHON_VERSION = 'python3'
     }
     stages {
-          stage('Clean Workspace') {
-            steps {
-                echo "Limpiando workspace antes de iniciar la pipeline..."
-                cleanWs()
-            }
-        }
+          
         stage('Build Entregable_1') {
             steps {
                 echo "Ejecutando pipeline de Entregable_1..."
