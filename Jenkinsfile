@@ -58,7 +58,7 @@ pipeline {
     post {
         always {
             echo "Pipeline maestra finalizada."
-            cleanWs()
+            
         }
         failure {
             echo "La pipeline maestra falló."
