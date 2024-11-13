@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'docker-agent-python'
+        }
+    }
     environment {
         PROJECT_DIR = 'src'
     }
