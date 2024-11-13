@@ -15,7 +15,7 @@ pipeline {
                 echo "Compilando el proyecto..."
                 sh """
                 cd ${PROJECT_DIR}
-                javac -d out $(find . -name "*.java")
+                javac -d out \$(find . -name "*.java")
                 """
             }
         }

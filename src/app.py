@@ -12,6 +12,9 @@ current_dir = os.path.dirname(__file__)
 htmlcov_dir = os.path.join(current_dir, "Entregable_1", "htmlcov")
 app.mount("/trivia/coverage", StaticFiles(directory=htmlcov_dir), name="coverage")
 
+# Montar el directorio 'docs' para el Javadoc de Entregable_2
+javadoc_dir = os.path.join(current_dir, "Entregable_2", "docs")
+app.mount("/entregable2/javadoc", StaticFiles(directory=javadoc_dir), name="javadoc")
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -20,6 +23,7 @@ def home():
     <ul>
         <li><a href="/trivia">Módulo Trivia</a></li>
         <li><a href="/trivia/coverage">Reporte de Cobertura - Trivia</a></li>
+        <li><a href="/entregable2/javadoc">Javadoc - Entregable 2</a></li>
         </ul>
     """
 
@@ -34,6 +38,10 @@ def trivia():
 @app.get("/trivia/coverage", include_in_schema=False)
 async def redirect_to_coverage_index():
     return RedirectResponse(url="/trivia/coverage/index.html")
+
+@app.get("/entregable2/javadoc", include_in_schema=False)
+async def redirect_to_javadoc_index():
+    return RedirectResponse(url="/entregable2/javadoc/index.html")
 
 if __name__ == "__main__":
     import uvicorn
