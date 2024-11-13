@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'openjdk:11-jdk'
+            label 'docker-agent-java'
+            args '-v /var/jenkins_home:/var/jenkins_home' // Opcional: para compartir el workspace de Jenkins
+        }
+    }
     environment {
         PROJECT_DIR = 'src/Entregable_2/Code'
     }
