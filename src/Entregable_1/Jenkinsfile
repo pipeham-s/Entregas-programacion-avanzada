@@ -11,14 +11,15 @@ pipeline {
         stage('Setup Python') {
             steps {
                 echo "Instalando Python y configurando entorno virtual..."
-                sh """
-                sudo apt update -y
-                sudo apt install -y ${PYTHON_VERSION} ${PYTHON_VERSION}-venv ${PYTHON_VERSION}-pip
-                cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                pip install --upgrade pip
-                """
+                sh '''
+    apt update -y
+    apt install -y python3 python3-venv python3-pip --no-install-recommends
+    cd src
+    python3 -m venv venv
+    . venv/bin/activate
+    pip install --upgrade pip --user
+'''
+
             }
         }
 
