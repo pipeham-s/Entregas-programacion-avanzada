@@ -35,6 +35,13 @@ pipeline {
                 """
             }
         }
+        stage('Pre-Clean Workspace') {
+    steps {
+        echo "Limpiando workspace antes del despliegue..."
+        cleanWs()
+    }
+}
+
         stage('Deploy Web App') {
             steps {
                 echo "Desplegando aplicación web..."
