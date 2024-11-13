@@ -1,0 +1,44 @@
+pipeline {
+    agent {
+        docker {
+            image 'openjdk:11-jdk'
+            label 'docker-agent-java'
+            args '-v /var/jenkins_home:/var/jenkins_home' // Opcional: para compartir el workspace de Jenkins
+        }
+    }
+    environment {
+        PROJECT_DIR = 'src/Entregable_2/Code'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo "Compilando el proyecto..."
+                sh """
+                cd ${PROJECT_DIR}
+                javac -d out $(find . -name "*.java")
+                """
+            }
+        }
+        stage('Javadoc') {
+            steps {
+                echo "Generando Javadoc..."
+                sh """
+                cd ${PROJECT_DIR}
+                javadoc -d ../../docs $(find . -name "*.java")
+                """
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline finalizado."
+            cleanWs()
+        }
+        failure {
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
+        }
+    }
+}
