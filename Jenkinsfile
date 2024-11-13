@@ -28,33 +28,38 @@ pipeline {
                 """
             }
         }
-
-        stage('Deploy Web App') {
+        stage('Run Tests') {
             steps {
-                echo "Desplegando aplicación web..."
+                echo "Ejecutando pruebas unitarias..."
                 sh """
                     cd ${PROJECT_DIR}
                     . venv/bin/activate
-
-                    # Detener cualquier instancia anterior de la aplicación
-                    pkill -f "uvicorn app:app" || true
-
-                    # Iniciar la aplicación en segundo plano
-                    nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+                    pytest
                 """
-                echo "La aplicación web está corriendo en http://localhost:8000"
             }
         }
     }
     post {
-        always {
-            echo "Pipeline maestra finalizada."
+        success {
+            echo "Pipeline ejecutada exitosamente. Iniciando el despliegue de la web..."
+            sh """
+                cd ${PROJECT_DIR}
+                . venv/bin/activate
+
+                # Detener cualquier instancia anterior de la aplicación
+                pkill -f "uvicorn app:app" || true
+
+                # Iniciar la aplicación web en segundo plano
+                nohup venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload > uvicorn.log 2>&1 &
+            """
+            echo "La aplicación web está corriendo en http://localhost:8000"
         }
         failure {
-            echo "La pipeline maestra falló."
+            echo "La pipeline falló. No se desplegará la aplicación web."
         }
-        success {
-            echo "La pipeline maestra se ejecutó exitosamente."
+        always {
+            echo "Limpieza del workspace."
+            deleteDir()
         }
     }
 }
