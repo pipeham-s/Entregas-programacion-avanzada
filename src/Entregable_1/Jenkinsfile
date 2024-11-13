@@ -1,18 +1,22 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'docker-agent-python'
+        }
+    }
     environment {
         PROJECT_DIR = 'src/Entregable_1'
-        PYTHON_VERSION = 'python'
+        PYTHON_VERSION = 'python3'
         VENV_DIR = 'venv'
     }
     stages {
         stage('Setup') {
             steps {
                 echo "Instalando dependencias..."
-                bat """
+                sh """
                 cd ${PROJECT_DIR}
                 ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                call ${VENV_DIR}\\Scripts\\activate
+                . ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt
                 """
@@ -21,9 +25,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Ejecutando tests..."
-                bat """
+                sh """
                 cd ${PROJECT_DIR}
-                call ${VENV_DIR}\\Scripts\\activate
+                . ${VENV_DIR}/bin/activate
                 ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
                 """
             }
@@ -32,7 +36,7 @@ pipeline {
             steps {
                 echo "Generando reporte de cobertura..."
                 publishHTML(target: [
-                    reportDir: "${PROJECT_DIR}\\htmlcov",
+                    reportDir: "${PROJECT_DIR}/htmlcov",
                     reportFiles: 'index.html',
                     reportName: 'Cobertura de Tests'
                 ])
@@ -41,7 +45,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 echo "Simulando entrega..."
-                bat "echo 'Entrega completada exitosamente.'"
+                sh "echo 'Entrega completada exitosamente.'"
             }
         }
     }
