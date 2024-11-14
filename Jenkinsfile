@@ -14,7 +14,7 @@ pipeline {
                 if [ ! -d ${VENV_DIR} ]; then
                     ${PYTHON_VERSION} -m venv ${VENV_DIR}
                 fi
-                bash -c "source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r ${REQUIREMENTS_FILE}"
+                bash -c "source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"
                 """
             }
         }
