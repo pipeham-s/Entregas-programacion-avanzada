@@ -23,6 +23,7 @@ def create_database(db_path):
             edad INTEGER
         );
     ''')
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS empleados (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
