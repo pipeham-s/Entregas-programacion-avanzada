@@ -20,6 +20,8 @@ if not os.path.exists(htmlcov_dir):
 if not os.path.exists(javadoc_dir):
     raise RuntimeError(f"Directory '{javadoc_dir}' does not exist")
 
+if not os.path.exists(usql_docs_dir):
+    raise RuntimeError(f"Directory '{usql_docs_dir}' does not exist")
 
 # Montar los directorios como archivos estáticos
 app.mount("/trivia/coverage", StaticFiles(directory=htmlcov_dir), name="coverage")
@@ -50,8 +52,8 @@ async def redirect_to_javadoc_index():
     return RedirectResponse(url="/entregable2/javadoc/index.html")
 
 
-@app.get("/usql/pydoc", include_in_schema=False)
-async def redirect_to_pydoc_index():
+@app.get("/usql/pydoc", response_class=HTMLResponse)
+def pydoc_usql():
     return """
     <h1>Documentación Pydoc - USQL</h1>
     <ul>
