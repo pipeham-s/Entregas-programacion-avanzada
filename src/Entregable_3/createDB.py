@@ -2,7 +2,7 @@ import sqlite3
 
 
 def create_database(db_path):
-    """Creates an SQLite database with example tables and data for testing."""
+    """Creates an SQLite database with example tables and data for testing for a long time."""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
