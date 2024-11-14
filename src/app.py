@@ -30,10 +30,8 @@ def home():
     return """
     <h1>Proyecto Integrado</h1>
     <ul>
-        <li><a href="/trivia">Módulo Trivia</a></li>
-        <li><a href="/trivia/coverage">Reporte de Cobertura - Trivia</a></li>
-        <li><a href="/entregable2/javadoc">Javadoc - Entregable 2</a></li>
-        <li><a href="/pedidos">Módulo Pedidos</a></li>
+        <li><a href="/trivia">Trivia - Reporte de Cobertura</a></li>
+        <li><a href="/pedidos">Pedidos - Javadoc</a></li>
     </ul>
     """
 
@@ -59,13 +57,7 @@ async def redirect_to_javadoc_index():
 
 @app.get("/pedidos", response_class=HTMLResponse)
 def pedidos():
-    return """
-    <h2>Módulo Pedidos</h2>
-    <p>Esta es la aplicación del módulo de pedidos.</p>
-    <ul>
-        <li><a href="/entregable2/javadoc">Ver Javadoc del módulo Pedidos</a></li>
-    </ul>
-    """
+    return "<h2>Módulo Pedidos</h2><p>Esta es la aplicación del módulo de pedidos.</p>"
 
 
 if __name__ == "__main__":
