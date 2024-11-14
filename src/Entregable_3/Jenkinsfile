@@ -14,18 +14,18 @@ pipeline {
             }
         }
         
-        stage('PyDocs-Pedidos') {
+      stage('PyDocs-Pedidos') {
     steps {
         echo "Generando documentación PyDoc..."
         sh """
-        
         cd src/Entregable_3
 
-        
-        bash -c "mkdir -p docs && find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc {} > docs/$(basename {} .py).html \;"
+        # Usar bash para ejecutar el comando sin problemas con el shell
+        bash -c "mkdir -p docs && find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc {} > docs/\$(basename {} .py).html"
         """
     }
 }
+
 
     }
 }
