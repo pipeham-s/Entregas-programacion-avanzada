@@ -3,7 +3,6 @@ pipeline {
     environment {
         PROJECT_DIR = 'src/Entregable_3'
         PYTHON_VERSION = 'python3'
-        VENV_DIR = 'venv'
         DOCS_DIR = "${PROJECT_DIR}/docs"
     }
     stages {
@@ -13,10 +12,8 @@ pipeline {
                 sh """
                 #!/bin/bash
                 cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
-                pip install -r requirements.txt
+                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
                 """
             }
         }
@@ -26,7 +23,6 @@ pipeline {
                 sh """
                 #!/bin/bash
                 mkdir -p ${DOCS_DIR}
-                . ${VENV_DIR}/bin/activate
                 for file in \$(find . -name "*.py" ! -name "__init__.py"); do
                     pydoc -w \$file
                     mv \$(basename "\$file").html ${DOCS_DIR}
