@@ -37,12 +37,13 @@ pipeline {
                 ])
             }
         }
-       stage('Deploy') {
+    stage('Deploy') {
     steps {
         echo "Iniciando servicio Uvicorn..."
         sh "sudo systemctl restart uvicorn"
     }
 }
+
     }
     post {
         always {
