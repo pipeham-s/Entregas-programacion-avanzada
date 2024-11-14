@@ -1,9 +1,5 @@
 pipeline {
-    agent{
-        node {
-            label 'docker-agent-alpine'
-        }
-    }
+    agent any
     environment {
         PROJECT_DIR = 'src/Entregable_2/Code'
     }
@@ -21,7 +17,7 @@ pipeline {
             steps {
                 echo "Generando Javadoc..."
                 sh """
-                javadoc -d src/Entregable_2/docs -sourcepath src -subpackages Entregable_2.Code
+                bash -c "javadoc -d src/Entregable_2/docs -sourcepath src -subpackages Entregable_2.Code"
                 """
             }
         }
