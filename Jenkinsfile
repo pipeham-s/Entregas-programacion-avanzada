@@ -7,7 +7,7 @@ pipeline {
         REQUIREMENTS_FILE = "${PROJECT_DIR}/requirements.txt"
     }
     stages {
-        stage('Setup') {
+        stage('Setup-Trivia') {
             steps {
                 echo "Instalando dependencias globales..."
                 sh """
@@ -19,7 +19,7 @@ pipeline {
             }
         }
         
-        stage('Test') {
+        stage('Test-Trivia') {
             steps {
                 echo "Ejecutando tests..."
                 sh """
@@ -29,7 +29,7 @@ pipeline {
             }
         }
         
-        stage('Report') {
+        stage('Report-Trivia') {
             steps {
                 echo "Generando reporte de cobertura..."
                 publishHTML(target: [
@@ -41,7 +41,7 @@ pipeline {
         }
 
         // Integración del pipeline de pedidos
-        stage('Build') {
+        stage('Build-Pedidos') {
             steps {
                 echo "Compilando el proyecto de pedidos..."
                 sh """
@@ -51,7 +51,7 @@ pipeline {
             }
         }
 
-        stage('Javadoc') {
+        stage('Javadoc-Pedidos') {
             steps {
                 echo "Generando Javadoc del módulo pedidos..."
                 sh """
@@ -59,6 +59,35 @@ pipeline {
                 """
             }
         }
+
+        stage('Build-Usql') {
+            steps {
+                echo "Compilando el proyecto de Python..."
+                sh """
+                cd src/Entregable_3
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                """
+            }
+        }
+  stage('PyDocs-Usql') {
+    steps {
+        echo "Generando documentación PyDoc..."
+        sh """
+        bash -c '
+        cd src/Entregable_3
+        . venv/bin/activate
+        mkdir -p docs
+        for file in \$(find . -path "./venv" -prune -o -name "*.py" ! -name "__init__.py" -print); do
+            python -m pydoc -w \$file || echo "Error al generar documentación para \$file"
+            mv \$(basename \${file} .py).html docs/ || echo "Archivo HTML no encontrado para \$file"
+        done
+        '
+        """
+    }
+}
 
         // Despliegue del servicio Uvicorn
         stage('Deploy') {
