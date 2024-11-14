@@ -32,6 +32,7 @@ pipeline {
                 git config --global user.email "jenkins@example.com"
                 git config --global user.name "Jenkins"
                 cd src/Entregable_2
+                git checkout main || git checkout -b main  // Cambia a la rama main o la crea si no existe
                 git add docs
                 git commit -m "Actualización de Javadoc"
                 git push origin main
