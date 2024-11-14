@@ -28,10 +28,13 @@ stage('Generate PyDocs') {
         cd src/Entregable_3
 
         # Generar la documentación utilizando pydoc
-        find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc -w {} \;
+        find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc -w {} ;
         """
     }
 }
+
+
+
 
 
 
