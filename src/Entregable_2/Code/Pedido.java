@@ -34,7 +34,7 @@ public class Pedido implements Comparable<Pedido> {
     }
 
     /**
-     * Método que compara dos pedidos para determinar su orden de procesamiento.
+     * Método que compara dos pedidos para determinar su orden de procesamientoooooo.
      * @param otro Pedido con el que se compara.
      * @return -1 si este pedido es más urgente, 1 si el otro pedido es más urgente, 0 si son iguales.
      */
