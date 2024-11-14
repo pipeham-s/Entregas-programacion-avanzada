@@ -1,70 +1,32 @@
 pipeline {
     agent any
     environment {
-        PROJECT_DIR = 'src/Entregable_3'
-        PYTHON_VERSION = 'python3'
-        VENV_DIR = 'venv'
-        DOCS_DIR = "${PROJECT_DIR}/docs"
+        PROJECT_DIR = 'src/Entregable_3'  // Ruta del proyecto
+        DOCS_DIR = 'src/Entregable_3/docs'  // Ruta donde se generarán los archivos de documentación
     }
     stages {
-        stage('Setup') {
-    steps {
-        echo "Instalando dependencias..."
-        sh """
-        # Crear entorno virtual si no existe
-        cd ${PROJECT_DIR}
-        ${PYTHON_VERSION} -m venv ${VENV_DIR}
-        . ${VENV_DIR}/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
-        """
-    }
-}
-stage('Generate PyDocs') {
-    steps {
-        echo "Generando documentación PyDoc..."
-        sh """
-        mkdir -p src/Entregable_3/docs
-        cd src/Entregable_3
-
-        # Generar la documentación utilizando pydoc
-        find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc -w {} \\;
-        """
-    }
-}
-
-
-
-
-
-
-
-        stage('Publish PyDocs') {
+        stage('Build-Pedidos') {
             steps {
-                echo "Publicando PyDocs en Jenkins..."
-                publishHTML(target: [
-                    reportDir: "${DOCS_DIR}",
-                    reportFiles: 'index.html',
-                    reportName: 'Documentación PyDocs'
-                ])
+                echo "Compilando el proyecto de Python..."
+                sh """
+                cd ${PROJECT_DIR}
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                """
             }
         }
-        stage('Deliver') {
+        stage('PyDocs-Pedidos') {
             steps {
-                echo "Simulando entrega..."
-                sh "echo 'Entrega completada exitosamente.'"
+                echo "Generando documentación PyDoc..."
+                sh """
+                cd ${PROJECT_DIR}
+                # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
+                mkdir -p ${DOCS_DIR}
+                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} > ${DOCS_DIR}/{}.html \;
+                """
             }
-        }
-    }
-    post {
-        always {
-            echo "Pipeline finalizado."
-        }
-        failure {
-            echo "Pipeline falló. Verifica los errores."
-        }
-        success {
-            echo "Pipeline ejecutado exitosamente."
         }
     }
 }
