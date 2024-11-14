@@ -20,20 +20,23 @@ pipeline {
                 """
             }
         }
-        stage('Generate PyDocs') {
-            steps {
-                echo "Generando documentación PyDoc..."
-                sh """
-                #!/bin/bash
-                mkdir -p ${DOCS_DIR}
-                . ${VENV_DIR}/bin/activate
-                for file in \$(find . -name "*.py" ! -name "__init__.py"); do
-                    pydoc -w \$file
-                    mv \$(basename "\$file").html ${DOCS_DIR}
-                done
-                """
-            }
-        }
+       stage('Generate PyDocs') {
+    steps {
+        echo "Generando documentación PyDoc..."
+        sh """
+        # Crear el directorio para los documentos
+        mkdir -p src/Entregable_3/docs
+        # Activar el entorno virtual desde el directorio correcto
+        cd src/Entregable_3
+        . venv/bin/activate
+        for file in \$(find . -name "*.py" ! -name "__init__.py"); do
+            pydoc -w \$file
+            mv \$(basename "\$file").html ${DOCS_DIR}
+        done
+        """
+    }
+}
+
         stage('Publish PyDocs') {
             steps {
                 echo "Publicando PyDocs en Jenkins..."
