@@ -37,17 +37,12 @@ pipeline {
                 ])
             }
         }
-        stage('Deploy') {
-            steps {
-                echo "Desplegando FastAPI..."
-                sh """
-                cd src
-                bash -c "source /var/lib/jenkins/venv/bin/activate && nohup uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &"
-
-
-                """
-            }
-        }
+       stage('Deploy') {
+    steps {
+        echo "Iniciando servicio Uvicorn..."
+        sh "sudo systemctl restart uvicorn"
+    }
+}
     }
     post {
         always {
