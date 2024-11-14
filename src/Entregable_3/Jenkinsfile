@@ -1,0 +1,60 @@
+pipeline {
+    agent {
+        node {
+            label 'docker-agent-python'
+        }
+    }
+    environment {
+        PROJECT_DIR = 'src/Entregable_3'
+        DOCS_DIR = 'src/Entregable_3/docs'
+    }
+    stages {
+        stage('Setup') {
+            steps {
+                echo "Instalando dependencias..."
+                sh """
+                cd ${PROJECT_DIR}
+                python -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
+                """
+            }
+        }
+        stage('Generate PyDocs') {
+            steps {
+                echo "Generando documentación PyDoc..."
+                sh """
+                mkdir -p ${DOCS_DIR}
+                . venv/bin/activate
+                for file in \$(find . -name "*.py" ! -name "__init__.py"); do
+                    pydoc -w \$file
+                    mv \$(basename "\$file").html ${DOCS_DIR}
+                done
+                """
+            }
+        }
+        stage('Publish PyDocs') {
+            steps {
+                echo "Publicando PyDocs en Jenkins..."
+                publishHTML(target: [
+                    reportDir: "${DOCS_DIR}",
+                    reportFiles: 'index.html',
+                    reportName: 'Documentación PyDocs'
+                ])
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline finalizado."
+            cleanWs()
+        }
+        failure {
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
+        }
+    }
+}
