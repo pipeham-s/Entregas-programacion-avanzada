@@ -13,23 +13,15 @@ pipeline {
                 """
             }
         }
-        
-    stage('PyDocs-Pedidos') {
-    steps {
-        echo "Generando documentación PyDoc..."
-        sh """
-        cd src/Entregable_3
-
-        # Crear el directorio de documentación
-        mkdir -p docs
-
-        # Generar la documentación de todos los archivos Python
-        find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc {} \; -exec sh -c 'mv {}.html docs/$(basename {} .py).html' \;
-        """
-    }
-}
-
-
-
+        stage('PyDocs-Pedidos') {
+            steps {
+                echo "Generando documentación PyDoc..."
+                sh """
+                cd src/Entregable_3
+                mkdir -p docs
+                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} \; -exec sh -c "mv {}.html docs/\$(basename {} .py).html" \;
+                """
+            }
+        }
     }
 }
