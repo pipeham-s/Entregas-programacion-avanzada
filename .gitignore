@@ -1,5 +1,4 @@
 __pycache__/
-htmlcov/
 .pytest_cache/
 .venv/
 *.log
