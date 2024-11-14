@@ -10,12 +10,13 @@ pipeline {
             steps {
                 echo "Instalando dependencias globales..."
                 sh """
+                #!/bin/bash
                 if [ ! -d ${VENV_DIR} ]; then
                     ${PYTHON_VERSION} -m venv ${VENV_DIR}
                 fi
-                source ${VENV_DIR}/bin/activate
+                . ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
-                pip install -r requirements.txt
+                pip install -r ${PROJECT_DIR}/requirements.txt
                 """
             }
         }
@@ -23,8 +24,9 @@ pipeline {
             steps {
                 echo "Ejecutando tests..."
                 sh """
+                #!/bin/bash
                 cd ${PROJECT_DIR}
-                source ${VENV_DIR}/bin/activate
+                . ${VENV_DIR}/bin/activate
                 ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
                 """
             }
@@ -43,8 +45,9 @@ pipeline {
             steps {
                 echo "Desplegando FastAPI..."
                 sh """
+                #!/bin/bash
                 cd src
-                source ${VENV_DIR}/bin/activate
+                . ${VENV_DIR}/bin/activate
                 nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
                 """
             }
