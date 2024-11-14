@@ -100,7 +100,7 @@ pipeline {
     post {
     always {
         echo "Pipeline finalizado."
-        mail to: 'tu_correo@dominio.com',
+        mail to: 'santilozano01@gmail.com',
              subject: "Jenkins Pipeline: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
              body: "El pipeline ${env.JOB_NAME} ha finalizado con estado: ${currentBuild.currentResult}\nRevisa los detalles en: ${env.BUILD_URL}"
     }
