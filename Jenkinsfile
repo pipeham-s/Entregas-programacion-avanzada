@@ -42,7 +42,8 @@ pipeline {
                 echo "Desplegando FastAPI..."
                 sh """
                 cd src
-                bash -c "source ${VENV_DIR}/bin/activate && nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &"
+                bash -c "source /var/lib/jenkins/venv/bin/activate && uvicorn app:app --host 0.0.0.0 --port 8000 &"
+
                 """
             }
         }
