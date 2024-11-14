@@ -30,8 +30,8 @@ def home():
     return """
     <h1>Proyecto Integrado</h1>
     <ul>
-        <li><a href="/trivia">Trivia - Reporte de Cobertura</a></li>
-        <li><a href="/pedidos">Pedidos - Javadoc</a></li>
+        <li><a href="/trivia/coverage">Trivia - Reporte de Cobertura</a></li>
+        <li><a href="/pedidos/javadoc">Pedidos - Javadoc</a></li>
     </ul>
     """
 
@@ -48,7 +48,7 @@ async def redirect_to_coverage_index():
 # Redirección a Javadoc
 
 
-@app.get("/entregable2/javadoc", include_in_schema=False)
+@app.get("/pedidos/javadoc", include_in_schema=False)
 async def redirect_to_javadoc_index():
     return RedirectResponse(url="/entregable2/javadoc/index.html")
 
