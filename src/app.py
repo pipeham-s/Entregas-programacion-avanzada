@@ -11,6 +11,7 @@ current_dir = os.path.dirname(__file__)
 # Rutas para los recursos estáticos
 htmlcov_dir = os.path.join(current_dir, "Entregable_1", "htmlcov")
 javadoc_dir = os.path.join(current_dir, "Entregable_2", "docs")
+pydoc_dir = os.path.join(current_dir, "Entregable_3", "docs")
 
 # Verificar existencia de directorios
 if not os.path.exists(htmlcov_dir):
@@ -19,10 +20,14 @@ if not os.path.exists(htmlcov_dir):
 if not os.path.exists(javadoc_dir):
     raise RuntimeError(f"Directory '{javadoc_dir}' does not exist")
 
+if not os.path.exists(pydoc_dir):
+    raise RuntimeError(f"Directory '{pydoc_dir}' does not exist")
+
 # Montar los directorios como archivos estáticos
 app.mount("/trivia/coverage", StaticFiles(directory=htmlcov_dir), name="coverage")
 app.mount("/entregable2/javadoc",
           StaticFiles(directory=javadoc_dir), name="javadoc")
+app.mount("/usql/pydoc", StaticFiles(directory=pydoc_dir), name="pydoc")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -32,6 +37,7 @@ def home():
     <ul>
         <li><a href="/trivia/coverage">Trivia - Reporte de Cobertura</a></li>
         <li><a href="/pedidos/javadoc">Pedidos - Javadoc</a></li>
+        <li><a href="/usql/pydoc">USQL - Pydoc</a></li>
     </ul>
     """
 
@@ -45,9 +51,13 @@ async def redirect_to_coverage_index():
 async def redirect_to_javadoc_index():
     return RedirectResponse(url="/entregable2/javadoc/index.html")
 
+
+@app.get("/usql/pydoc", include_in_schema=False)
+async def redirect_to_pydoc_index():
+    return RedirectResponse(url="/usql/pydoc/index.html")
+
+
 # Endpoint para el módulo de pedidos
-
-
 @app.get("/pedidos", response_class=HTMLResponse)
 def pedidos():
     return "<h2>Módulo Pedidos</h2><p>Esta es la aplicación del módulo de pedidos.</p>"
