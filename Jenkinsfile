@@ -11,7 +11,9 @@ pipeline {
                 echo "Desplegando FastAPI..."
                 sh """
                 cd src
-                source Entregable_1/venv/bin/activate
+                . Entregable_1/venv/bin/activate
+                which python || echo 'Python no está instalado'
+                which nohup || echo 'Nohup no está instalado'
                 nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
                 """
             }
