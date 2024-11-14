@@ -13,12 +13,10 @@ pipeline {
             steps {
                 echo "Instalando Python..."
                 sh """
-                apt-get update
-                apt-get install -y python3 python3-venv
+                apk update
+                apk add --no-cache python3 py3-pip
+                python3 -m ensurepip --upgrade
                 python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
                 """
             }
         }
@@ -27,8 +25,7 @@ pipeline {
                 echo "Instalando dependencias..."
                 sh """
                 cd ${PROJECT_DIR}
-                python -m venv venv
-                . venv/bin/activate
+                . ../venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
                 """
