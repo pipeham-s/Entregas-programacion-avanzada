@@ -3,7 +3,7 @@ package Entregable_2.Code;
 import java.util.concurrent.*;
 
 /**
- * Clase que representa un procesador de pedidos con una cola de pedidos y un ExecutorService.
+ * Clase que representa un procesador de pedidos con una cola de pedidos y un ExecutorServiceeeeee.
  * Los pedidos se procesan en tres etapas: pago, empaquetado y envío.
  */
 public class ProcesadorPedidos {
