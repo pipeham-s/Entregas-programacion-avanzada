@@ -19,12 +19,12 @@ pipeline {
         }
         stage('PyDocs-Pedidos') {
             steps {
-                echo "Generando documentación PyDoc del módulo pedidos..."
+                echo "Generando documentación PyDoc..."
                 sh """
                 cd ${PROJECT_DIR}
-                # Generar documentación con pydoc y guardarla en el directorio de docs
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc -w {} \;
-                mv *.html ${DOCS_DIR}
+                # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
+                mkdir -p ${DOCS_DIR}
+                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} > ${DOCS_DIR}/{}.html \;
                 """
             }
         }
