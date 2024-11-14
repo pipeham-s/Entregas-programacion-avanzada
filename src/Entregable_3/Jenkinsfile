@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent-python'
-        }
-    }
+    agent any  // Ejecutar en cualquier nodo disponible, incluyendo el nodo principal
     environment {
         PROJECT_DIR = 'src/Entregable_3'
         DOCS_DIR = 'src/Entregable_3/docs'
@@ -14,7 +10,7 @@ pipeline {
                 echo "Instalando dependencias..."
                 sh """
                 cd ${PROJECT_DIR}
-                python -m venv venv
+                python3 -m venv venv
                 . venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
