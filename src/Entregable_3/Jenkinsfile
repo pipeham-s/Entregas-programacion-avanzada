@@ -1,33 +1,22 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent-alpine'
-        }
-    }
+    agent any
     environment {
         PROJECT_DIR = 'src/Entregable_3'
-        DOCS_DIR = 'src/Entregable_3/docs'
+        PYTHON_VERSION = 'python3'
+        VENV_DIR = 'venv'
+        DOCS_DIR = "${PROJECT_DIR}/docs"
     }
     stages {
-        stage('Setup Python') {
-            steps {
-                echo "Instalando Python..."
-                sh """
-                apk update
-                apk add --no-cache python3 py3-pip
-                python3 -m ensurepip --upgrade
-                python3 -m venv venv
-                """
-            }
-        }
         stage('Setup') {
             steps {
                 echo "Instalando dependencias..."
                 sh """
+                #!/bin/bash
                 cd ${PROJECT_DIR}
-                . ../venv/bin/activate
+                ${PYTHON_VERSION} -m venv ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
-                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
+                pip install -r requirements.txt
                 """
             }
         }
@@ -35,8 +24,9 @@ pipeline {
             steps {
                 echo "Generando documentación PyDoc..."
                 sh """
+                #!/bin/bash
                 mkdir -p ${DOCS_DIR}
-                . venv/bin/activate
+                . ${VENV_DIR}/bin/activate
                 for file in \$(find . -name "*.py" ! -name "__init__.py"); do
                     pydoc -w \$file
                     mv \$(basename "\$file").html ${DOCS_DIR}
@@ -54,11 +44,16 @@ pipeline {
                 ])
             }
         }
+        stage('Deliver') {
+            steps {
+                echo "Simulando entrega..."
+                sh "echo 'Entrega completada exitosamente.'"
+            }
+        }
     }
     post {
         always {
             echo "Pipeline finalizado."
-            cleanWs()
         }
         failure {
             echo "Pipeline falló. Verifica los errores."
