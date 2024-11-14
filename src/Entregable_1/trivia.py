@@ -124,6 +124,8 @@ def obtener_respuesta(pregunta):
         print_colored(f"\nIncorrecto. La respuesta correcta era: {pregunta['respuesta_correcta']}", "red")
         return 0
 
+def suma(a, b):
+    return a + b
 
 @docstring("Muestra un banner de agradecimiento.")
 def mostrar_banner_gracias():
