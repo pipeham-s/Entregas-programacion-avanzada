@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'docker-agent-python'
+            label 'docker-agent-alpine'
         }
     }
     environment {
@@ -9,6 +9,19 @@ pipeline {
         DOCS_DIR = 'src/Entregable_3/docs'
     }
     stages {
+        stage('Setup Python') {
+            steps {
+                echo "Instalando Python..."
+                sh """
+                apt-get update
+                apt-get install -y python3 python3-venv
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
+                """
+            }
+        }
         stage('Setup') {
             steps {
                 echo "Instalando dependencias..."
