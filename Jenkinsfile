@@ -1,9 +1,10 @@
 pipeline {
     agent any
     environment {
+        PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'
         VENV_DIR = '/var/lib/jenkins/venv'
-        REQUIREMENTS_FILE = 'requirements.txt'
+        REQUIREMENTS_FILE = "${PROJECT_DIR}/requirements.txt"
     }
     stages {
         stage('Setup') {
@@ -21,6 +22,7 @@ pipeline {
             steps {
                 echo "Ejecutando tests..."
                 sh """
+                cd ${PROJECT_DIR}
                 bash -c "source ${VENV_DIR}/bin/activate && ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html"
                 """
             }
@@ -29,7 +31,7 @@ pipeline {
             steps {
                 echo "Generando reporte de cobertura..."
                 publishHTML(target: [
-                    reportDir: "src/Entregable_1/htmlcov",
+                    reportDir: "${PROJECT_DIR}/htmlcov",
                     reportFiles: 'index.html',
                     reportName: 'Cobertura de Tests'
                 ])
