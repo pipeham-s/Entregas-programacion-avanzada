@@ -13,21 +13,23 @@ pipeline {
                 """
             }
         }
-   stage('PyDocs-Pedidos') {
+  stage('PyDocs-Pedidos') {
     steps {
         echo "Generando documentación PyDoc..."
         sh """
         bash -c '
         cd src/Entregable_3
+        . venv/bin/activate
         mkdir -p docs
         for file in \$(find . -path "./venv" -prune -o -name "*.py" ! -name "__init__.py" -print); do
-            python -m pydoc \$file
-            mv \${file}.html docs/\$(basename \${file} .py).html || echo "Archivo HTML no encontrado para \$file"
+            python -m pydoc -w \$file || echo "Error al generar documentación para \$file"
+            mv \$(basename \${file} .py).html docs/ || echo "Archivo HTML no encontrado para \$file"
         done
         '
         """
     }
 }
+
 
 
     }
