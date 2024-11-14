@@ -21,8 +21,8 @@ if not os.path.exists(javadoc_dir):
 
 # Montar los directorios como archivos estáticos
 app.mount("/trivia/coverage", StaticFiles(directory=htmlcov_dir), name="coverage")
-app.mount("/entregable2/javadoc",
-          StaticFiles(directory=javadoc_dir), name="javadoc")
+# app.mount("/entregable2/javadoc",
+#           StaticFiles(directory=javadoc_dir), name="javadoc")
 
 
 @app.get("/", response_class=HTMLResponse)
