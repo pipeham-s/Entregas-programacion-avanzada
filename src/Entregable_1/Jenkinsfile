@@ -50,7 +50,7 @@ pipeline {
     post {
         always {
             echo "Pipeline finalizado."
-            deleteDir()  // Limpia el workspace
+            
         }
         failure {
             echo "Pipeline falló. Verifica los errores."

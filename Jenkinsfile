@@ -1,32 +1,31 @@
 pipeline {
-    agent {
-        node {
-            label 'docker-agent-python'
-        }
-    }
-    environment {
-        PROJECT_DIR = 'src'
-    }
+    agent any
     stages {
-        stage('Checkout Código') {
+        stage('Run Trivia Pipeline') {
             steps {
-                echo "Obteniendo el código del repositorio..."
-                checkout scm
+                build job: 'trivia-pipeline'
             }
         }
-        stage('Ejecutar trivia-pipeline') {
+        stage('Deploy FastAPI App') {
             steps {
-                echo "Ejecutando el pipeline de pruebas..."
-                build job: 'trivia-pipeline', wait: true  // Ejecuta el pipeline trivia-pipeline
+                echo "Desplegando FastAPI..."
+                sh """
+                cd src
+                source Entregable_1/venv/bin/activate
+                nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
+                """
             }
         }
     }
     post {
-        success {
-            echo "Pipeline ejecutado exitosamente."
+        always {
+            echo "Pipeline finalizado."
         }
         failure {
-            echo "El pipeline falló."
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
         }
     }
 }
