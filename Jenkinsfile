@@ -7,7 +7,7 @@ pipeline {
         REQUIREMENTS_FILE = "${PROJECT_DIR}/requirements.txt"
     }
     stages {
-        stage('Setup') {
+        stage('Build-Trivia') {
             steps {
                 echo "Instalando dependencias globales..."
                 sh """
@@ -18,7 +18,7 @@ pipeline {
                 """
             }
         }
-        stage('Test') {
+        stage('Test-Trivia') {
             steps {
                 echo "Ejecutando tests..."
                 sh """
@@ -27,7 +27,7 @@ pipeline {
                 """
             }
         }
-        stage('Report') {
+        stage('Report-Trivia') {
             steps {
                 echo "Generando reporte de cobertura..."
                 publishHTML(target: [
@@ -35,6 +35,24 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: 'Cobertura de Tests'
                 ])
+            }
+        }
+        // Integración del pipeline de pedidos
+        stage('Build-Pedidos') {
+            steps {
+                echo "Compilando el proyecto de pedidos..."
+                sh """
+                cd src/Entregable_2/Code
+                javac -d out \$(find . -name "*.java")
+                """
+            }
+        }
+        stage('Javadoc-Pedidos') {
+            steps {
+                echo "Generando Javadoc del módulo pedidos..."
+                sh """
+                bash -c "javadoc -d src/Entregable_2/docs -sourcepath src -subpackages Entregable_2.Code"
+                """
             }
         }
     stage('Deploy') {
