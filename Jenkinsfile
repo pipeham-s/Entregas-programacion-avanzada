@@ -97,24 +97,20 @@ pipeline {
             }
         }
     }
-    
     post {
-    success {
-        emailext(
-            subject: "Build Success: ${env.JOB_NAME}",
-            body: "El build fue exitoso.",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-            to: 'slozano@correo.um.edu.uy'
-        )
+    always {
+        echo "Pipeline finalizado."
+        mail to: 'tu_correo@dominio.com',
+             subject: "Jenkins Pipeline: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+             body: "El pipeline ${env.JOB_NAME} ha finalizado con estado: ${currentBuild.currentResult}\nRevisa los detalles en: ${env.BUILD_URL}"
     }
     failure {
-        emailext(
-            subject: "Build Failed: ${env.JOB_NAME}",
-            body: "El build falló. Revisa los errores.",
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-            to: 'slozano@correo.um.edu.uy'
-        )
+        echo "Pipeline falló. Verifica los errores."
+    }
+    success {
+        echo "Pipeline ejecutado exitosamente."
     }
 }
+
 
 }
