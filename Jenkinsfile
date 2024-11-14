@@ -1,28 +1,83 @@
 pipeline {
     agent any
+    environment {
+        PROJECT_DIR = 'src/Entregable_1'  // Manteniendo la variable original
+        PYTHON_VERSION = 'python3'
+        VENV_DIR = '/var/lib/jenkins/venv'
+        REQUIREMENTS_FILE = "${PROJECT_DIR}/requirements.txt"
+    }
     stages {
-        stage('Build-Pedidos') {
+        stage('Setup') {
             steps {
-                echo "Compilando el proyecto de Python..."
+                echo "Instalando dependencias globales..."
                 sh """
-                cd /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
+                if [ ! -d ${VENV_DIR} ]; then
+                    ${PYTHON_VERSION} -m venv ${VENV_DIR}
+                fi
+                bash -c "source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"
                 """
             }
         }
-        stage('PyDocs-Pedidos') {
+        
+        stage('Test') {
             steps {
-                echo "Generando documentación PyDoc..."
+                echo "Ejecutando tests..."
                 sh """
-                cd /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3
-                # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
-                mkdir -p /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3/docs
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} \\; -exec sh -c 'mv {} /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3/docs/$(basename {} .py).html' \\;
+                cd ${PROJECT_DIR}
+                bash -c "source ${VENV_DIR}/bin/activate && ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html"
                 """
             }
+        }
+        
+        stage('Report') {
+            steps {
+                echo "Generando reporte de cobertura..."
+                publishHTML(target: [
+                    reportDir: "${PROJECT_DIR}/htmlcov",
+                    reportFiles: 'index.html',
+                    reportName: 'Cobertura de Tests'
+                ])
+            }
+        }
+
+        // Integración del pipeline de pedidos
+        stage('Build') {
+            steps {
+                echo "Compilando el proyecto de pedidos..."
+                sh """
+                cd src/Entregable_2/Code
+                javac -d out \$(find . -name "*.java")
+                """
+            }
+        }
+
+        stage('Javadoc') {
+            steps {
+                echo "Generando Javadoc del módulo pedidos..."
+                sh """
+                bash -c "javadoc -d src/Entregable_2/docs -sourcepath src -subpackages Entregable_2.Code"
+                """
+            }
+        }
+
+        // Despliegue del servicio Uvicorn
+        stage('Deploy') {
+            steps {
+                echo "Iniciando servicio Uvicorn..."
+                sh "sudo systemctl restart uvicorn"
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo "Pipeline finalizado."
+        }
+        failure {
+            echo "Pipeline falló. Verifica los errores."
+        }
+        success {
+            echo "Pipeline ejecutado exitosamente."
         }
     }
 }
