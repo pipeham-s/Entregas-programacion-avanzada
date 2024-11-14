@@ -1,15 +1,34 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'docker-agent-alpine'
+        }
+    }
     environment {
         PROJECT_DIR = 'src/Entregable_3'
         DOCS_DIR = 'src/Entregable_3/docs'
     }
     stages {
+        stage('Setup Python') {
+            steps {
+                echo "Instalando Python..."
+                sh """
+                apt-get update
+                apt-get install -y python3 python3-venv
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
+                """
+            }
+        }
         stage('Setup') {
             steps {
                 echo "Instalando dependencias..."
                 sh """
                 cd ${PROJECT_DIR}
+                python -m venv venv
+                . venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
                 """
@@ -20,6 +39,7 @@ pipeline {
                 echo "Generando documentación PyDoc..."
                 sh """
                 mkdir -p ${DOCS_DIR}
+                . venv/bin/activate
                 for file in \$(find . -name "*.py" ! -name "__init__.py"); do
                     pydoc -w \$file
                     mv \$(basename "\$file").html ${DOCS_DIR}
