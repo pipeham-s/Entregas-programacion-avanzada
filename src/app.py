@@ -52,7 +52,13 @@ async def redirect_to_coverage_index():
 
 @app.get("/pedidos", response_class=HTMLResponse)
 def pedidos():
-    return "<h2>Módulo Pedidos</h2><p>Esta es la aplicación del módulo de pedidos.</p>"
+    return """
+    <h2>Módulo Pedidos</h2>
+    <p>Esta es la aplicación del módulo de pedidos.</p>
+    <ul>
+        <li><a href="/entregable2/javadoc">Ver Javadoc del módulo Pedidos</a></li>
+    </ul>
+    """
 
 
 if __name__ == "__main__":
