@@ -99,14 +99,22 @@ pipeline {
     }
     
     post {
-        always {
-            echo "Pipeline finalizado."
-        }
-        failure {
-            echo "Pipeline falló. Verifica los errores."
-        }
-        success {
-            echo "Pipeline ejecutado exitosamente."
-        }
+    success {
+        emailext(
+            subject: "Build Success: ${env.JOB_NAME}",
+            body: "El build fue exitoso.",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+            to: 'slozano@correo.um.edu.uy'
+        )
     }
+    failure {
+        emailext(
+            subject: "Build Failed: ${env.JOB_NAME}",
+            body: "El build falló. Revisa los errores.",
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+            to: 'slozano@correo.um.edu.uy'
+        )
+    }
+}
+
 }
