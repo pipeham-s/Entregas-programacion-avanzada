@@ -3,18 +3,18 @@ pipeline {
     environment {
         PROJECT_DIR = 'src/Entregable_1'
         PYTHON_VERSION = 'python3'
-        VENV_DIR = 'venv'
+        VENV_DIR = '/var/lib/jenkins/venv'
+        REQUIREMENTS_FILE = "${PROJECT_DIR}/requirements.txt"
     }
     stages {
         stage('Setup') {
             steps {
-                echo "Instalando dependencias..."
+                echo "Instalando dependencias globales..."
                 sh """
-                cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
+                if [ ! -d ${VENV_DIR} ]; then
+                    ${PYTHON_VERSION} -m venv ${VENV_DIR}
+                fi
+                bash -c "source ${VENV_DIR}/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"
                 """
             }
         }
@@ -23,8 +23,7 @@ pipeline {
                 echo "Ejecutando tests..."
                 sh """
                 cd ${PROJECT_DIR}
-                . ${VENV_DIR}/bin/activate
-                ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html
+                bash -c "source ${VENV_DIR}/bin/activate && ${PYTHON_VERSION} -m pytest --cov=trivia --cov-report=term --cov-report=html"
                 """
             }
         }
@@ -38,17 +37,13 @@ pipeline {
                 ])
             }
         }
-        stage('Deploy') {
-            steps {
-                echo "Desplegando FastAPI..."
-                sh """
-                cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
-                """
-            }
-        }
+    stage('Deploy') {
+    steps {
+        echo "Iniciando servicio Uvicorn..."
+        sh "sudo systemctl restart uvicorn"
+    }
+}
+
     }
     post {
         always {
