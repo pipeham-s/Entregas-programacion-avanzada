@@ -8,18 +8,19 @@ pipeline {
     }
     stages {
         stage('Setup') {
-            steps {
-                echo "Instalando dependencias..."
-                sh """
-                #!/bin/bash
-                cd ${PROJECT_DIR}
-                ${PYTHON_VERSION} -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-                """
-            }
-        }
+    steps {
+        echo "Instalando dependencias..."
+        sh """
+        # Crear entorno virtual si no existe
+        cd ${PROJECT_DIR}
+        ${PYTHON_VERSION} -m venv ${VENV_DIR}
+        . ${VENV_DIR}/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        """
+    }
+}
+
        stage('Generate PyDocs') {
     steps {
         echo "Generando documentación PyDoc..."
