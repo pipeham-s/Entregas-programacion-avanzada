@@ -14,16 +14,18 @@ pipeline {
             }
         }
         
-        stage('PyDocs') {
-            steps {
-                echo "Generando documentación PyDoc del módulo..."
-                sh """
-                cd src/Entregable_3
-                # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
-                mkdir -p docs
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} \; -exec sh -c 'mv {} docs/$(basename {} .py).html'
-                """
-            }
-        }
+        stage('PyDocs-Pedidos') {
+    steps {
+        echo "Generando documentación PyDoc..."
+        sh """
+        # Asegurarse de estar en el directorio correcto
+        cd src/Entregable_3
+
+        # Usar bash para ejecutar el comando sin problemas con el shell
+        bash -c "mkdir -p docs && find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc {} > docs/$(basename {} .py).html \;"
+        """
+    }
+}
+
     }
 }
