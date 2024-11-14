@@ -24,7 +24,7 @@ pipeline {
                 cd ${PROJECT_DIR}
                 # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
                 mkdir -p ${DOCS_DIR}
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} > ${DOCS_DIR}/{}.html \;
+                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} > ${DOCS_DIR}/$(basename {} .py).html \;
                 """
             }
         }
