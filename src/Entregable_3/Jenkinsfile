@@ -20,23 +20,20 @@ pipeline {
         """
     }
 }
-
-       stage('Generate PyDocs') {
+stage('Generate PyDocs') {
     steps {
         echo "Generando documentación PyDoc..."
         sh """
-        # Crear el directorio para los documentos
         mkdir -p src/Entregable_3/docs
-        # Activar el entorno virtual desde el directorio correcto
         cd src/Entregable_3
-        . venv/bin/activate
-        for file in \$(find . -name "*.py" ! -name "__init__.py"); do
-            pydoc -w \$file
-            mv \$(basename "\$file").html ${DOCS_DIR}
-        done
+
+        # Generar la documentación utilizando pydoc
+        find . -name '*.py' ! -name '__init__.py' -exec python -m pydoc -w {} \;
         """
     }
 }
+
+
 
         stage('Publish PyDocs') {
             steps {
