@@ -42,8 +42,9 @@ pipeline {
             steps {
                 echo "Desplegando FastAPI..."
                 sh """
-                cd src
-                . ${PROJECT_DIR}/venv/bin/activate
+                cd ${PROJECT_DIR}
+                ${PYTHON_VERSION} -m venv ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
                 nohup python -m uvicorn app:app --host 0.0.0.0 --port 8000 &
                 """
             }
