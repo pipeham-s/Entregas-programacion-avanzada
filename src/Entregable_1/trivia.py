@@ -67,17 +67,7 @@ def procesar_preguntas_combinadas(listas_de_preguntas):
     preguntas_procesadas = procesar_lineas(preguntas_combinadas)
     return preguntas_procesadas
 
-def suma(a, b):
-    return a + b
 
-def resta(a, b):
-    return a - b
-
-def multiplicacion(a, b):
-    return a * b
-
-def division(a, b):
-    return a / b
 
 
 
