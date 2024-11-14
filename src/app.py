@@ -36,16 +36,9 @@ def home():
     """
 
 
-@app.get("/trivia", response_class=HTMLResponse)
-def trivia():
-    return "<h2>Módulo Trivia</h2><p>Esta es la aplicación del módulo de trivia.</p>"
-
-
 @app.get("/trivia/coverage", include_in_schema=False)
 async def redirect_to_coverage_index():
     return RedirectResponse(url="/trivia/coverage/index.html")
-
-# Redirección a Javadoc
 
 
 @app.get("/pedidos/javadoc", include_in_schema=False)
