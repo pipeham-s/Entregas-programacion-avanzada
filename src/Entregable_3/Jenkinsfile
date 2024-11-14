@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // Ejecutar en cualquier nodo disponible, incluyendo el nodo principal
+    agent any
     environment {
         PROJECT_DIR = 'src/Entregable_3'
         DOCS_DIR = 'src/Entregable_3/docs'
@@ -10,8 +10,6 @@ pipeline {
                 echo "Instalando dependencias..."
                 sh """
                 cd ${PROJECT_DIR}
-                python3 -m venv venv
-                . venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt || echo "No se encontraron dependencias adicionales."
                 """
@@ -22,7 +20,6 @@ pipeline {
                 echo "Generando documentación PyDoc..."
                 sh """
                 mkdir -p ${DOCS_DIR}
-                . venv/bin/activate
                 for file in \$(find . -name "*.py" ! -name "__init__.py"); do
                     pydoc -w \$file
                     mv \$(basename "\$file").html ${DOCS_DIR}
