@@ -14,14 +14,20 @@ pipeline {
             }
         }
         stage('PyDocs-Pedidos') {
-            steps {
-                echo "Generando documentación PyDoc..."
-                sh """
-                cd src/Entregable_3
-                mkdir -p docs
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} \; -exec sh -c "mv {}.html docs/\$(basename {} .py).html" \;
-                """
-            }
-        }
+    steps {
+        echo "Generando documentación PyDoc..."
+        sh """
+        bash -c '
+        cd src/Entregable_3
+        mkdir -p docs
+        for file in \$(find . -name "*.py" ! -name "__init__.py"); do
+            python -m pydoc \$file
+            mv \${file}.html docs/\$(basename \${file} .py).html
+        done
+        '
+        """
+    }
+}
+
     }
 }
