@@ -47,6 +47,13 @@ def trivia():
 async def redirect_to_coverage_index():
     return RedirectResponse(url="/trivia/coverage/index.html")
 
+# Redirección a Javadoc
+
+
+@app.get("/entregable2/javadoc", include_in_schema=False)
+async def redirect_to_javadoc_index():
+    return RedirectResponse(url="/entregable2/javadoc/index.html")
+
 # Endpoint para el módulo de pedidos
 
 
