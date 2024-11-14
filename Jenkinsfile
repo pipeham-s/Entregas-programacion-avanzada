@@ -1,15 +1,11 @@
 pipeline {
     agent any
-    environment {
-        PROJECT_DIR = 'src/Entregable_3'
-        DOCS_DIR = 'src/Entregable_3/docs'
-    }
     stages {
         stage('Build-Pedidos') {
             steps {
                 echo "Compilando el proyecto de Python..."
                 sh """
-                cd ${PROJECT_DIR}
+                cd /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3
                 python3 -m venv venv
                 . venv/bin/activate
                 pip install --upgrade pip
@@ -21,17 +17,12 @@ pipeline {
             steps {
                 echo "Generando documentación PyDoc..."
                 sh """
-                cd ${PROJECT_DIR}
+                cd /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3
                 # Crear los archivos HTML de la documentación directamente en el directorio 'docs'
-                mkdir -p ${DOCS_DIR}
-                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} > ${DOCS_DIR}/{}.html \;
+                mkdir -p /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3/docs
+                find . -name "*.py" ! -name "__init__.py" -exec python -m pydoc {} \\; -exec sh -c 'mv {} /var/lib/jenkins/workspace/usql-pipeline/src/Entregable_3/docs/$(basename {} .py).html' \\;
                 """
             }
-        }
-    }
-    post {
-        always {
-            echo "Pipeline finalizado."
         }
     }
 }
